@@ -2489,6 +2489,13 @@ impl ModelManager {
         let model_info =
             model_info.ok_or_else(|| anyhow::anyhow!("Model not found: {}", model_id))?;
 
+        if is_bundled_model_id(model_id) {
+            return Err(anyhow::anyhow!(
+                "Built-in model '{}' cannot be deleted",
+                model_id
+            ));
+        }
+
         debug!("ModelManager: Found model info: {:?}", model_info);
 
         if let ModelSource::HuggingFace { repo_id, revision } = &model_info.source {
@@ -2661,64 +2668,22 @@ impl ModelManager {
             ));
         }
 
-        if let ModelSource::HuggingFace { repo_id, revision } = &model_info.source {
-            if let Some(path) = hf_cached_path(repo_id, revision, &model_info.filename) {
-                return Ok(path);
-            }
-            // Mirror-fallback download or manual drop-in in the models dir.
-            // The complete file only ever appears after verification, so a
-            // stale `.partial` alongside it is leftover noise, not a veto —
-            // clear it rather than declaring the model missing.
-            let local_path = self.models_dir.join(&model_info.filename);
-            if local_path.exists() {
-                let partial_path = self
-                    .models_dir
-                    .join(format!("{}.partial", &model_info.filename));
-                if partial_path.exists() {
-                    let _ = fs::remove_file(&partial_path);
-                }
-                return Ok(local_path);
-            }
-            self.mark_model_unavailable(model_id);
-            return Err(anyhow::anyhow!(
-                "Complete model file not found in HF cache or models dir: {}",
-                model_id
-            ));
+        // A bundled model is read straight from the install directory, but a
+        // user-supplied copy in app data takes priority — see
+        // `resolve_model_path`.
+        if let Some(path) = resolve_model_path(
+            model_id,
+            &self.models_dir,
+            &self.bundled_paths.lock().unwrap(),
+        ) {
+            return Ok(path);
         }
 
-        let model_path = self.models_dir.join(&model_info.filename);
-        let partial_path = self
-            .models_dir
-            .join(format!("{}.partial", &model_info.filename));
-
-        if model_info.is_directory {
-            if !model_path.exists() || !model_path.is_dir() {
-                self.mark_model_unavailable(model_id);
-                return Err(anyhow::anyhow!(
-                    "Complete model directory not found: {}",
-                    model_id
-                ));
-            }
-            if partial_path.exists() {
-                return Err(anyhow::anyhow!(
-                    "Model directory is incomplete: {}",
-                    model_id
-                ));
-            }
-            Ok(model_path)
-        } else {
-            if !model_path.exists() {
-                self.mark_model_unavailable(model_id);
-                return Err(anyhow::anyhow!(
-                    "Complete model file not found: {}",
-                    model_id
-                ));
-            }
-            if partial_path.exists() {
-                return Err(anyhow::anyhow!("Model file is incomplete: {}", model_id));
-            }
-            Ok(model_path)
-        }
+        self.mark_model_unavailable(model_id);
+        Err(anyhow::anyhow!(
+            "Model files not found for '{}' in the install directory or the models folder",
+            model_id
+        ))
     }
 
     pub fn cancel_download(&self, model_id: &str) -> Result<()> {
