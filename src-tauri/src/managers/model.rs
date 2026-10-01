@@ -63,6 +63,56 @@ pub fn is_bundled_model_id(model_id: &str) -> bool {
     BUNDLED_MODELS.iter().any(|entry| entry.id == model_id)
 }
 
+/// Scan a models resource directory for bundled models that are actually
+/// present. A missing entry is not an error — the app just reports the model as
+/// not installed.
+///
+/// Pure so it is unit-testable without an `AppHandle`; `ModelManager` supplies
+/// the real resource root.
+pub fn discover_bundled_models(models_root: &Path) -> HashMap<String, PathBuf> {
+    let mut found = HashMap::new();
+    for entry in BUNDLED_MODELS {
+        let path = models_root.join(entry.dir_name);
+        let present = if entry.is_directory {
+            path.is_dir()
+        } else {
+            path.is_file()
+        };
+        if present {
+            info!("Bundled model '{}' found at {:?}", entry.id, path);
+            found.insert(entry.id.to_string(), path);
+        } else {
+            warn!(
+                "Bundled model '{}' not found at {:?}; it will be reported as not installed",
+                entry.id, path
+            );
+        }
+    }
+    found
+}
+
+/// Resolve the on-disk directory a bundled model should be loaded from.
+///
+/// PRIORITY — do not reorder: a user-provided copy in the app-data models
+/// directory wins over the bundled copy in the install directory. Some users
+/// run custom GigaAM builds by dropping `giga-am-v3-int8` into their app-data
+/// folder; inverting this order would silently ignore their model. The bundled
+/// path is only the fallback for a clean install.
+pub fn resolve_model_path(
+    model_id: &str,
+    models_dir: &Path,
+    bundled_paths: &HashMap<String, PathBuf>,
+) -> Option<PathBuf> {
+    let entry = BUNDLED_MODELS.iter().find(|entry| entry.id == model_id)?;
+
+    let user_copy = models_dir.join(entry.dir_name);
+    if user_copy.exists() {
+        return Some(user_copy);
+    }
+
+    bundled_paths.get(model_id).cloned()
+}
+
 /// Where a model comes from and how Handy obtains it — the routing discriminant
 /// for downloading and on-disk resolution.
 #[derive(Debug, Clone, Serialize, Deserialize, Type)]
@@ -2736,6 +2786,92 @@ mod tests {
         assert!(is_bundled_model_id("gigaam-v3-e2e-ctc"));
         assert!(!is_bundled_model_id("whisper-small"));
         assert!(!is_bundled_model_id(""));
+    }
+
+    #[test]
+    fn discover_bundled_models_finds_existing_gigaam_directory() {
+        let temp = TempDir::new().unwrap();
+        let models_root = temp.path();
+        fs::create_dir_all(models_root.join("giga-am-v3-int8")).unwrap();
+
+        let found = discover_bundled_models(models_root);
+
+        assert_eq!(
+            found.get("gigaam-v3-e2e-ctc"),
+            Some(&models_root.join("giga-am-v3-int8"))
+        );
+    }
+
+    #[test]
+    fn discover_bundled_models_skips_missing_entries() {
+        let temp = TempDir::new().unwrap();
+
+        assert!(discover_bundled_models(temp.path()).is_empty());
+    }
+
+    #[test]
+    fn discover_bundled_models_ignores_wrong_kind_of_entry() {
+        let temp = TempDir::new().unwrap();
+        let models_root = temp.path();
+        // A regular file where a directory is expected must not count as
+        // installed — GigaAM would fail to load with a confusing engine error.
+        fs::write(models_root.join("giga-am-v3-int8"), b"").unwrap();
+
+        assert!(discover_bundled_models(models_root).is_empty());
+    }
+
+    #[test]
+    fn resolve_model_path_prefers_user_copy_over_bundled() {
+        let temp = TempDir::new().unwrap();
+        let models_dir = temp.path().join("appdata-models");
+        let bundled_dir = temp.path().join("install-resources");
+        fs::create_dir_all(models_dir.join("giga-am-v3-int8")).unwrap();
+        fs::create_dir_all(bundled_dir.join("giga-am-v3-int8")).unwrap();
+
+        let mut bundled = std::collections::HashMap::new();
+        bundled.insert(
+            "gigaam-v3-e2e-ctc".to_string(),
+            bundled_dir.join("giga-am-v3-int8"),
+        );
+
+        assert_eq!(
+            resolve_model_path("gigaam-v3-e2e-ctc", &models_dir, &bundled),
+            Some(models_dir.join("giga-am-v3-int8"))
+        );
+    }
+
+    #[test]
+    fn resolve_model_path_falls_back_to_bundled_when_no_user_copy() {
+        let temp = TempDir::new().unwrap();
+        let models_dir = temp.path().join("appdata-models");
+        let bundled_dir = temp.path().join("install-resources");
+        fs::create_dir_all(&models_dir).unwrap();
+        fs::create_dir_all(bundled_dir.join("giga-am-v3-int8")).unwrap();
+
+        let mut bundled = std::collections::HashMap::new();
+        bundled.insert(
+            "gigaam-v3-e2e-ctc".to_string(),
+            bundled_dir.join("giga-am-v3-int8"),
+        );
+
+        assert_eq!(
+            resolve_model_path("gigaam-v3-e2e-ctc", &models_dir, &bundled),
+            Some(bundled_dir.join("giga-am-v3-int8"))
+        );
+    }
+
+    #[test]
+    fn resolve_model_path_returns_none_when_nothing_is_installed() {
+        let temp = TempDir::new().unwrap();
+
+        assert_eq!(
+            resolve_model_path(
+                "gigaam-v3-e2e-ctc",
+                &temp.path().join("appdata-models"),
+                &std::collections::HashMap::new()
+            ),
+            None
+        );
     }
 
     #[test]
