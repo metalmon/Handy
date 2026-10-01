@@ -391,30 +391,6 @@ async changeAppLanguageSetting(language: string) : Promise<Result<null, string>>
     else return { status: "error", error: e  as any };
 }
 },
-async changeUpdateChecksSetting(enabled: boolean) : Promise<Result<null, string>> {
-    try {
-    return { status: "ok", data: await TAURI_INVOKE("change_update_checks_setting", { enabled }) };
-} catch (e) {
-    if(e instanceof Error) throw e;
-    else return { status: "error", error: e  as any };
-}
-},
-async changeShowWhatsNewOnUpdateSetting(enabled: boolean) : Promise<Result<null, string>> {
-    try {
-    return { status: "ok", data: await TAURI_INVOKE("change_show_whats_new_on_update_setting", { enabled }) };
-} catch (e) {
-    if(e instanceof Error) throw e;
-    else return { status: "error", error: e  as any };
-}
-},
-async changeWhatsNewLastSeenVersionSetting(version: string) : Promise<Result<null, string>> {
-    try {
-    return { status: "ok", data: await TAURI_INVOKE("change_whats_new_last_seen_version_setting", { version }) };
-} catch (e) {
-    if(e instanceof Error) throw e;
-    else return { status: "error", error: e  as any };
-}
-},
 /**
  * Change the keyboard implementation with runtime switching.
  * This will unregister all shortcuts from the old implementation,
@@ -511,14 +487,6 @@ async runKeyboardDiagnostic(durationSecs: number | null) : Promise<Result<Keyboa
     else return { status: "error", error: e  as any };
 }
 },
-async triggerUpdateCheck() : Promise<Result<null, string>> {
-    try {
-    return { status: "ok", data: await TAURI_INVOKE("trigger_update_check") };
-} catch (e) {
-    if(e instanceof Error) throw e;
-    else return { status: "error", error: e  as any };
-}
-},
 async showMainWindowCommand() : Promise<Result<null, string>> {
     try {
     return { status: "ok", data: await TAURI_INVOKE("show_main_window_command") };
@@ -532,9 +500,6 @@ async cancelOperation() : Promise<void> {
 },
 async isPortable() : Promise<boolean> {
     return await TAURI_INVOKE("is_portable");
-},
-async isUpdateChecksLocked() : Promise<boolean> {
-    return await TAURI_INVOKE("is_update_checks_locked");
 },
 async getAppDirPath() : Promise<Result<string, string>> {
     try {
@@ -648,25 +613,9 @@ async getModelInfo(modelId: string) : Promise<Result<ModelInfo | null, string>> 
     else return { status: "error", error: e  as any };
 }
 },
-async downloadModel(modelId: string) : Promise<Result<null, string>> {
-    try {
-    return { status: "ok", data: await TAURI_INVOKE("download_model", { modelId }) };
-} catch (e) {
-    if(e instanceof Error) throw e;
-    else return { status: "error", error: e  as any };
-}
-},
 async deleteModel(modelId: string) : Promise<Result<null, string>> {
     try {
     return { status: "ok", data: await TAURI_INVOKE("delete_model", { modelId }) };
-} catch (e) {
-    if(e instanceof Error) throw e;
-    else return { status: "error", error: e  as any };
-}
-},
-async cancelDownload(modelId: string) : Promise<Result<null, string>> {
-    try {
-    return { status: "ok", data: await TAURI_INVOKE("cancel_download", { modelId }) };
 } catch (e) {
     if(e instanceof Error) throw e;
     else return { status: "error", error: e  as any };
@@ -908,10 +857,8 @@ async updateRecordingRetentionPeriod(period: string) : Promise<Result<null, stri
 }
 },
 /**
- * Checks if the Mac is a laptop by detecting battery presence
- * 
- * This uses pmset to check for battery information.
- * Returns true if a battery is detected (laptop), false otherwise (desktop)
+ * Stub implementation for non-macOS platforms
+ * Always returns false since laptop detection is macOS-specific
  */
 async isLaptop() : Promise<Result<boolean, string>> {
     try {
@@ -970,14 +917,7 @@ shortcut_activation?: ShortcutActivation;
  * Hold-or-toggle only: a press held at least this long is push-to-talk,
  * anything shorter is a tap that locks recording on.
  */
-hold_threshold_ms?: number; audio_feedback?: boolean; audio_feedback_volume?: number; sound_theme?: SoundTheme; start_hidden?: boolean; autostart_enabled?: boolean; update_checks_enabled?: boolean; show_whats_new_on_update?: boolean; 
-/**
- * The app version whose What's New the user has already seen. Fresh installs
- * default to the current version (nothing is "new" to them). Existing users
- * upgrading from before this key existed are blanked by the migration so they
- * see the current release's notes — see `apply_settings_migrations`.
- */
-whats_new_last_seen_version?: string; selected_model?: string; onboarding_completed?: boolean; always_on_microphone?: boolean; selected_microphone?: string | null; 
+hold_threshold_ms?: number; audio_feedback?: boolean; audio_feedback_volume?: number; sound_theme?: SoundTheme; start_hidden?: boolean; autostart_enabled?: boolean; selected_model?: string; onboarding_completed?: boolean; always_on_microphone?: boolean; selected_microphone?: string | null; 
 /**
  * Which input channel to use on the selected microphone device.
  * None means "average all channels" (original behavior).
@@ -1040,27 +980,20 @@ export type LogLevel = "trace" | "debug" | "info" | "warn" | "error"
 export type ModelInfo = { id: string; name: string; description: string; filename: string; source: ModelSource; size_mb: number; is_downloaded: boolean; is_downloading: boolean; partial_size: number; is_directory: boolean; engine_type: EngineType; accuracy_score: number; speed_score: number; supports_translation: boolean; is_recommended: boolean; supported_languages: string[]; supports_language_selection: boolean; is_custom: boolean; supports_streaming: boolean; supports_language_detection: boolean }
 export type ModelLoadStatus = { is_loaded: boolean; current_model: string | null }
 /**
- * Where a model comes from and how Handy obtains it — the routing discriminant
- * for downloading and on-disk resolution.
+ * Where a model's files come from.
+ * 
+ * This build has no download path, so a model is either shipped in the bundle
+ * (read in place from the install directory) or a user-supplied custom file in
+ * the app-data models directory.
  */
 export type ModelSource = 
 /**
- * Direct HTTP download from a URL (current blob.handy.computer hosting).
+ * Shipped inside the bundle as `resources/models/<dir_name>`.
  */
-{ Url: { url: string; 
+{ Bundled: { dir_name: string } } | 
 /**
- * Expected SHA-256 for integrity verification; `None` skips it.
- */
-sha256: string | null } } | 
-/**
- * A file inside a Hugging Face Hub repo, fetched via hf-hub into the shared
- * HF cache (so other tools reuse it). The file within the repo is
- * [`ModelInfo::filename`].
- */
-{ HuggingFace: { repo_id: string; revision: string } } | 
-/**
- * Already present on disk — a user-provided custom model, or one discovered
- * in a shared cache. Nothing to download.
+ * Already present on disk — a user-provided custom model. Nothing to
+ * download.
  */
 "Local"
 export type ModelUnloadTimeout = "never" | "immediately" | "min_2" | "min_5" | "min_10" | "min_15" | "hour_1" | "sec_15"
