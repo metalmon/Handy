@@ -517,7 +517,10 @@ pub struct AppSettings {
 }
 
 fn default_model() -> String {
-    "".to_string()
+    crate::managers::model::BUNDLED_MODELS
+        .first()
+        .map(|entry| entry.id.to_string())
+        .unwrap_or_else(|| "gigaam-v3-e2e-ctc".to_string())
 }
 
 const CURRENT_SETTINGS_SCHEMA_VERSION: u32 = 2;
@@ -559,7 +562,8 @@ fn default_whats_new_last_seen_version() -> String {
 }
 
 fn default_selected_language() -> String {
-    "auto".to_string()
+    // Auto-detection is meaningless for the bundled Russian-only model.
+    "ru".to_string()
 }
 
 fn default_overlay_position() -> OverlayPosition {
@@ -634,9 +638,9 @@ fn default_post_process_enabled() -> bool {
 }
 
 fn default_app_language() -> String {
-    tauri_plugin_os::locale()
-        .map(|l| l.replace('_', "-"))
-        .unwrap_or_else(|| "en".to_string())
+    // This build is Russian-first: the interface defaults to Russian on every
+    // fresh install instead of following the OS locale.
+    "ru".to_string()
 }
 
 fn default_show_tray_icon() -> bool {
@@ -920,7 +924,7 @@ pub fn get_default_settings() -> AppSettings {
         update_checks_enabled: default_update_checks_enabled(),
         show_whats_new_on_update: default_show_whats_new_on_update(),
         whats_new_last_seen_version: default_whats_new_last_seen_version(),
-        selected_model: "".to_string(),
+        selected_model: default_model(),
         onboarding_completed: false,
         always_on_microphone: false,
         selected_microphone: None,
@@ -928,7 +932,7 @@ pub fn get_default_settings() -> AppSettings {
         clamshell_microphone: None,
         selected_output_device: None,
         translate_to_english: false,
-        selected_language: "auto".to_string(),
+        selected_language: default_selected_language(),
         overlay_position: default_overlay_position(),
         debug_mode: false,
         log_level: default_log_level(),
@@ -1186,6 +1190,17 @@ fn apply_settings_migrations(
         updated = true;
     }
 
+    // This build ships exactly one model. Any other persisted selection — an
+    // upstream Whisper/GigaAM id from a previous install, or a custom model that
+    // no longer ships — can never resolve, so normalize it to the bundled one
+    // instead of leaving the app pointed at a model it cannot load.
+    if !settings.selected_model.is_empty()
+        && !crate::managers::model::is_bundled_model_id(&settings.selected_model)
+    {
+        settings.selected_model = default_model();
+        updated = true;
+    }
+
     updated
 }
 
@@ -1241,6 +1256,43 @@ pub fn get_recording_retention_period(app: &AppHandle) -> RecordingRetentionPeri
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn defaults_target_the_bundled_russian_model() {
+        assert_eq!(default_model(), "gigaam-v3-e2e-ctc");
+        assert_eq!(default_selected_language(), "ru");
+        assert_eq!(default_app_language(), "ru");
+    }
+
+    #[test]
+    fn fresh_settings_already_select_the_bundled_model() {
+        let settings = get_default_settings();
+
+        assert_eq!(settings.selected_model, "gigaam-v3-e2e-ctc");
+        assert_eq!(settings.selected_language, "ru");
+    }
+
+    #[test]
+    fn stale_selected_model_is_migrated_to_the_bundled_one() {
+        // Start from a fully current store so only the model rule can fire.
+        let mut stored = serde_json::to_value(get_default_settings()).unwrap();
+        stored["selected_model"] = serde_json::json!("whisper-large-v3-turbo");
+        let mut settings: AppSettings = serde_json::from_value(stored.clone()).unwrap();
+
+        assert!(apply_settings_migrations(&mut settings, &stored));
+
+        assert_eq!(settings.selected_model, "gigaam-v3-e2e-ctc");
+    }
+
+    #[test]
+    fn bundled_selected_model_is_left_alone_by_the_migration() {
+        let stored = serde_json::to_value(get_default_settings()).unwrap();
+        let mut settings: AppSettings = serde_json::from_value(stored.clone()).unwrap();
+
+        // Nothing to migrate, so the model rule must not report a change either.
+        assert!(!apply_settings_migrations(&mut settings, &stored));
+        assert_eq!(settings.selected_model, "gigaam-v3-e2e-ctc");
+    }
 
     #[test]
     fn stored_binding_returns_the_requested_binding() {
