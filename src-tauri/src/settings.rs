@@ -1,4 +1,3 @@
-use crate::utils;
 use log::{debug, warn};
 use serde::de::{self, Visitor};
 use serde::{Deserialize, Deserializer, Serialize};
@@ -389,16 +388,6 @@ pub struct AppSettings {
     pub start_hidden: bool,
     #[serde(default = "default_autostart_enabled")]
     pub autostart_enabled: bool,
-    #[serde(default = "default_update_checks_enabled")]
-    pub update_checks_enabled: bool,
-    #[serde(default = "default_show_whats_new_on_update")]
-    pub show_whats_new_on_update: bool,
-    /// The app version whose What's New the user has already seen. Fresh installs
-    /// default to the current version (nothing is "new" to them). Existing users
-    /// upgrading from before this key existed are blanked by the migration so they
-    /// see the current release's notes — see `apply_settings_migrations`.
-    #[serde(default = "default_whats_new_last_seen_version")]
-    pub whats_new_last_seen_version: String,
     #[serde(default = "default_model")]
     pub selected_model: String,
     #[serde(default)]
@@ -547,18 +536,6 @@ fn default_start_hidden() -> bool {
 
 fn default_autostart_enabled() -> bool {
     false
-}
-
-fn default_update_checks_enabled() -> bool {
-    true
-}
-
-fn default_show_whats_new_on_update() -> bool {
-    true
-}
-
-fn default_whats_new_last_seen_version() -> String {
-    env!("CARGO_PKG_VERSION").to_string()
 }
 
 fn default_selected_language() -> String {
@@ -921,9 +898,6 @@ pub fn get_default_settings() -> AppSettings {
         sound_theme: default_sound_theme(),
         start_hidden: default_start_hidden(),
         autostart_enabled: default_autostart_enabled(),
-        update_checks_enabled: default_update_checks_enabled(),
-        show_whats_new_on_update: default_show_whats_new_on_update(),
-        whats_new_last_seen_version: default_whats_new_last_seen_version(),
         selected_model: default_model(),
         onboarding_completed: false,
         always_on_microphone: false,
@@ -1115,16 +1089,6 @@ fn apply_settings_migrations(
         updated = true;
     }
 
-    // One-time What's New migration: migrations only run on an existing store
-    // (fresh installs stamp the current version via get_default_settings). A
-    // missing key here means a user upgrading from before it existed — blank it
-    // so they see the current release's What's New, mirroring the onboarding
-    // migration's explicit first-run-vs-upgrade decision.
-    if settings_value.get("whats_new_last_seen_version").is_none() {
-        settings.whats_new_last_seen_version = String::new();
-        updated = true;
-    }
-
     // One-time shortcut activation migration (only while the new key is
     // absent): the retired `push_to_talk` bool maps onto the two legacy modes so
     // upgrading users keep exactly the behavior they had. Only fresh installs
@@ -1202,23 +1166,6 @@ fn apply_settings_migrations(
     }
 
     updated
-}
-
-/// Update checks are forced off (without touching the persisted setting) when
-/// `HANDY_DISABLE_UPDATER` is set — e.g. by the Nix package, since self-update
-/// can't work against an immutable /nix/store install.
-pub fn update_checks_forced_disabled() -> bool {
-    use std::sync::OnceLock;
-    static IS_UPDATER_DISABLED: OnceLock<bool> = OnceLock::new();
-    *IS_UPDATER_DISABLED.get_or_init(|| utils::env_flag_enabled("HANDY_DISABLE_UPDATER"))
-}
-
-/// Effective updater state: the user's stored preference, overridden to `false`
-/// while `HANDY_DISABLE_UPDATER` is set. Callers deciding whether to actually
-/// check for updates must use this rather than reading `update_checks_enabled`
-/// directly, so the forced-off state never leaks into the persisted setting.
-pub fn update_checks_effectively_enabled(settings: &AppSettings) -> bool {
-    settings.update_checks_enabled && !update_checks_forced_disabled()
 }
 
 pub fn write_settings(app: &AppHandle, settings: AppSettings) {
@@ -1718,7 +1665,6 @@ mod tests {
         let raw = serde_json::json!({
             "settings_schema_version": CURRENT_SETTINGS_SCHEMA_VERSION,
             "onboarding_completed": false,
-            "whats_new_last_seen_version": default_whats_new_last_seen_version(),
             "overlay_style": "live",
             "transcribe_accelerator": "gpu",
             "transcribe_gpu_device": null
@@ -1742,7 +1688,6 @@ mod tests {
         let raw = serde_json::json!({
             "settings_schema_version": CURRENT_SETTINGS_SCHEMA_VERSION,
             "onboarding_completed": false,
-            "whats_new_last_seen_version": default_whats_new_last_seen_version(),
             "overlay_style": "live",
             "transcribe_accelerator": "gpu",
             "transcribe_gpu_device": settings.transcribe_gpu_device
