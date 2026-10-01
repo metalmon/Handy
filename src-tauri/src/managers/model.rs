@@ -1454,10 +1454,22 @@ impl ModelManager {
         // two locks are never nested) so a mid-download entry is never dropped.
         let downloading_ids: HashSet<String> =
             self.cancel_flags.lock().unwrap().keys().cloned().collect();
+        // Bundled ids are read here too and must not be taken while the registry
+        // lock is held, so snapshot them alongside `downloading_ids`.
+        let bundled: HashSet<String> = self.bundled_paths.lock().unwrap().keys().cloned().collect();
         let mut models = self.available_models.lock().unwrap();
         let mut vanished_models: Vec<String> = Vec::new();
 
         for model in models.values_mut() {
+            if bundled.contains(&model.id) {
+                // A bundled model is always complete: it shipped inside the
+                // bundle and there is nothing to download or extract.
+                model.is_downloaded = true;
+                model.is_downloading = false;
+                model.partial_size = 0;
+                continue;
+            }
+
             if let ModelSource::HuggingFace { repo_id, revision } = &model.source {
                 // A models-dir copy counts too: mirror-fallback downloads land
                 // there, and it makes manual drop-ins of catalog files work.
