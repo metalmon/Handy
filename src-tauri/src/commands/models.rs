@@ -1,7 +1,6 @@
 use crate::managers::model::{ModelInfo, ModelManager};
 use crate::managers::transcription::{ModelStateEvent, TranscriptionManager};
 use crate::settings::{get_settings, write_settings, ModelUnloadTimeout};
-use log::error;
 use std::sync::Arc;
 use tauri::{AppHandle, Emitter, Manager, State};
 
@@ -34,31 +33,6 @@ pub async fn rescan_local_models(
         .await
         .map_err(|e| format!("rescan task panicked: {e}"))?
         .map_err(|e| e.to_string())
-}
-
-#[tauri::command]
-#[specta::specta]
-pub async fn download_model(
-    app_handle: AppHandle,
-    model_manager: State<'_, Arc<ModelManager>>,
-    model_id: String,
-) -> Result<(), String> {
-    let result = model_manager
-        .download_model(&model_id)
-        .await
-        .map_err(|e| e.to_string());
-
-    if let Err(ref error) = result {
-        // Log as well as emit: the toast is transient, and failed downloads have
-        // historically been undiagnosable because logs showed nothing (#1579).
-        error!("Model download failed for {}: {}", model_id, error);
-        let _ = app_handle.emit(
-            "model-download-failed",
-            serde_json::json!({ "model_id": &model_id, "error": error }),
-        );
-    }
-
-    result
 }
 
 #[tauri::command]
@@ -192,15 +166,4 @@ pub async fn is_model_loading(
     // Check if transcription manager has a loaded model
     let current_model = transcription_manager.get_current_model();
     Ok(current_model.is_none())
-}
-
-#[tauri::command]
-#[specta::specta]
-pub async fn cancel_download(
-    model_manager: State<'_, Arc<ModelManager>>,
-    model_id: String,
-) -> Result<(), String> {
-    model_manager
-        .cancel_download(&model_id)
-        .map_err(|e| e.to_string())
 }
