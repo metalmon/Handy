@@ -596,6 +596,9 @@ pub struct ModelManager {
     app_handle: AppHandle,
     models_dir: PathBuf,
     available_models: Mutex<HashMap<String, ModelInfo>>,
+    /// Resolved install-directory paths of bundled models, keyed by model id.
+    /// Only models actually present in the bundle appear here.
+    bundled_paths: Mutex<HashMap<String, PathBuf>>,
     cancel_flags: Arc<Mutex<HashMap<String, CancellationToken>>>,
     extracting_models: Arc<Mutex<HashSet<String>>>,
     /// Single-flight guard for [`Self::rescan_local_models`] so concurrent
@@ -1214,13 +1217,15 @@ impl ModelManager {
             app_handle: app_handle.clone(),
             models_dir,
             available_models: Mutex::new(available_models),
+            bundled_paths: Mutex::new(HashMap::new()),
             cancel_flags: Arc::new(Mutex::new(HashMap::new())),
             extracting_models: Arc::new(Mutex::new(HashSet::new())),
             is_rescanning: Arc::new(AtomicBool::new(false)),
         };
 
-        // Migrate any bundled models to user directory
-        manager.migrate_bundled_models()?;
+        // Locate models shipped inside the bundle. Runs before any status check
+        // so a bundled model is already known as installed when first queried.
+        manager.resolve_bundled_models();
 
         // Migrate GigaAM from single-file to directory format
         manager.migrate_gigaam_to_directory()?;
@@ -1307,6 +1312,10 @@ impl ModelManager {
             }
         };
 
+        // Bundled models live in the install directory, which changes when the
+        // app is updated in place, so re-resolve them on every rescan.
+        self.resolve_bundled_models();
+
         // Snapshot the current registry and discover against the copy off-lock.
         // The discover_* helpers are purely additive (they skip ids already in
         // the map), so the snapshot ends up as {current} ∪ {newly-found}.
@@ -1380,31 +1389,20 @@ impl ModelManager {
         }
     }
 
-    fn migrate_bundled_models(&self) -> Result<()> {
-        // Check for bundled models and copy them to user directory
-        let bundled_models = ["ggml-small.bin"]; // Add other bundled models here if any
-
-        for filename in &bundled_models {
-            let bundled_path = self.app_handle.path().resolve(
-                format!("resources/models/{}", filename),
-                tauri::path::BaseDirectory::Resource,
-            );
-
-            if let Ok(bundled_path) = bundled_path {
-                if bundled_path.exists() {
-                    let user_path = self.models_dir.join(filename);
-
-                    // Only copy if user doesn't already have the model
-                    if !user_path.exists() {
-                        info!("Migrating bundled model {} to user directory", filename);
-                        fs::copy(&bundled_path, &user_path)?;
-                        info!("Successfully migrated {}", filename);
-                    }
-                }
+    /// Refresh [`Self::bundled_paths`] from the bundle's models resource
+    /// directory. Idempotent, and safe to call on every rescan.
+    fn resolve_bundled_models(&self) {
+        let resolved = match self.app_handle.path().resolve(
+            "resources/models",
+            tauri::path::BaseDirectory::Resource,
+        ) {
+            Ok(root) => discover_bundled_models(&root),
+            Err(e) => {
+                warn!("Could not resolve the models resource directory: {}", e);
+                HashMap::new()
             }
-        }
-
-        Ok(())
+        };
+        *self.bundled_paths.lock().unwrap() = resolved;
     }
 
     /// Migrate GigaAM from the old single-file format (giga-am-v3.int8.onnx)
