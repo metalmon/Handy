@@ -45,3 +45,7 @@ result
 
 # Python bytecode (scripts/)
 __pycache__/
+
+# Superpowers plans/specs and skill artifacts (local working docs, not product)
+docs/superpowers/
+.superpowers/

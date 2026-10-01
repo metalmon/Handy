@@ -38,6 +38,31 @@ pub enum EngineType {
     Cohere,
 }
 
+/// A model that ships inside the application bundle and is read in place from
+/// the install directory. Bundled models are never copied into app data and can
+/// never be deleted — the app is unusable without them.
+pub struct BundledModel {
+    pub id: &'static str,
+    /// Directory name under `resources/models/`, also used as
+    /// `ModelInfo::filename`.
+    pub dir_name: &'static str,
+    pub is_directory: bool,
+}
+
+/// Every model shipped in the bundle. A table rather than a single constant so
+/// adding a second bundled model later needs no refactor.
+pub const BUNDLED_MODELS: &[BundledModel] = &[BundledModel {
+    id: "gigaam-v3-e2e-ctc",
+    dir_name: "giga-am-v3-int8",
+    is_directory: true,
+}];
+
+/// Whether `model_id` names a model that ships in the bundle. Used to refuse
+/// deletion and to normalize a stale persisted selection.
+pub fn is_bundled_model_id(model_id: &str) -> bool {
+    BUNDLED_MODELS.iter().any(|entry| entry.id == model_id)
+}
+
 /// Where a model comes from and how Handy obtains it — the routing discriminant
 /// for downloading and on-disk resolution.
 #[derive(Debug, Clone, Serialize, Deserialize, Type)]
@@ -2676,6 +2701,42 @@ mod tests {
     use super::*;
     use std::io::Write;
     use tempfile::TempDir;
+
+    #[test]
+    fn bundled_table_ships_gigaam_directory_layout() {
+        let entry = BUNDLED_MODELS
+            .iter()
+            .find(|entry| entry.id == "gigaam-v3-e2e-ctc")
+            .expect("GigaAM v3 must ship bundled");
+
+        assert_eq!(entry.dir_name, "giga-am-v3-int8");
+        assert!(entry.is_directory);
+    }
+
+    #[test]
+    fn bundled_table_has_unique_ids_and_dir_names() {
+        let mut ids: Vec<&str> = BUNDLED_MODELS.iter().map(|entry| entry.id).collect();
+        let mut dirs: Vec<&str> = BUNDLED_MODELS
+            .iter()
+            .map(|entry| entry.dir_name)
+            .collect();
+        ids.sort_unstable();
+        dirs.sort_unstable();
+        let unique_ids = ids.len();
+        let unique_dirs = dirs.len();
+        ids.dedup();
+        dirs.dedup();
+
+        assert_eq!(ids.len(), unique_ids, "duplicate bundled model id");
+        assert_eq!(dirs.len(), unique_dirs, "duplicate bundled dir_name");
+    }
+
+    #[test]
+    fn is_bundled_model_id_recognizes_only_bundled_ids() {
+        assert!(is_bundled_model_id("gigaam-v3-e2e-ctc"));
+        assert!(!is_bundled_model_id("whisper-small"));
+        assert!(!is_bundled_model_id(""));
+    }
 
     #[test]
     fn test_effective_language_accepts_chinese_script_intent_for_zh_capability() {
