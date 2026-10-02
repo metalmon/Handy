@@ -176,7 +176,10 @@ In `.github/workflows/release.yml`, replace the whole `create-release:` job (lin
       contents: write
     runs-on: ubuntu-latest
     outputs:
-      release-id: ${{ steps.ensure-release.outputs.release-id }}
+      # actions/github-script exposes exactly one output, named `result`, holding
+      # whatever the script returns. The step id is NOT the output name, so
+      # `steps.ensure-release.outputs.release-id` would resolve to empty.
+      release-id: ${{ steps.ensure-release.outputs.result }}
       version: ${{ steps.get-version.outputs.version }}
     steps:
       - name: Checkout repository
@@ -293,6 +296,10 @@ Append to the end of `.github/workflows/release.yml`, after the `publish-tauri` 
             });
             core.info(`Published release #${releaseId}`);
 ```
+
+`release_id` receives the numeric release id as a string, which the REST client
+accepts. The script returns a bare number, not an object, so
+`steps.ensure-release.outputs.result` is that number with no JSON quoting.
 
 - [ ] **Step 4: Update the dependency reference**
 
