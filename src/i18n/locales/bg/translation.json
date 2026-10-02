@@ -1,7 +1,6 @@
 {
   "tray": {
     "settings": "Настройки...",
-    "checkUpdates": "Проверка за актуализации...",
     "copyLastTranscript": "Копиране на последния транскрипт",
     "unloadModel": "Разтоварване на модела",
     "model": "Модел",
@@ -19,17 +18,6 @@
     "about": "За приложението"
   },
   "onboarding": {
-    "subtitle": "За да започнете, изберете модел за транскрипция",
-    "existingModelsTitle": "Съвместими модели",
-    "downloadModelsTitle": "Достъпни за изтегляне",
-    "showAllModels": "Показване на всички {{total}} модела",
-    "showFewerModels": "Показване на по-малко модели",
-    "recommended": "Препоръчан",
-    "customModelDescription": "Не се поддържа официално",
-    "modelCard": {
-      "accuracy": "точност",
-      "speed": "скорост"
-    },
     "models": {
       "small": {
         "name": "Whisper Small",
@@ -96,9 +84,6 @@
         "description": "Голям, по-бавен, но много точен многоезичен модел."
       }
     },
-    "errors": {
-      "selectModel": "Неуспешно избиране на модел"
-    },
     "permissions": {
       "title": "Необходими разрешения",
       "description": "Handy се нуждае от няколко разрешения, за да работи правилно.",
@@ -121,38 +106,14 @@
     }
   },
   "modelSelector": {
-    "custom": "Персонализиран",
-    "streaming": "Стрийминг",
     "active": "Активен",
-    "switching": "Превключване...",
-    "noModelsAvailable": "Няма налични модели",
-    "verifying": "Проверка на {{modelName}}...",
-    "verifyingGeneric": "Проверка...",
-    "extracting": "Разархивиране на {{modelName}}...",
-    "extractingMultiple": "Разархивиране на {{count}} модела...",
-    "extractingGeneric": "Разархивиране...",
-    "downloading": "Изтегляне {{percentage}}%",
-    "downloadingMultiple": "Изтегляне на {{count}} модела...",
+    "statusTitle": "Status: {{modelStatus}}",
     "modelReady": "Моделът е готов",
     "loading": "Зареждане на {{modelName}}...",
     "loadingGeneric": "Зареждане...",
     "modelError": "Грешка в модела",
     "modelUnloaded": "Моделът е разтоварен",
-    "noModelDownloadRequired": "Няма модел – необходимо е изтегляне",
-    "deleteModel": "Изтриване на {{modelName}}",
-    "downloadSpeed": "{{speed}} MB/s",
-    "cancel": "Отказ",
-    "cancelDownload": "Отказ на изтеглянето",
-    "capabilities": {
-      "languageSelection": "Поддържа няколко входни езика",
-      "singleLanguage": "Поддържа само този език",
-      "languageCount": "{{total}} езика",
-      "languageOnly": "Само {{language}}",
-      "translation": "Може да превежда на английски",
-      "translate": "Превод на английски",
-      "streaming": "Показва транскрипция на живо, докато говорите"
-    },
-    "legacy": "Наследен"
+    "noModelDownloadRequired": "Няма модел – необходимо е изтегляне"
   },
   "settings": {
     "modelSettings": {
@@ -213,21 +174,7 @@
       "title": "Модели за транскрипция",
       "description": "Изберете модел за транскрипция или изтеглете допълнителни. Различните модели предлагат различна точност и скорост.",
       "yourModels": "Изтеглени модели",
-      "availableModels": "Налични за изтегляне",
-      "deleteConfirm": "Сигурни ли сте, че искате да изтриете {{modelName}}? Ще трябва да го изтеглите отново, за да го използвате.",
-      "deleteActiveConfirm": "{{modelName}} е вашият активен модел. Изтриването му ще спре транскрипциите, докато не изберете нов модел. Сигурни ли сте?",
-      "deleteTitle": "Изтриване на модел",
-      "filters": {
-        "allLanguages": "Всички езици",
-        "streaming": "Филтриране на моделите, които поддържат транскрипция на живо",
-        "translation": "Филтриране на моделите, които поддържат превод на английски"
-      },
-      "noModelsMatch": "Няма модели, отговарящи на този филтър.",
-      "searchPlaceholder": "Търсене на модели по име…",
-      "rescan": {
-        "label": "Сканиране отново",
-        "tooltip": "Сканиране отново за модели, добавени в папката с модели или кеша на Hugging Face извън Handy"
-      }
+      "noModelsMatch": "Няма модели, отговарящи на този филтър."
     },
     "sound": {
       "title": "Звук",
@@ -491,11 +438,6 @@
         "lineCount": "Редове: {{count}}",
         "empty": "Изчакване на логове… Записите ще се появят тук, щом приложението ги генерира."
       },
-      "updateChecks": {
-        "label": "Проверка за актуализации",
-        "description": "Автоматична проверка за нови версии на Handy",
-        "lockedDescription": "Деактивирано от системната конфигурация (HANDY_DISABLE_UPDATER)"
-      },
       "soundTheme": {
         "label": "Звукова тема",
         "description": "Избор на звукова тема за сигнал при старт и край на записа"
@@ -589,18 +531,10 @@
         "verdictNoEvents": "Не са уловени събития — натиснахте ли някакви клавиши по време на теста?",
         "failed": "Диагностиката е неуспешна: {{error}}"
       },
-      "whatsNewPreview": {
-        "title": "Преглед на новостите",
-        "description": "Отваря последните включени бележки към изданието, без да ги маркира като видени",
-        "button": "Преглед",
-        "noNotes": "Не са намерени включени бележки към изданието",
-        "error": "Неуспешен преглед на бележките към изданието"
-      },
       "onboardingPreview": {
         "title": "Преглед на първоначалната настройка",
         "description": "Прегледайте екраните за първоначална настройка, без да променяте разрешенията, моделите или състоянието на завършване",
         "permissionsButton": "Разрешения",
-        "modelsButton": "Избор на модел",
         "exitButton": "Изход от прегледа"
       }
     },
@@ -631,32 +565,11 @@
           "description": "Високопроизводително изпълнение на автоматичния модел за разпознаване на реч Whisper на OpenAI",
           "details": "Handy използва ggml за бързо локално реч-към-текст. Благодарности на Georgi Gerganov и сътрудниците за отличната работа."
         }
-      },
-      "whatsNewUpdates": {
-        "label": "Показвай новостите",
-        "description": "Показвай бележки към изданието след актуализации на Handy"
       }
     }
   },
-  "footer": {
-    "checkingUpdates": "Проверка за актуализации...",
-    "updateAvailableShort": "Налична актуализация",
-    "upToDate": "Актуална версия",
-    "updateCheckingDisabled": "Проверката за актуализации е изключена",
-    "downloading": "Изтегля се... {{progress}}%",
-    "installing": "Инсталиране...",
-    "preparing": "Подготовка...",
-    "checkForUpdates": "Проверка за актуализации",
-    "portableUpdateTitle": "Необходима е ръчна актуализация",
-    "portableUpdateMessage": "Преносимите инсталации не могат да бъдат актуализирани автоматично. Изтеглете инсталатора за вашата система от бутона по-долу, стартирайте го и инсталирайте в същата папка — папката Data/ (настройки, модели, записи) остава на мястото си.",
-    "portableUpdateButton": "Изтегляне на инсталатора",
-    "portableUpdateBrowseMessage": "Преносимите инсталации не могат да бъдат актуализирани автоматично. Изтеглете най-новата версия за вашата система от GitHub Releases и я инсталирайте в същата папка — папката Data/ (настройки, модели, записи) остава на мястото си.",
-    "portableUpdateBrowseButton": "Отвори GitHub Releases"
-  },
   "common": {
     "loading": "Зареждане...",
-    "delete": "Изтриване",
-    "close": "Затваряне",
     "open": "Отваряне",
     "copy": "Копиране",
     "clear": "Изчистване",
@@ -700,9 +613,6 @@
   "overlay": {
     "transcribing": "Транскрибиране...",
     "processing": "Обработка..."
-  },
-  "whatsNew": {
-    "title": "Ново в Handy v{{version}}"
   },
   "secureInput": {
     "blockedWithCulprit_one": "{{name}} може да блокира 1 бърз клавиш",

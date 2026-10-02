@@ -1,7 +1,6 @@
 {
   "tray": {
     "settings": "Налаштування...",
-    "checkUpdates": "Перевірити оновлення...",
     "copyLastTranscript": "Скопіювати останню транскрипцію",
     "unloadModel": "Вивантажити модель",
     "model": "Модель",
@@ -19,17 +18,6 @@
     "about": "Інфо"
   },
   "onboarding": {
-    "subtitle": "Для початку оберіть модель транскрипції",
-    "existingModelsTitle": "Сумісні моделі",
-    "downloadModelsTitle": "Доступні для завантаження",
-    "showAllModels": "Показати всі моделі ({{total}})",
-    "showFewerModels": "Показати менше моделей",
-    "recommended": "Рекомендовано",
-    "customModelDescription": "Офіційно не підтримується",
-    "modelCard": {
-      "accuracy": "точність",
-      "speed": "швидкість"
-    },
     "models": {
       "small": {
         "name": "Whisper Small",
@@ -96,9 +84,6 @@
         "description": "Велика, повільніша, але дуже точна багатомовна модель."
       }
     },
-    "errors": {
-      "selectModel": "Не вдалося вибрати модель"
-    },
     "permissions": {
       "title": "Потрібні дозволи",
       "description": "Handy потребує деяких дозволів для коректної роботи.",
@@ -121,38 +106,14 @@
     }
   },
   "modelSelector": {
-    "custom": "Користувацька",
-    "streaming": "Потокове",
     "active": "Активна",
-    "noModelsAvailable": "Немає доступних моделей",
-    "verifying": "Перевірка {{modelName}}...",
-    "verifyingGeneric": "Перевірка...",
-    "extracting": "Розпакування {{modelName}}...",
-    "extractingMultiple": "Розпакування {{count}} моделей...",
-    "extractingGeneric": "Розпакування...",
-    "downloading": "Завантаження {{percentage}}%",
-    "downloadingMultiple": "Завантаження {{count}} моделей...",
+    "statusTitle": "Status: {{modelStatus}}",
     "modelReady": "Модель готова",
     "loading": "Завантаження {{modelName}}...",
     "loadingGeneric": "Завантаження...",
     "modelError": "Помилка моделі",
     "modelUnloaded": "Модель вивантажена",
-    "noModelDownloadRequired": "Немає моделі - потрібно завантажити",
-    "deleteModel": "Видалити {{modelName}}",
-    "switching": "Перемикання...",
-    "downloadSpeed": "{{speed}} MB/s",
-    "capabilities": {
-      "languageSelection": "Підтримує кілька мов введення",
-      "languageCount": "{{total}} мов",
-      "translation": "Може перекладати на англійську",
-      "translate": "Перекласти на англійську",
-      "singleLanguage": "Підтримує лише цю мову",
-      "languageOnly": "Лише {{language}}",
-      "streaming": "Показує транскрипцію в реальному часі під час мовлення"
-    },
-    "cancel": "Скасувати",
-    "cancelDownload": "Скасувати завантаження",
-    "legacy": "Застаріле"
+    "noModelDownloadRequired": "Немає моделі - потрібно завантажити"
   },
   "settings": {
     "modelSettings": {
@@ -212,22 +173,8 @@
     "models": {
       "title": "Моделі транскрипції",
       "description": "Виберіть модель транскрипції або завантажте додаткові моделі. Різні моделі пропонують різні рівні точності та швидкості.",
-      "deleteConfirm": "Ви впевнені, що хочете видалити {{modelName}}? Вам потрібно буде завантажити її знову, щоб використовувати.",
-      "deleteActiveConfirm": "{{modelName}} — ваша активна модель. Видалення зупинить транскрипцію, доки ви не оберете нову модель. Ви впевнені?",
-      "deleteTitle": "Видалити модель",
-      "filters": {
-        "allLanguages": "Усі мови",
-        "streaming": "Фільтрувати моделі з підтримкою транскрипції в реальному часі",
-        "translation": "Фільтрувати моделі з підтримкою перекладу англійською"
-      },
       "noModelsMatch": "Жодна модель не відповідає цьому фільтру.",
-      "yourModels": "Завантажені моделі",
-      "availableModels": "Доступні для завантаження",
-      "searchPlaceholder": "Пошук моделей за назвою…",
-      "rescan": {
-        "label": "Пересканувати",
-        "tooltip": "Пересканувати моделі, додані до папки моделей або кешу Hugging Face поза межами Handy"
-      }
+      "yourModels": "Завантажені моделі"
     },
     "sound": {
       "title": "Звук",
@@ -491,11 +438,6 @@
         "lineCount": "Рядків: {{count}}",
         "empty": "Очікування логів… Записи з'являтимуться тут, щойно застосунок їх створюватиме."
       },
-      "updateChecks": {
-        "label": "Перевірка оновлень",
-        "description": "Автоматично перевіряти наявність нових версій Handy",
-        "lockedDescription": "Вимкнено системною конфігурацією (HANDY_DISABLE_UPDATER)"
-      },
       "soundTheme": {
         "label": "Звукова тема",
         "description": "Оберіть звукову тему для сповіщень про початок і зупинку запису"
@@ -589,18 +531,10 @@
         "verdictNoEvents": "Подій не зафіксовано — ви натискали клавіші під час тесту?",
         "failed": "Не вдалося виконати діагностику: {{error}}"
       },
-      "whatsNewPreview": {
-        "title": "Попередній перегляд новин",
-        "description": "Відкрити останні вбудовані примітки до випуску, не позначаючи їх як переглянуті",
-        "button": "Перегляд",
-        "noNotes": "Вбудовані примітки до випуску не знайдено",
-        "error": "Не вдалося переглянути примітки до випуску"
-      },
       "onboardingPreview": {
         "title": "Попередній перегляд початкового налаштування",
         "description": "Перегляньте екрани початкового налаштування, не змінюючи дозволи, моделі чи стан завершення",
         "permissionsButton": "Дозволи",
-        "modelsButton": "Вибір моделі",
         "exitButton": "Вийти з перегляду"
       }
     },
@@ -631,32 +565,11 @@
           "description": "Високопродуктивний інференс моделі автоматичного розпізнавання мовлення Whisper від OpenAI",
           "details": "Handy використовує ggml для швидкої локальної обробки мовлення в текст. Дякуємо за чудову роботу Георгію Герганову та контриб'юторам."
         }
-      },
-      "whatsNewUpdates": {
-        "label": "Показувати новини",
-        "description": "Показувати примітки до випуску після оновлень Handy"
       }
     }
   },
-  "footer": {
-    "checkingUpdates": "Перевірка оновлень...",
-    "updateAvailableShort": "Доступне оновлення",
-    "upToDate": "Актуальна версія",
-    "updateCheckingDisabled": "Перевірка оновлень вимкнена",
-    "downloading": "Завантаження... {{progress}}%",
-    "installing": "Встановлення...",
-    "preparing": "Підготовка...",
-    "checkForUpdates": "Перевірити оновлення",
-    "portableUpdateTitle": "Потрібне ручне оновлення",
-    "portableUpdateMessage": "Портативні встановлення не можна оновити автоматично. Завантажте нижче інсталятор для вашої системи, запустіть його та встановіть у ту саму теку — ваша тека Data/ (налаштування, моделі, записи) залишиться на місці.",
-    "portableUpdateButton": "Завантажити інсталятор",
-    "portableUpdateBrowseMessage": "Портативні встановлення не можна оновити автоматично. Завантажте найновішу версію для вашої системи зі сторінки GitHub Releases та встановіть її в ту саму теку — ваша тека Data/ (налаштування, моделі, записи) залишиться на місці.",
-    "portableUpdateBrowseButton": "Відкрити GitHub Releases"
-  },
   "common": {
     "loading": "Завантаження...",
-    "delete": "Видалити",
-    "close": "Закрити",
     "open": "Відкрити",
     "copy": "Копіювати",
     "clear": "Очистити",
@@ -700,9 +613,6 @@
   "overlay": {
     "transcribing": "Обробка...",
     "processing": "Постобробка..."
-  },
-  "whatsNew": {
-    "title": "Нове в Handy v{{version}}"
   },
   "secureInput": {
     "blockedWithCulprit_one": "{{name}} може блокувати 1 комбінацію клавіш",

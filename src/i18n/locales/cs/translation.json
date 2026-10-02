@@ -1,7 +1,6 @@
 {
   "tray": {
     "settings": "Nastavení...",
-    "checkUpdates": "Zkontrolovat aktualizace...",
     "copyLastTranscript": "Zkopírovat poslední přepis",
     "unloadModel": "Uvolnit model",
     "model": "Model",
@@ -19,17 +18,6 @@
     "about": "O aplikaci"
   },
   "onboarding": {
-    "subtitle": "Pro začátek vyberte model pro přepis",
-    "existingModelsTitle": "Kompatibilní modely",
-    "downloadModelsTitle": "Dostupné ke stažení",
-    "showAllModels": "Zobrazit všech {{total}} modelů",
-    "showFewerModels": "Zobrazit méně modelů",
-    "recommended": "Doporučeno",
-    "customModelDescription": "Oficiálně nepodporováno",
-    "modelCard": {
-      "accuracy": "přesnost",
-      "speed": "rychlost"
-    },
     "models": {
       "small": {
         "name": "Whisper Small",
@@ -96,9 +84,6 @@
         "description": "Velký, pomalejší, ale velmi přesný vícejazyčný model."
       }
     },
-    "errors": {
-      "selectModel": "Nepodařilo se vybrat model"
-    },
     "permissions": {
       "title": "Vyžadována oprávnění",
       "description": "Handy potřebuje několik oprávnění pro správné fungování.",
@@ -121,38 +106,14 @@
     }
   },
   "modelSelector": {
-    "custom": "Vlastní",
-    "streaming": "Streaming",
     "active": "Aktivní",
-    "noModelsAvailable": "Nejsou dostupné žádné modely",
-    "verifying": "Ověřování {{modelName}}...",
-    "verifyingGeneric": "Ověřování...",
-    "extracting": "Rozbaluji {{modelName}}...",
-    "extractingMultiple": "Rozbaluji {{count}} modelů...",
-    "extractingGeneric": "Rozbalování...",
-    "downloading": "Stahování {{percentage}}%",
-    "downloadingMultiple": "Stahování {{count}} modelů...",
+    "statusTitle": "Status: {{modelStatus}}",
     "modelReady": "Model připraven",
     "loading": "Načítám {{modelName}}...",
     "loadingGeneric": "Načítání...",
     "modelError": "Chyba modelu",
     "modelUnloaded": "Model uvolněn",
-    "noModelDownloadRequired": "Žádný model - je nutné stáhnout",
-    "deleteModel": "Smazat {{modelName}}",
-    "switching": "Přepínání...",
-    "downloadSpeed": "{{speed}} MB/s",
-    "capabilities": {
-      "languageSelection": "Podporuje více vstupních jazyků",
-      "languageCount": "{{total}} jazyků",
-      "translation": "Umí překládat do angličtiny",
-      "translate": "Přeložit do angličtiny",
-      "singleLanguage": "Podporuje pouze tento jazyk",
-      "languageOnly": "Pouze {{language}}",
-      "streaming": "Zobrazuje přepis živě, jak mluvíte"
-    },
-    "cancel": "Zrušit",
-    "cancelDownload": "Zrušit stahování",
-    "legacy": "Zastaralé"
+    "noModelDownloadRequired": "Žádný model - je nutné stáhnout"
   },
   "settings": {
     "modelSettings": {
@@ -161,22 +122,8 @@
     "models": {
       "title": "Modely přepisu",
       "description": "Vyberte model přepisu nebo stáhněte další modely. Různé modely nabízejí různé úrovně přesnosti a rychlosti.",
-      "deleteConfirm": "Opravdu chcete smazat {{modelName}}? Pro opětovné použití jej budete muset znovu stáhnout.",
-      "deleteActiveConfirm": "{{modelName}} je váš aktivní model. Jeho smazáním se zastaví přepisy, dokud nevyberete nový model. Opravdu chcete pokračovat?",
-      "deleteTitle": "Smazat model",
-      "filters": {
-        "allLanguages": "Všechny jazyky",
-        "streaming": "Filtrovat modely podporující živý přepis",
-        "translation": "Filtrovat modely podporující překlad do angličtiny"
-      },
       "noModelsMatch": "Tomuto filtru neodpovídají žádné modely.",
-      "yourModels": "Stažené modely",
-      "availableModels": "Dostupné ke stažení",
-      "searchPlaceholder": "Hledat modely podle názvu…",
-      "rescan": {
-        "label": "Znovu prohledat",
-        "tooltip": "Znovu prohledat modely přidané do složky modelů nebo mezipaměti Hugging Face mimo Handy"
-      }
+      "yourModels": "Stažené modely"
     },
     "general": {
       "title": "Obecné",
@@ -491,11 +438,6 @@
         "lineCount": "Řádků: {{count}}",
         "empty": "Čekání na logy… Záznamy se zde zobrazí, jakmile je aplikace vygeneruje."
       },
-      "updateChecks": {
-        "label": "Kontrolovat aktualizace",
-        "description": "Automaticky kontrolovat nové verze Handy",
-        "lockedDescription": "Zakázáno systémovou konfigurací (HANDY_DISABLE_UPDATER)"
-      },
       "soundTheme": {
         "label": "Zvukový motiv",
         "description": "Vyberte zvukový motiv pro odezvu při startu a ukončení nahrávání"
@@ -589,18 +531,10 @@
         "verdictNoEvents": "Nebyly zachyceny žádné události — stiskli jste během testu nějaké klávesy?",
         "failed": "Diagnostika selhala: {{error}}"
       },
-      "whatsNewPreview": {
-        "title": "Náhled novinek",
-        "description": "Otevřít nejnovější přibalené poznámky k vydání bez označení jako zobrazené",
-        "button": "Náhled",
-        "noNotes": "Nebyly nalezeny žádné přibalené poznámky k vydání",
-        "error": "Nepodařilo se zobrazit náhled poznámek k vydání"
-      },
       "onboardingPreview": {
         "title": "Náhled úvodního nastavení",
         "description": "Prohlédněte si obrazovky úvodního nastavení beze změny oprávnění, modelů nebo stavu dokončení",
         "permissionsButton": "Oprávnění",
-        "modelsButton": "Výběr modelu",
         "exitButton": "Ukončit náhled"
       }
     },
@@ -631,32 +565,11 @@
           "description": "Vysoce výkonné inferenční zpracování modelu automatického rozpoznávání řeči Whisper od OpenAI",
           "details": "Handy používá ggml pro rychlé lokální zpracování řeči na text. Díky skvělé práci Georgiho Gerganova a přispěvatelů."
         }
-      },
-      "whatsNewUpdates": {
-        "label": "Zobrazovat novinky",
-        "description": "Zobrazovat poznámky k vydání po aktualizacích Handy"
       }
     }
   },
-  "footer": {
-    "checkingUpdates": "Kontroluji aktualizace...",
-    "updateAvailableShort": "Dostupná aktualizace",
-    "upToDate": "Vše aktuální",
-    "updateCheckingDisabled": "Kontrola aktualizací vypnuta",
-    "downloading": "Stahování... {{progress}}%",
-    "installing": "Instalace...",
-    "preparing": "Příprava...",
-    "checkForUpdates": "Zkontrolovat aktualizace",
-    "portableUpdateTitle": "Vyžadována ruční aktualizace",
-    "portableUpdateMessage": "Přenosné instalace nelze aktualizovat automaticky. Níže stáhněte instalátor pro svůj systém, spusťte jej a nainstalujte do stejné složky — vaše složka Data/ (nastavení, modely, nahrávky) zůstane na místě.",
-    "portableUpdateButton": "Stáhnout instalátor",
-    "portableUpdateBrowseMessage": "Přenosné instalace nelze aktualizovat automaticky. Stáhněte nejnovější verzi pro svůj systém z GitHub Releases a nainstalujte ji do stejné složky — vaše složka Data/ (nastavení, modely, nahrávky) zůstane na místě.",
-    "portableUpdateBrowseButton": "Otevřít GitHub Releases"
-  },
   "common": {
     "loading": "Načítání...",
-    "delete": "Smazat",
-    "close": "Zavřít",
     "open": "Otevřít",
     "copy": "Kopírovat",
     "clear": "Vymazat",
@@ -700,9 +613,6 @@
   "overlay": {
     "transcribing": "Přepisuji...",
     "processing": "Zpracovávám..."
-  },
-  "whatsNew": {
-    "title": "Novinky v Handy v{{version}}"
   },
   "secureInput": {
     "blockedWithCulprit_one": "{{name}} může blokovat 1 zkratku",

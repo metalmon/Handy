@@ -1,7 +1,6 @@
 {
   "tray": {
     "settings": "Instellingen...",
-    "checkUpdates": "Controleren op updates...",
     "copyLastTranscript": "Laatste transcriptie kopiëren",
     "unloadModel": "Model ontladen",
     "model": "Model",
@@ -19,17 +18,6 @@
     "about": "Over Handy"
   },
   "onboarding": {
-    "subtitle": "Kies een transcriptiemodel om aan de slag te gaan",
-    "existingModelsTitle": "Compatibele modellen",
-    "downloadModelsTitle": "Beschikbaar voor download",
-    "showAllModels": "Toon alle {{total}} modellen",
-    "showFewerModels": "Minder modellen tonen",
-    "recommended": "Aanbevolen",
-    "customModelDescription": "Niet officieel ondersteund",
-    "modelCard": {
-      "accuracy": "nauwkeurigheid",
-      "speed": "snelheid"
-    },
     "models": {
       "small": {
         "name": "Whisper Small",
@@ -96,9 +84,6 @@
         "description": "Een groot, trager, maar zeer nauwkeurig meertalig model."
       }
     },
-    "errors": {
-      "selectModel": "Model selecteren mislukt"
-    },
     "permissions": {
       "title": "Machtigingen vereist",
       "description": "Handy heeft een aantal machtigingen nodig om goed te kunnen werken.",
@@ -121,38 +106,14 @@
     }
   },
   "modelSelector": {
-    "custom": "Aangepast",
-    "legacy": "Klassiek",
-    "streaming": "Streaming",
     "active": "Actief",
-    "switching": "Wisselen...",
-    "noModelsAvailable": "Geen modellen beschikbaar",
-    "verifying": "Verifiëren van {{modelName}}...",
-    "verifyingGeneric": "Verifiëren...",
-    "extracting": "Uitpakken van {{modelName}}...",
-    "extractingMultiple": "Uitpakken van {{count}} modellen...",
-    "extractingGeneric": "Uitpakken...",
-    "downloading": "Downloaden {{percentage}}%",
-    "downloadingMultiple": "Downloaden van {{count}} modellen...",
+    "statusTitle": "Status: {{modelStatus}}",
     "modelReady": "Model gereed",
     "loading": "Laden van {{modelName}}...",
     "loadingGeneric": "Laden...",
     "modelError": "Modelfout",
     "modelUnloaded": "Model ontladen",
-    "noModelDownloadRequired": "Geen model - Download vereist",
-    "deleteModel": "{{modelName}} verwijderen",
-    "downloadSpeed": "{{speed}} MB/s",
-    "cancel": "Annuleren",
-    "cancelDownload": "Download annuleren",
-    "capabilities": {
-      "languageSelection": "Ondersteunt meerdere invoertalen",
-      "singleLanguage": "Ondersteunt alleen deze taal",
-      "languageCount": "{{total}} talen",
-      "languageOnly": "Alleen {{language}}",
-      "translation": "Kan vertalen naar het Engels",
-      "translate": "Vertalen",
-      "streaming": "Toont live transcriptie tijdens het spreken"
-    }
+    "noModelDownloadRequired": "Geen model - Download vereist"
   },
   "settings": {
     "modelSettings": {
@@ -212,21 +173,7 @@
     "models": {
       "title": "Transcriptiemodellen",
       "description": "Selecteer een transcriptiemodel of download extra modellen. Verschillende modellen bieden variërende niveaus van nauwkeurigheid en snelheid.",
-      "searchPlaceholder": "Modellen zoeken op naam...",
       "yourModels": "Gedownloade modellen",
-      "availableModels": "Beschikbaar voor download",
-      "deleteConfirm": "Weet je zeker dat je {{modelName}} wilt verwijderen? Je moet het model opnieuw downloaden om het weer te gebruiken.",
-      "deleteActiveConfirm": "{{modelName}} is je actieve model. Als je dit verwijdert, stoppen de transcripties totdat je een nieuw model selecteert. Weet je het zeker?",
-      "deleteTitle": "Model verwijderen",
-      "filters": {
-        "allLanguages": "Alle talen",
-        "streaming": "Filter modellen die live transcriptie ondersteunen",
-        "translation": "Filter modellen die vertaling naar het Engels ondersteunen"
-      },
-      "rescan": {
-        "label": "Opnieuw scannen",
-        "tooltip": "Scannen naar modellen die buiten Handy om zijn toegevoegd aan de modellenmap of Hugging Face-cache"
-      },
       "noModelsMatch": "Geen modellen voldoen aan dit filter."
     },
     "sound": {
@@ -491,23 +438,10 @@
         "lineCount": "{{count}} regels",
         "empty": "Wachten op logboeken... Meldingen verschijnen hier zodra de app ze genereert."
       },
-      "updateChecks": {
-        "label": "Controleren op updates",
-        "description": "Automatisch controleren op nieuwe versies van Handy",
-        "lockedDescription": "Uitgeschakeld door systeemconfiguratie (HANDY_DISABLE_UPDATER)"
-      },
-      "whatsNewPreview": {
-        "title": "Voorbeeld van release-notes",
-        "description": "Open de nieuwste meegeleverde release-notes zonder deze als gelezen te markeren",
-        "button": "Voorbeeld",
-        "noNotes": "Geen meegeleverde release-notes gevonden",
-        "error": "Voorbeeld van release-notes laden mislukt"
-      },
       "onboardingPreview": {
         "title": "Voorbeeld van onboarding",
         "description": "Bekijk de onboardingschermen zonder machtigingen, modellen of de voltooiingsstatus te wijzigen",
         "permissionsButton": "Machtigingen",
-        "modelsButton": "Modelselectie",
         "exitButton": "Voorbeeld sluiten"
       },
       "soundTheme": {
@@ -610,10 +544,6 @@
         "title": "Versie",
         "description": "Huidige versie van Handy"
       },
-      "whatsNewUpdates": {
-        "label": "Toon 'Wat is er nieuw'",
-        "description": "Release-notes tonen nadat Handy is bijgewerkt"
-      },
       "appDataDirectory": {
         "title": "App-datamap",
         "description": "Locatie waar Handy de gegevens opslaat"
@@ -638,28 +568,8 @@
       }
     }
   },
-  "footer": {
-    "checkingUpdates": "Controleren op updates...",
-    "updateAvailableShort": "Update beschikbaar",
-    "upToDate": "Up-to-date",
-    "updateCheckingDisabled": "Updatecontrole uitgeschakeld",
-    "downloading": "Downloaden... {{progress}}%",
-    "installing": "Installeren...",
-    "preparing": "Voorbereiden...",
-    "checkForUpdates": "Controleren op updates",
-    "portableUpdateTitle": "Handmatige update vereist",
-    "portableUpdateMessage": "Draagbare (portable) installaties kunnen niet automatisch worden bijgewerkt. Download hieronder het installatiebestand voor je systeem, voer het uit en installeer in dezelfde map — je Data/-map (instellingen, modellen, opnames) blijft behouden.",
-    "portableUpdateButton": "Installatiebestand downloaden",
-    "portableUpdateBrowseMessage": "Draagbare (portable) installaties kunnen niet automatisch worden bijgewerkt. Download de nieuwste versie voor je systeem van GitHub Releases en installeer die in dezelfde map — je Data/-map (instellingen, modellen, opnames) blijft behouden.",
-    "portableUpdateBrowseButton": "GitHub Releases openen"
-  },
-  "whatsNew": {
-    "title": "Nieuw in Handy v{{version}}"
-  },
   "common": {
     "loading": "Laden...",
-    "delete": "Verwijderen",
-    "close": "Sluiten",
     "open": "Openen",
     "copy": "Kopiëren",
     "clear": "Wissen",

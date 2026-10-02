@@ -1,7 +1,6 @@
 {
   "tray": {
     "settings": "Configuració...",
-    "checkUpdates": "Comprova si hi ha actualitzacions...",
     "copyLastTranscript": "Copia l'última transcripció",
     "unloadModel": "Allibera el model de la memòria",
     "model": "Model",
@@ -19,17 +18,6 @@
     "about": "Quant a"
   },
   "onboarding": {
-    "subtitle": "Per començar, trieu un model de transcripció",
-    "existingModelsTitle": "Models compatibles",
-    "downloadModelsTitle": "Disponibles per baixar",
-    "showAllModels": "Mostra tots els {{total}} models",
-    "showFewerModels": "Mostra menys models",
-    "recommended": "Recomanat",
-    "customModelDescription": "Sense suport oficial",
-    "modelCard": {
-      "accuracy": "precisió",
-      "speed": "velocitat"
-    },
     "models": {
       "small": {
         "name": "Whisper Small",
@@ -96,9 +84,6 @@
         "description": "Un model multilingüe gran, més lent, però molt precís."
       }
     },
-    "errors": {
-      "selectModel": "No s'ha pogut seleccionar el model"
-    },
     "permissions": {
       "title": "Permisos necessaris",
       "description": "El Handy demana alguns permisos per funcionar correctament.",
@@ -121,38 +106,14 @@
     }
   },
   "modelSelector": {
-    "custom": "Personalitzat",
-    "legacy": "Antic",
-    "streaming": "En temps real",
     "active": "Actiu",
-    "switching": "S'està canviant...",
-    "noModelsAvailable": "No hi ha models disponibles",
-    "verifying": "S'està verificant {{modelName}}...",
-    "verifyingGeneric": "S'està verificant...",
-    "extracting": "S'està extraient {{modelName}}...",
-    "extractingMultiple": "S'estan extraient {{count}} models...",
-    "extractingGeneric": "S'està extraient...",
-    "downloading": "S'està baixant: {{percentage}}%",
-    "downloadingMultiple": "S'estan baixant {{count}} models...",
+    "statusTitle": "Status: {{modelStatus}}",
     "modelReady": "Model a punt",
     "loading": "S'està carregant {{modelName}}...",
     "loadingGeneric": "S'està carregant...",
     "modelError": "Error del model",
     "modelUnloaded": "Model alliberat de la memòria",
-    "noModelDownloadRequired": "No hi ha cap model: cal baixar-ne un",
-    "deleteModel": "Suprimiu {{modelName}}",
-    "downloadSpeed": "{{speed}} MB/s",
-    "cancel": "Cancel·la",
-    "cancelDownload": "Cancel·la la baixada",
-    "capabilities": {
-      "languageSelection": "Admet diverses llengües d'entrada",
-      "singleLanguage": "Només admet aquesta llengua",
-      "languageCount": "{{total}} llengües",
-      "languageOnly": "Només {{language}}",
-      "translation": "Pot traduir a l'anglès",
-      "translate": "Tradueix",
-      "streaming": "Mostra la transcripció en temps real mentre parleu"
-    }
+    "noModelDownloadRequired": "No hi ha cap model: cal baixar-ne un"
   },
   "settings": {
     "modelSettings": {
@@ -212,21 +173,7 @@
     "models": {
       "title": "Models de transcripció",
       "description": "Seleccioneu un model de transcripció o baixeu-ne més. Els models ofereixen diferents nivells de precisió i velocitat.",
-      "searchPlaceholder": "Cerqueu models pel nom…",
       "yourModels": "Models baixats",
-      "availableModels": "Disponibles per baixar",
-      "deleteConfirm": "Segur que voleu suprimir {{modelName}}? Haureu de tornar-lo a baixar per utilitzar-lo.",
-      "deleteActiveConfirm": "{{modelName}} és el model actiu. Si el suprimiu, no podreu fer transcripcions fins que seleccioneu un altre model. N'esteu segur?",
-      "deleteTitle": "Suprimeix el model",
-      "filters": {
-        "allLanguages": "Totes les llengües",
-        "streaming": "Filtra els models que admeten la transcripció en temps real",
-        "translation": "Filtra els models que admeten la traducció a l'anglès"
-      },
-      "rescan": {
-        "label": "Torna a cercar",
-        "tooltip": "Torna a cercar models afegits a la carpeta de models o a la memòria cau de Hugging Face des de fora del Handy"
-      },
       "noModelsMatch": "Cap model no coincideix amb aquest filtre."
     },
     "sound": {
@@ -491,23 +438,10 @@
         "lineCount": "{{count}} línies",
         "empty": "S'estan esperant registres… Les entrades apareixeran aquí a mesura que l'aplicació les emeti."
       },
-      "updateChecks": {
-        "label": "Comproveu si hi ha actualitzacions",
-        "description": "Comprova automàticament si hi ha versions noves del Handy",
-        "lockedDescription": "Desactivat per la configuració del sistema (HANDY_DISABLE_UPDATER)"
-      },
-      "whatsNewPreview": {
-        "title": "Previsualització de les novetats",
-        "description": "Obre les últimes notes de la versió incloses sense marcar-les com a llegides",
-        "button": "Previsualitzeu",
-        "noNotes": "No s'han trobat notes de la versió incloses",
-        "error": "No s'han pogut previsualitzar les notes de la versió"
-      },
       "onboardingPreview": {
         "title": "Previsualització de la configuració inicial",
         "description": "Previsualitza les pantalles de configuració inicial sense canviar els permisos, os models ni l'estat de compleció",
         "permissionsButton": "Permisos",
-        "modelsButton": "Selecció del model",
         "exitButton": "Sortiu de la previsualització"
       },
       "soundTheme": {
@@ -610,10 +544,6 @@
         "title": "Versió",
         "description": "Versió actual del Handy"
       },
-      "whatsNewUpdates": {
-        "label": "Mostra les novetats",
-        "description": "Mostra les notes de la versió després d'actualitzar el Handy"
-      },
       "appDataDirectory": {
         "title": "Directori de dades de l'aplicació",
         "description": "Ubicació on el Handy desa les dades"
@@ -638,28 +568,8 @@
       }
     }
   },
-  "footer": {
-    "checkingUpdates": "S'està comprovant si hi ha actualitzacions...",
-    "updateAvailableShort": "Hi ha una actualització disponible",
-    "upToDate": "Actualitzat",
-    "updateCheckingDisabled": "Comprovació d'actualitzacions desactivada",
-    "downloading": "S'està baixant... {{progress}}%",
-    "installing": "S'està instal·lant...",
-    "preparing": "S'està preparant...",
-    "checkForUpdates": "Comprova si hi ha actualitzacions",
-    "portableUpdateTitle": "Cal actualitzar manualment",
-    "portableUpdateMessage": "Les instal·lacions portables no es poden actualitzar automàticament. Baixa l'instal·lador per al vostre sistema a continuació, executeu-lo i instal·leu-lo a la mateixa carpeta. La carpeta Data/ (configuració, models i enregistraments) es conserva.",
-    "portableUpdateButton": "Baixa l'instal·lador",
-    "portableUpdateBrowseMessage": "Les instal·lacions portables no es poden actualitzar automàticament. Baixa l'última versió per al vostre sistema des de GitHub Releases i instal·leu-la a la mateixa carpeta. La carpeta Data/ (configuració, models i enregistraments) es conserva.",
-    "portableUpdateBrowseButton": "Obriu GitHub Releases"
-  },
-  "whatsNew": {
-    "title": "Novetats del Handy v{{version}}"
-  },
   "common": {
     "loading": "S'està carregant...",
-    "delete": "Suprimeix",
-    "close": "Tanca",
     "open": "Obre",
     "copy": "Copia",
     "clear": "Neteja",

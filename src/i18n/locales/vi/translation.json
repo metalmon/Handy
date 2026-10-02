@@ -1,7 +1,6 @@
 {
   "tray": {
     "settings": "Cài đặt...",
-    "checkUpdates": "Kiểm tra cập nhật...",
     "copyLastTranscript": "Sao chép bản chép lời mới nhất",
     "unloadModel": "Dỡ mô hình",
     "model": "Mô hình",
@@ -19,17 +18,6 @@
     "about": "Giới thiệu"
   },
   "onboarding": {
-    "subtitle": "Để bắt đầu, hãy chọn một mô hình chuyển đổi giọng nói",
-    "existingModelsTitle": "Mô hình tương thích",
-    "downloadModelsTitle": "Có sẵn để tải xuống",
-    "showAllModels": "Hiển thị tất cả {{total}} mô hình",
-    "showFewerModels": "Hiển thị ít mô hình hơn",
-    "recommended": "Đề xuất",
-    "customModelDescription": "Không được hỗ trợ chính thức",
-    "modelCard": {
-      "accuracy": "độ chính xác",
-      "speed": "tốc độ"
-    },
     "models": {
       "small": {
         "name": "Whisper Small",
@@ -96,9 +84,6 @@
         "description": "Mô hình lớn, chậm hơn, nhưng rất chính xác và đa ngôn ngữ."
       }
     },
-    "errors": {
-      "selectModel": "Không thể chọn mô hình"
-    },
     "permissions": {
       "title": "Cần cấp quyền",
       "description": "Handy cần một số quyền để hoạt động bình thường.",
@@ -121,38 +106,14 @@
     }
   },
   "modelSelector": {
-    "custom": "Tùy chỉnh",
-    "streaming": "Truyền trực tiếp",
     "active": "Đang hoạt động",
-    "switching": "Đang chuyển...",
-    "noModelsAvailable": "Không có mô hình nào",
-    "verifying": "Đang xác minh {{modelName}}...",
-    "verifyingGeneric": "Đang xác minh...",
-    "extracting": "Đang giải nén {{modelName}}...",
-    "extractingMultiple": "Đang giải nén {{count}} mô hình...",
-    "extractingGeneric": "Đang giải nén...",
-    "downloading": "Đang tải xuống {{percentage}}%",
-    "downloadingMultiple": "Đang tải xuống {{count}} mô hình...",
+    "statusTitle": "Status: {{modelStatus}}",
     "modelReady": "Mô Hình Sẵn Sàng",
     "loading": "Đang tải {{modelName}}...",
     "loadingGeneric": "Đang tải...",
     "modelError": "Lỗi Mô Hình",
     "modelUnloaded": "Mô Hình Đã Gỡ",
-    "noModelDownloadRequired": "Chưa Có Mô Hình - Cần Tải Xuống",
-    "deleteModel": "Xóa {{modelName}}",
-    "downloadSpeed": "{{speed}} MB/s",
-    "capabilities": {
-      "languageSelection": "Hỗ trợ nhiều ngôn ngữ đầu vào",
-      "languageCount": "{{total}} ngôn ngữ",
-      "translation": "Có thể dịch sang tiếng Anh",
-      "translate": "Dịch sang tiếng Anh",
-      "singleLanguage": "Chỉ hỗ trợ ngôn ngữ này",
-      "languageOnly": "Chỉ {{language}}",
-      "streaming": "Hiển thị phiên âm trực tiếp khi bạn nói"
-    },
-    "cancel": "Hủy",
-    "cancelDownload": "Hủy tải xuống",
-    "legacy": "Cũ"
+    "noModelDownloadRequired": "Chưa Có Mô Hình - Cần Tải Xuống"
   },
   "settings": {
     "modelSettings": {
@@ -161,22 +122,8 @@
     "models": {
       "title": "Mô hình chuyển đổi",
       "description": "Chọn mô hình chuyển đổi hoặc tải thêm mô hình. Các mô hình khác nhau có mức độ chính xác và tốc độ khác nhau.",
-      "deleteConfirm": "Bạn có chắc chắn muốn xóa {{modelName}}? Bạn sẽ cần tải lại để sử dụng.",
-      "deleteActiveConfirm": "{{modelName}} là mô hình đang hoạt động của bạn. Xóa nó sẽ dừng phiên âm cho đến khi bạn chọn một mô hình mới. Bạn có chắc không?",
-      "deleteTitle": "Xóa mô hình",
-      "filters": {
-        "allLanguages": "Tất cả ngôn ngữ",
-        "streaming": "Lọc các mô hình hỗ trợ phiên âm trực tiếp",
-        "translation": "Lọc các mô hình hỗ trợ dịch sang tiếng Anh"
-      },
       "noModelsMatch": "Không có mô hình nào khớp với bộ lọc này.",
-      "yourModels": "Mô hình đã tải",
-      "availableModels": "Có sẵn để tải xuống",
-      "searchPlaceholder": "Tìm mô hình theo tên…",
-      "rescan": {
-        "label": "Quét lại",
-        "tooltip": "Quét lại các mô hình được thêm vào thư mục mô hình hoặc bộ nhớ đệm Hugging Face bên ngoài Handy"
-      }
+      "yourModels": "Mô hình đã tải"
     },
     "general": {
       "title": "Chung",
@@ -491,11 +438,6 @@
         "lineCount": "{{count}} dòng",
         "empty": "Đang chờ nhật ký… Các mục sẽ xuất hiện ở đây khi ứng dụng phát ra."
       },
-      "updateChecks": {
-        "label": "Kiểm tra cập nhật",
-        "description": "Tự động kiểm tra phiên bản mới của Handy",
-        "lockedDescription": "Đã bị vô hiệu hóa bởi cấu hình hệ thống (HANDY_DISABLE_UPDATER)"
-      },
       "soundTheme": {
         "label": "Chủ đề âm thanh",
         "description": "Chọn chủ đề âm thanh cho phản hồi bắt đầu và kết thúc ghi âm"
@@ -589,18 +531,10 @@
         "verdictNoEvents": "Không ghi nhận sự kiện nào — bạn có bấm phím nào trong lúc kiểm tra không?",
         "failed": "Chẩn đoán thất bại: {{error}}"
       },
-      "whatsNewPreview": {
-        "title": "Xem trước điểm mới",
-        "description": "Mở ghi chú phát hành mới nhất được đóng gói mà không đánh dấu là đã xem",
-        "button": "Xem trước",
-        "noNotes": "Không tìm thấy ghi chú phát hành được đóng gói",
-        "error": "Không thể xem trước ghi chú phát hành"
-      },
       "onboardingPreview": {
         "title": "Xem trước thiết lập ban đầu",
         "description": "Xem trước các màn hình thiết lập mà không thay đổi quyền, mô hình hoặc trạng thái hoàn tất",
         "permissionsButton": "Quyền",
-        "modelsButton": "Chọn mô hình",
         "exitButton": "Thoát xem trước"
       }
     },
@@ -631,32 +565,11 @@
           "description": "Suy luận hiệu suất cao của mô hình nhận dạng giọng nói tự động Whisper của OpenAI",
           "details": "Handy sử dụng ggml để xử lý chuyển đổi giọng nói thành văn bản nhanh, cục bộ. Cảm ơn công việc tuyệt vời của Georgi Gerganov và các cộng tác viên."
         }
-      },
-      "whatsNewUpdates": {
-        "label": "Hiển thị điểm mới",
-        "description": "Hiển thị ghi chú phát hành sau khi Handy cập nhật"
       }
     }
   },
-  "footer": {
-    "checkingUpdates": "Đang kiểm tra cập nhật...",
-    "updateAvailableShort": "Có bản cập nhật",
-    "upToDate": "Đã cập nhật",
-    "updateCheckingDisabled": "Đã tắt kiểm tra cập nhật",
-    "downloading": "Đang tải... {{progress}}%",
-    "installing": "Đang cài đặt...",
-    "preparing": "Đang chuẩn bị...",
-    "checkForUpdates": "Kiểm tra cập nhật",
-    "portableUpdateTitle": "Cần cập nhật thủ công",
-    "portableUpdateMessage": "Bản cài đặt di động không thể cập nhật tự động. Hãy tải trình cài đặt phù hợp với hệ thống của bạn bên dưới, chạy nó và cài vào cùng thư mục — thư mục Data/ (cài đặt, mô hình, bản ghi) của bạn được giữ nguyên.",
-    "portableUpdateButton": "Tải trình cài đặt",
-    "portableUpdateBrowseMessage": "Bản cài đặt di động không thể cập nhật tự động. Hãy tải phiên bản mới nhất phù hợp với hệ thống của bạn từ GitHub Releases và cài vào cùng thư mục — thư mục Data/ (cài đặt, mô hình, bản ghi) của bạn được giữ nguyên.",
-    "portableUpdateBrowseButton": "Mở GitHub Releases"
-  },
   "common": {
     "loading": "Đang tải...",
-    "delete": "Xóa",
-    "close": "Đóng",
     "open": "Mở",
     "copy": "Sao chép",
     "clear": "Xóa",
@@ -700,9 +613,6 @@
   "overlay": {
     "transcribing": "Đang chuyển đổi...",
     "processing": "Đang xử lý..."
-  },
-  "whatsNew": {
-    "title": "Điểm mới trong Handy v{{version}}"
   },
   "secureInput": {
     "blockedWithCulprit_one": "{{name}} có thể đang chặn 1 phím tắt",

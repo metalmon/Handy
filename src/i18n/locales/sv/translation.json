@@ -1,7 +1,6 @@
 {
   "tray": {
     "settings": "Inställningar...",
-    "checkUpdates": "Sök efter uppdateringar...",
     "copyLastTranscript": "Kopiera senaste transkriptionen",
     "unloadModel": "Avlasta modell",
     "model": "Modell",
@@ -19,17 +18,6 @@
     "about": "Om"
   },
   "onboarding": {
-    "subtitle": "För att komma igång, välj en transkriptionsmodell",
-    "existingModelsTitle": "Kompatibla modeller",
-    "downloadModelsTitle": "Tillgängliga för nedladdning",
-    "showAllModels": "Visa alla {{total}} modeller",
-    "showFewerModels": "Visa färre modeller",
-    "recommended": "Rekommenderat",
-    "customModelDescription": "Stöds inte officiellt",
-    "modelCard": {
-      "accuracy": "noggrannhet",
-      "speed": "hastighet"
-    },
     "models": {
       "small": {
         "name": "Whisper Small",
@@ -96,9 +84,6 @@
         "description": "En stor, långsammare, men mycket noggrann flerspråkig modell."
       }
     },
-    "errors": {
-      "selectModel": "Det gick inte att välja modell"
-    },
     "permissions": {
       "title": "Behörigheter krävs",
       "description": "Handy behöver ett par behörigheter för att fungera korrekt.",
@@ -121,38 +106,14 @@
     }
   },
   "modelSelector": {
-    "custom": "Anpassad",
-    "streaming": "Streaming",
     "active": "Aktiv",
-    "switching": "Byter...",
-    "noModelsAvailable": "Inga modeller tillgängliga",
-    "verifying": "Verifierar {{modelName}}...",
-    "verifyingGeneric": "Verifierar...",
-    "extracting": "Extraherar {{modelName}}...",
-    "extractingMultiple": "Extraherar {{count}} modeller...",
-    "extractingGeneric": "Extraherar...",
-    "downloading": "Laddar ner {{percentage}}%",
-    "downloadingMultiple": "Laddar ner {{count}} modeller...",
+    "statusTitle": "Status: {{modelStatus}}",
     "modelReady": "Modell klar",
     "loading": "Laddar {{modelName}}...",
     "loadingGeneric": "Laddar...",
     "modelError": "Modellfel",
     "modelUnloaded": "Modell avlastad",
-    "noModelDownloadRequired": "Ingen modell - Nedladdning krävs",
-    "deleteModel": "Ta bort {{modelName}}",
-    "downloadSpeed": "{{speed}} MB/s",
-    "cancel": "Avbryt",
-    "cancelDownload": "Avbryt nedladdning",
-    "capabilities": {
-      "languageSelection": "Stöder flera indataspråk",
-      "singleLanguage": "Stöder endast detta språk",
-      "languageCount": "{{total}} språk",
-      "languageOnly": "Endast {{language}}",
-      "translation": "Kan översätta till engelska",
-      "translate": "Översätt till engelska",
-      "streaming": "Visar transkription i realtid medan du talar"
-    },
-    "legacy": "Äldre"
+    "noModelDownloadRequired": "Ingen modell - Nedladdning krävs"
   },
   "settings": {
     "modelSettings": {
@@ -213,21 +174,7 @@
       "title": "Transkriptionsmodeller",
       "description": "Välj en transkriptionsmodell eller ladda ner ytterligare modeller. Olika modeller erbjuder varierande nivåer av noggrannhet och hastighet.",
       "yourModels": "Nedladdade modeller",
-      "availableModels": "Tillgängliga att ladda ner",
-      "deleteConfirm": "Är du säker på att du vill ta bort {{modelName}}? Du måste ladda ner den igen för att använda den.",
-      "deleteActiveConfirm": "{{modelName}} är din aktiva modell. Om du tar bort den avbryts transkriptioner tills du väljer en ny modell. Är du säker?",
-      "deleteTitle": "Ta bort modell",
-      "filters": {
-        "allLanguages": "Alla språk",
-        "streaming": "Filtrera modeller som stöder transkription i realtid",
-        "translation": "Filtrera modeller som stöder översättning till engelska"
-      },
-      "noModelsMatch": "Inga modeller matchar detta filter.",
-      "searchPlaceholder": "Sök modeller efter namn…",
-      "rescan": {
-        "label": "Skanna om",
-        "tooltip": "Skanna om efter modeller som lagts till i modellmappen eller Hugging Face-cachen utanför Handy"
-      }
+      "noModelsMatch": "Inga modeller matchar detta filter."
     },
     "sound": {
       "title": "Ljud",
@@ -491,11 +438,6 @@
         "lineCount": "{{count}} rader",
         "empty": "Väntar på loggar… Poster visas här när appen skickar dem."
       },
-      "updateChecks": {
-        "label": "Sök efter uppdateringar",
-        "description": "Sök automatiskt efter nya versioner av Handy",
-        "lockedDescription": "Inaktiverad av systemkonfiguration (HANDY_DISABLE_UPDATER)"
-      },
       "soundTheme": {
         "label": "Ljudtema",
         "description": "Välj ett ljudtema för återkoppling vid start och stopp av inspelning"
@@ -589,18 +531,10 @@
         "verdictNoEvents": "Inga händelser fångades — tryckte du på några tangenter under testet?",
         "failed": "Diagnostiken misslyckades: {{error}}"
       },
-      "whatsNewPreview": {
-        "title": "Förhandsvisa nyheter",
-        "description": "Öppna den senaste medföljande versionsinformationen utan att markera den som visad",
-        "button": "Förhandsvisa",
-        "noNotes": "Ingen medföljande versionsinformation hittades",
-        "error": "Det gick inte att förhandsvisa versionsinformationen"
-      },
       "onboardingPreview": {
         "title": "Förhandsvisa introduktionen",
         "description": "Förhandsvisa introduktionsskärmarna utan att ändra behörigheter, modeller eller slutförandestatus",
         "permissionsButton": "Behörigheter",
-        "modelsButton": "Modellval",
         "exitButton": "Avsluta förhandsvisning"
       }
     },
@@ -631,32 +565,11 @@
           "description": "Högpresterande inferens av OpenAI:s Whisper-modell för automatisk taligenkänning",
           "details": "Handy använder ggml för snabb, lokal tal-till-text-behandling. Tack till det fantastiska arbete som utförts av Georgi Gerganov med medarbetare."
         }
-      },
-      "whatsNewUpdates": {
-        "label": "Visa nyheter",
-        "description": "Visa versionsinformation efter Handy-uppdateringar"
       }
     }
   },
-  "footer": {
-    "checkingUpdates": "Söker efter uppdateringar...",
-    "updateAvailableShort": "Uppdatering tillgänglig",
-    "upToDate": "Uppdaterad",
-    "updateCheckingDisabled": "Uppdateringskontroll inaktiverad",
-    "downloading": "Laddar ner... {{progress}}%",
-    "installing": "Installerar...",
-    "preparing": "Förbereder...",
-    "checkForUpdates": "Sök efter uppdateringar",
-    "portableUpdateTitle": "Manuell uppdatering krävs",
-    "portableUpdateMessage": "Portabla installationer kan inte uppdateras automatiskt. Ladda ner installeraren för ditt system nedan, kör den och installera i samma mapp — din Data/-mapp (inställningar, modeller, inspelningar) behålls.",
-    "portableUpdateButton": "Ladda ner installeraren",
-    "portableUpdateBrowseMessage": "Portabla installationer kan inte uppdateras automatiskt. Ladda ner den senaste versionen för ditt system från GitHub Releases och installera den i samma mapp — din Data/-mapp (inställningar, modeller, inspelningar) behålls.",
-    "portableUpdateBrowseButton": "Öppna GitHub Releases"
-  },
   "common": {
     "loading": "Laddar...",
-    "delete": "Ta bort",
-    "close": "Stäng",
     "open": "Öppna",
     "copy": "Kopiera",
     "clear": "Rensa",
@@ -700,9 +613,6 @@
   "overlay": {
     "transcribing": "Transkriberar...",
     "processing": "Bearbetar..."
-  },
-  "whatsNew": {
-    "title": "Nytt i Handy v{{version}}"
   },
   "secureInput": {
     "blockedWithCulprit_one": "{{name}} kanske blockerar 1 kortkommando",

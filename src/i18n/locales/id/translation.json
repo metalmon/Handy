@@ -1,7 +1,6 @@
 {
   "tray": {
     "settings": "Pengaturan...",
-    "checkUpdates": "Periksa Pembaruan...",
     "copyLastTranscript": "Salin Transkripsi Terakhir",
     "unloadModel": "Keluarkan Model dari Memori",
     "model": "Model",
@@ -19,17 +18,6 @@
     "about": "Tentang"
   },
   "onboarding": {
-    "subtitle": "Untuk memulai, pilih model transkripsi",
-    "existingModelsTitle": "Model yang Kompatibel",
-    "downloadModelsTitle": "Tersedia untuk Diunduh",
-    "showAllModels": "Tampilkan semua {{total}} model",
-    "showFewerModels": "Tampilkan lebih sedikit model",
-    "recommended": "Direkomendasikan",
-    "customModelDescription": "Tidak didukung secara resmi",
-    "modelCard": {
-      "accuracy": "akurasi",
-      "speed": "kecepatan"
-    },
     "models": {
       "small": {
         "name": "Whisper Small",
@@ -96,9 +84,6 @@
         "description": "Model multibahasa yang besar dan lebih lambat, tetapi sangat akurat."
       }
     },
-    "errors": {
-      "selectModel": "Gagal memilih model"
-    },
     "permissions": {
       "title": "Izin Diperlukan",
       "description": "Handy memerlukan beberapa izin agar dapat berfungsi dengan baik.",
@@ -121,38 +106,14 @@
     }
   },
   "modelSelector": {
-    "custom": "Kustom",
-    "legacy": "Legacy",
-    "streaming": "Streaming",
     "active": "Aktif",
-    "switching": "Beralih...",
-    "noModelsAvailable": "Tidak ada model yang tersedia",
-    "verifying": "Memverifikasi {{modelName}}...",
-    "verifyingGeneric": "Memverifikasi...",
-    "extracting": "Mengekstrak {{modelName}}...",
-    "extractingMultiple": "Mengekstrak {{count}} model...",
-    "extractingGeneric": "Mengekstrak...",
-    "downloading": "Mengunduh {{percentage}}%",
-    "downloadingMultiple": "Mengunduh {{count}} model...",
+    "statusTitle": "Status: {{modelStatus}}",
     "modelReady": "Model Siap",
     "loading": "Memuat {{modelName}}...",
     "loadingGeneric": "Memuat...",
     "modelError": "Kesalahan Model",
     "modelUnloaded": "Model Dikeluarkan dari Memori",
-    "noModelDownloadRequired": "Model Belum Tersedia — Perlu Diunduh",
-    "deleteModel": "Hapus {{modelName}}",
-    "downloadSpeed": "{{speed}} MB/s",
-    "cancel": "Batal",
-    "cancelDownload": "Batalkan unduhan",
-    "capabilities": {
-      "languageSelection": "Mendukung beberapa bahasa masukan",
-      "singleLanguage": "Hanya mendukung bahasa ini",
-      "languageCount": "{{total}} bahasa",
-      "languageOnly": "Hanya {{language}}",
-      "translation": "Dapat menerjemahkan ke bahasa Inggris",
-      "translate": "Terjemahkan",
-      "streaming": "Menampilkan transkripsi langsung saat Anda berbicara"
-    }
+    "noModelDownloadRequired": "Model Belum Tersedia — Perlu Diunduh"
   },
   "settings": {
     "modelSettings": {
@@ -212,21 +173,7 @@
     "models": {
       "title": "Model Transkripsi",
       "description": "Pilih model transkripsi atau unduh model tambahan. Setiap model menawarkan tingkat akurasi dan kecepatan yang berbeda.",
-      "searchPlaceholder": "Cari model berdasarkan nama…",
       "yourModels": "Model yang Diunduh",
-      "availableModels": "Tersedia untuk Diunduh",
-      "deleteConfirm": "Yakin ingin menghapus {{modelName}}? Anda harus mengunduhnya lagi untuk menggunakannya.",
-      "deleteActiveConfirm": "{{modelName}} adalah model aktif Anda. Menghapusnya akan menghentikan transkripsi sampai Anda memilih model baru. Yakin ingin melanjutkan?",
-      "deleteTitle": "Hapus Model",
-      "filters": {
-        "allLanguages": "Semua Bahasa",
-        "streaming": "Saring model yang mendukung transkripsi waktu nyata",
-        "translation": "Saring model yang mendukung penerjemahan ke bahasa Inggris"
-      },
-      "rescan": {
-        "label": "Pindai Ulang",
-        "tooltip": "Pindai ulang model yang ditambahkan ke folder model atau cache Hugging Face dari luar Handy"
-      },
       "noModelsMatch": "Tidak ada model yang cocok dengan kriteria ini."
     },
     "sound": {
@@ -491,23 +438,10 @@
         "lineCount": "{{count}} baris",
         "empty": "Menunggu log… Entri akan muncul di sini saat aplikasi menghasilkannya."
       },
-      "updateChecks": {
-        "label": "Periksa Pembaruan",
-        "description": "Periksa versi baru Handy secara otomatis",
-        "lockedDescription": "Dinonaktifkan oleh konfigurasi sistem (HANDY_DISABLE_UPDATER)"
-      },
-      "whatsNewPreview": {
-        "title": "Pratinjau Yang Baru",
-        "description": "Buka catatan rilis terbaru yang disertakan tanpa menandainya sebagai telah dilihat",
-        "button": "Pratinjau",
-        "noNotes": "Tidak ada catatan rilis yang disertakan",
-        "error": "Gagal menampilkan pratinjau catatan rilis"
-      },
       "onboardingPreview": {
         "title": "Pratinjau Penyiapan Awal",
         "description": "Pratinjau layar penyiapan awal tanpa mengubah izin, model, atau status penyelesaian",
         "permissionsButton": "Izin",
-        "modelsButton": "Pemilihan Model",
         "exitButton": "Keluar dari Pratinjau"
       },
       "soundTheme": {
@@ -610,10 +544,6 @@
         "title": "Versi",
         "description": "Versi Handy saat ini"
       },
-      "whatsNewUpdates": {
-        "label": "Tampilkan Yang Baru",
-        "description": "Tampilkan catatan rilis setelah Handy diperbarui"
-      },
       "appDataDirectory": {
         "title": "Direktori Data Aplikasi",
         "description": "Lokasi Handy menyimpan datanya"
@@ -638,28 +568,8 @@
       }
     }
   },
-  "footer": {
-    "checkingUpdates": "Memeriksa pembaruan...",
-    "updateAvailableShort": "Pembaruan tersedia",
-    "upToDate": "Sudah versi terbaru",
-    "updateCheckingDisabled": "Pemeriksaan Pembaruan Dinonaktifkan",
-    "downloading": "Mengunduh... {{progress}}%",
-    "installing": "Menginstal...",
-    "preparing": "Menyiapkan...",
-    "checkForUpdates": "Periksa pembaruan",
-    "portableUpdateTitle": "Pembaruan manual diperlukan",
-    "portableUpdateMessage": "Instalasi portabel tidak dapat diperbarui secara otomatis. Unduh penginstal untuk sistem Anda di bawah ini, jalankan, lalu instal ke folder yang sama — folder Data/ Anda (pengaturan, model, rekaman) tetap dipertahankan.",
-    "portableUpdateButton": "Unduh penginstal",
-    "portableUpdateBrowseMessage": "Instalasi portabel tidak dapat diperbarui secara otomatis. Unduh versi terbaru untuk sistem Anda dari GitHub Releases dan instal ke folder yang sama — folder Data/ Anda (pengaturan, model, rekaman) tetap dipertahankan.",
-    "portableUpdateBrowseButton": "Buka GitHub Releases"
-  },
-  "whatsNew": {
-    "title": "Baru di Handy v{{version}}"
-  },
   "common": {
     "loading": "Memuat...",
-    "delete": "Hapus",
-    "close": "Tutup",
     "open": "Buka",
     "copy": "Salin",
     "clear": "Bersihkan",

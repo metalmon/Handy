@@ -1,7 +1,6 @@
 {
   "tray": {
     "settings": "Ayarlar...",
-    "checkUpdates": "Güncellemeleri Kontrol Et...",
     "copyLastTranscript": "Son Transkripti Kopyala",
     "unloadModel": "Modeli Boşalt",
     "model": "Model",
@@ -19,17 +18,6 @@
     "about": "Hakkında"
   },
   "onboarding": {
-    "subtitle": "Başlamak için bir transkripsiyon modeli seçin",
-    "existingModelsTitle": "Uyumlu Modeller",
-    "downloadModelsTitle": "İndirilebilir",
-    "showAllModels": "{{total}} modelin tümünü göster",
-    "showFewerModels": "Daha az model göster",
-    "recommended": "Önerilen",
-    "customModelDescription": "Resmi olarak desteklenmiyor",
-    "modelCard": {
-      "accuracy": "doğruluk",
-      "speed": "hız"
-    },
     "models": {
       "small": {
         "name": "Whisper Small",
@@ -96,9 +84,6 @@
         "description": "Büyük, daha yavaş, ancak çok doğru çok dilli bir model."
       }
     },
-    "errors": {
-      "selectModel": "Model seçilemedi"
-    },
     "permissions": {
       "title": "İzinler Gerekli",
       "description": "Handy'nin düzgün çalışabilmesi için birkaç izne ihtiyacı var.",
@@ -121,38 +106,14 @@
     }
   },
   "modelSelector": {
-    "custom": "Özel",
-    "streaming": "Akış",
     "active": "Aktif",
-    "noModelsAvailable": "Kullanılabilir model yok",
-    "verifying": "{{modelName}} doğrulanıyor...",
-    "verifyingGeneric": "Doğrulanıyor...",
-    "extracting": "{{modelName}} çıkarılıyor...",
-    "extractingMultiple": "{{count}} model çıkarılıyor...",
-    "extractingGeneric": "Çıkarılıyor...",
-    "downloading": "%{{percentage}} indiriliyor",
-    "downloadingMultiple": "{{count}} model indiriliyor...",
+    "statusTitle": "Status: {{modelStatus}}",
     "modelReady": "Model Hazır",
     "loading": "{{modelName}} yükleniyor...",
     "loadingGeneric": "Yükleniyor...",
     "modelError": "Model Hatası",
     "modelUnloaded": "Model Boşaltıldı",
-    "noModelDownloadRequired": "Model Yok – İndirme Gerekli",
-    "deleteModel": "{{modelName}} Sil",
-    "switching": "Değiştiriliyor...",
-    "downloadSpeed": "{{speed}} MB/s",
-    "capabilities": {
-      "languageSelection": "Birden fazla giriş dilini destekler",
-      "languageCount": "{{total}} dil",
-      "translation": "İngilizce'ye çevirebilir",
-      "translate": "İngilizce'ye çevir",
-      "singleLanguage": "Yalnızca bu dili destekler",
-      "languageOnly": "Yalnızca {{language}}",
-      "streaming": "Konuşurken canlı transkripsiyon gösterir"
-    },
-    "cancel": "İptal",
-    "cancelDownload": "İndirmeyi iptal et",
-    "legacy": "Eski"
+    "noModelDownloadRequired": "Model Yok – İndirme Gerekli"
   },
   "settings": {
     "modelSettings": {
@@ -161,22 +122,8 @@
     "models": {
       "title": "Transkripsiyon Modelleri",
       "description": "Bir transkripsiyon modeli seçin veya ek modeller indirin. Farklı modeller değişen doğruluk ve hız seviyeleri sunar.",
-      "deleteConfirm": "{{modelName}} modelini silmek istediğinizden emin misiniz? Kullanmak için tekrar indirmeniz gerekecek.",
-      "deleteActiveConfirm": "{{modelName}} aktif modelinizdir. Silmek, yeni bir model seçene kadar transkripsiyonları durduracaktır. Emin misiniz?",
-      "deleteTitle": "Modeli Sil",
-      "filters": {
-        "allLanguages": "Tüm Diller",
-        "streaming": "Canlı transkripsiyonu destekleyen modelleri filtrele",
-        "translation": "İngilizce'ye çeviriyi destekleyen modelleri filtrele"
-      },
       "noModelsMatch": "Bu filtreyle eşleşen model yok.",
-      "yourModels": "İndirilen Modeller",
-      "availableModels": "İndirilebilir",
-      "searchPlaceholder": "Modelleri ada göre ara…",
-      "rescan": {
-        "label": "Yeniden Tara",
-        "tooltip": "Handy dışında modeller klasörüne veya Hugging Face önbelleğine eklenen modelleri yeniden tara"
-      }
+      "yourModels": "İndirilen Modeller"
     },
     "general": {
       "title": "Genel",
@@ -491,11 +438,6 @@
         "lineCount": "{{count}} satır",
         "empty": "Loglar bekleniyor… Uygulama logları ürettikçe girişler burada görünür."
       },
-      "updateChecks": {
-        "label": "Güncellemeleri Kontrol Et",
-        "description": "Handy için yeni sürümleri otomatik olarak kontrol eder",
-        "lockedDescription": "Sistem yapılandırması tarafından devre dışı bırakıldı (HANDY_DISABLE_UPDATER)"
-      },
       "soundTheme": {
         "label": "Ses Teması",
         "description": "Kayıt başlangıç ve bitişi için sesli geri bildirim temasını seçin"
@@ -589,18 +531,10 @@
         "verdictNoEvents": "Hiç olay yakalanmadı — test sırasında herhangi bir tuşa bastınız mı?",
         "failed": "Tanılama başarısız: {{error}}"
       },
-      "whatsNewPreview": {
-        "title": "Yenilikleri Önizle",
-        "description": "En son paketlenmiş sürüm notunu görüldü olarak işaretlemeden aç",
-        "button": "Önizle",
-        "noNotes": "Paketlenmiş sürüm notu bulunamadı",
-        "error": "Sürüm notları önizlenemedi"
-      },
       "onboardingPreview": {
         "title": "İlk kurulum önizlemesi",
         "description": "İzinleri, modelleri veya tamamlanma durumunu değiştirmeden ilk kurulum ekranlarını önizleyin",
         "permissionsButton": "İzinler",
-        "modelsButton": "Model seçimi",
         "exitButton": "Önizlemeden çık"
       }
     },
@@ -631,32 +565,11 @@
           "description": "Cihaz üzerinde makine öğrenmesi çıkarımı için yüksek performanslı tensör kütüphanesi",
           "details": "Handy'nin yerel konuşmadan metne dönüştürme özelliği transcribe.cpp ve ggml üzerine kuruludur. Georgi Gerganov'a ve katkıda bulunanlara harika çalışmaları için teşekkür ederiz."
         }
-      },
-      "whatsNewUpdates": {
-        "label": "Yenilikleri Göster",
-        "description": "Handy güncellemelerinden sonra sürüm notlarını göster"
       }
     }
   },
-  "footer": {
-    "checkingUpdates": "Güncellemeler kontrol ediliyor...",
-    "updateAvailableShort": "Güncelleme mevcut",
-    "upToDate": "Güncel",
-    "updateCheckingDisabled": "Güncelleme Kontrolü Devre Dışı",
-    "downloading": "İndiriliyor... %{{progress}}",
-    "installing": "Yükleniyor...",
-    "preparing": "Hazırlanıyor...",
-    "checkForUpdates": "Güncellemeleri kontrol et",
-    "portableUpdateTitle": "Manuel güncelleme gerekli",
-    "portableUpdateMessage": "Taşınabilir kurulumlar otomatik olarak güncellenemez. Aşağıdan sisteminize uygun yükleyiciyi indirin, çalıştırın ve aynı klasöre kurun — Data/ klasörünüz (ayarlar, modeller, kayıtlar) yerinde kalır.",
-    "portableUpdateButton": "Yükleyiciyi indir",
-    "portableUpdateBrowseMessage": "Taşınabilir kurulumlar otomatik olarak güncellenemez. Sisteminize uygun en son sürümü GitHub Releases’ten indirin ve aynı klasöre kurun — Data/ klasörünüz (ayarlar, modeller, kayıtlar) yerinde kalır.",
-    "portableUpdateBrowseButton": "GitHub Releases’i aç"
-  },
   "common": {
     "loading": "Yükleniyor...",
-    "delete": "Sil",
-    "close": "Kapat",
     "open": "Aç",
     "copy": "Kopyala",
     "clear": "Temizle",
@@ -700,9 +613,6 @@
   "overlay": {
     "transcribing": "Transkribe ediliyor...",
     "processing": "İşleniyor..."
-  },
-  "whatsNew": {
-    "title": "Handy v{{version}} yenilikleri"
   },
   "secureInput": {
     "blockedWithCulprit_one": "{{name}} 1 kısayolu engelliyor olabilir",

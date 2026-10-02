@@ -1,7 +1,6 @@
 {
   "tray": {
     "settings": "सेटिङहरू...",
-    "checkUpdates": "अपडेटहरू जाँच गर्नुहोस्...",
     "copyLastTranscript": "पछिल्लो ट्रान्सक्रिप्ट कपी गर्नुहोस्",
     "unloadModel": "मोडेल अनलोड गर्नुहोस्",
     "model": "मोडेल",
@@ -19,17 +18,6 @@
     "about": "बारेमा"
   },
   "onboarding": {
-    "subtitle": "सुरु गर्न, एउटा ट्रान्सक्रिप्सन मोडेल छान्नुहोस्",
-    "existingModelsTitle": "मिल्दा मोडेलहरू",
-    "downloadModelsTitle": "डाउनलोड गर्न उपलब्ध",
-    "showAllModels": "सबै {{total}} मोडेलहरू देखाउनुहोस्",
-    "showFewerModels": "थोरै मोडेलहरू देखाउनुहोस्",
-    "recommended": "सिफारिस गरिएको",
-    "customModelDescription": "आधिकारिक रूपमा समर्थित छैन",
-    "modelCard": {
-      "accuracy": "शुद्धता",
-      "speed": "गति"
-    },
     "models": {
       "small": {
         "name": "Whisper Small",
@@ -96,9 +84,6 @@
         "description": "ठूलो, अलि ढिलो, तर धेरै सटीक बहुभाषिक मोडेल।"
       }
     },
-    "errors": {
-      "selectModel": "मोडेल चयन गर्न सकिएन"
-    },
     "permissions": {
       "title": "अनुमतिहरू आवश्यक छन्",
       "description": "Handy लाई राम्रोसँग काम गर्न केही अनुमतिहरू चाहिन्छ।",
@@ -121,38 +106,14 @@
     }
   },
   "modelSelector": {
-    "custom": "कस्टम",
-    "legacy": "लिगेसी",
-    "streaming": "स्ट्रिमिङ",
     "active": "सक्रिय",
-    "switching": "बदलिँदैछ...",
-    "noModelsAvailable": "कुनै मोडेल उपलब्ध छैन",
-    "verifying": "{{modelName}} प्रमाणित गरिँदैछ...",
-    "verifyingGeneric": "प्रमाणित गरिँदैछ...",
-    "extracting": "{{modelName}} एक्स्ट्र्याक्ट गरिँदैछ...",
-    "extractingMultiple": "{{count}} वटा मोडेल एक्स्ट्र्याक्ट गरिँदैछ...",
-    "extractingGeneric": "एक्स्ट्र्याक्ट गरिँदैछ...",
-    "downloading": "डाउनलोड गरिँदैछ {{percentage}}%",
-    "downloadingMultiple": "{{count}} वटा मोडेल डाउनलोड गरिँदैछ...",
+    "statusTitle": "Status: {{modelStatus}}",
     "modelReady": "मोडेल तयार छ",
     "loading": "{{modelName}} लोड गरिँदैछ...",
     "loadingGeneric": "लोड गरिँदैछ...",
     "modelError": "मोडेल त्रुटि",
     "modelUnloaded": "मोडेल अनलोड गरियो",
-    "noModelDownloadRequired": "मोडेल छैन - डाउनलोड आवश्यक",
-    "deleteModel": "{{modelName}} मेटाउनुहोस्",
-    "downloadSpeed": "{{speed}} MB/s",
-    "cancel": "रद्द गर्नुहोस्",
-    "cancelDownload": "डाउनलोड रद्द गर्नुहोस्",
-    "capabilities": {
-      "languageSelection": "धेरै इनपुट भाषाहरू समर्थन गर्छ",
-      "singleLanguage": "यो भाषा मात्र समर्थन गर्छ",
-      "languageCount": "{{total}} भाषाहरू",
-      "languageOnly": "{{language}} मात्र",
-      "translation": "अङ्ग्रेजीमा अनुवाद गर्न सक्छ",
-      "translate": "अनुवाद",
-      "streaming": "बोल्दै गर्दा लाइभ ट्रान्सक्रिप्सन देखाउँछ"
-    }
+    "noModelDownloadRequired": "मोडेल छैन - डाउनलोड आवश्यक"
   },
   "settings": {
     "modelSettings": {
@@ -212,21 +173,7 @@
     "models": {
       "title": "ट्रान्सक्रिप्सन मोडेलहरू",
       "description": "ट्रान्सक्रिप्सन मोडेल चयन गर्नुहोस् वा थप मोडेलहरू डाउनलोड गर्नुहोस्। फरक मोडेलहरूले फरक स्तरको शुद्धता र गति दिन्छन्।",
-      "searchPlaceholder": "नामद्वारा मोडेल खोज्नुहोस्…",
       "yourModels": "डाउनलोड गरिएका मोडेलहरू",
-      "availableModels": "डाउनलोड गर्न उपलब्ध",
-      "deleteConfirm": "के तपाईं साँच्चै {{modelName}} मेटाउन चाहनुहुन्छ? यसलाई फेरि प्रयोग गर्न फेरि डाउनलोड गर्नुपर्नेछ।",
-      "deleteActiveConfirm": "{{modelName}} तपाईंको सक्रिय मोडेल हो। यसलाई मेटाउँदा नयाँ मोडेल चयन नगरेसम्म ट्रान्सक्रिप्सन रोकिनेछ। के तपाईं साँच्चै मेटाउन चाहनुहुन्छ?",
-      "deleteTitle": "मोडेल मेटाउनुहोस्",
-      "filters": {
-        "allLanguages": "सबै भाषाहरू",
-        "streaming": "लाइभ ट्रान्सक्रिप्सन समर्थन गर्ने मोडेलहरू फिल्टर गर्नुहोस्",
-        "translation": "अङ्ग्रेजीमा अनुवाद समर्थन गर्ने मोडेलहरू फिल्टर गर्नुहोस्"
-      },
-      "rescan": {
-        "label": "फेरि स्क्यान गर्नुहोस्",
-        "tooltip": "Handy बाहिरबाट मोडेल फोल्डर वा Hugging Face क्यासमा थपिएका मोडेलहरू फेरि स्क्यान गर्नुहोस्"
-      },
       "noModelsMatch": "यो फिल्टरसँग कुनै मोडेल मिल्दैन।"
     },
     "sound": {
@@ -491,23 +438,10 @@
         "lineCount": "{{count}} लाइनहरू",
         "empty": "लगहरूको प्रतीक्षा गरिँदैछ… एपले लग निकाल्दा यहाँ देखिनेछन्।"
       },
-      "updateChecks": {
-        "label": "अपडेटहरू जाँच गर्नुहोस्",
-        "description": "Handy को नयाँ संस्करण स्वतः जाँच गर्नुहोस्",
-        "lockedDescription": "प्रणाली कन्फिगरेसनद्वारा असक्षम पारिएको (HANDY_DISABLE_UPDATER)"
-      },
-      "whatsNewPreview": {
-        "title": "नयाँ के छ पूर्वावलोकन",
-        "description": "पछिल्लो बन्डल गरिएको रिलिज नोट हेरिएको चिन्ह नलगाई खोल्नुहोस्",
-        "button": "पूर्वावलोकन",
-        "noNotes": "कुनै बन्डल गरिएको रिलिज नोट भेटिएन",
-        "error": "रिलिज नोट पूर्वावलोकन गर्न सकिएन"
-      },
       "onboardingPreview": {
         "title": "प्रारम्भिक सेटअप पूर्वावलोकन",
         "description": "अनुमति, मोडेल वा सम्पन्न स्थिति परिवर्तन नगरी प्रारम्भिक सेटअप स्क्रिनहरू पूर्वावलोकन गर्नुहोस्",
         "permissionsButton": "अनुमतिहरू",
-        "modelsButton": "मोडेल चयन",
         "exitButton": "पूर्वावलोकन बन्द गर्नुहोस्"
       },
       "soundTheme": {
@@ -610,10 +544,6 @@
         "title": "संस्करण",
         "description": "Handy को हालको संस्करण"
       },
-      "whatsNewUpdates": {
-        "label": "नयाँ के छ देखाउनुहोस्",
-        "description": "Handy अपडेट भएपछि रिलिज नोटहरू देखाउनुहोस्"
-      },
       "appDataDirectory": {
         "title": "एप डेटा डाइरेक्टरी",
         "description": "Handy ले आफ्नो डेटा भण्डारण गर्ने स्थान"
@@ -638,28 +568,8 @@
       }
     }
   },
-  "footer": {
-    "checkingUpdates": "अपडेटहरू जाँच गरिँदैछ...",
-    "updateAvailableShort": "अपडेट उपलब्ध छ",
-    "upToDate": "अद्यावधिक छ",
-    "updateCheckingDisabled": "अपडेट जाँच अफ छ",
-    "downloading": "डाउनलोड गरिँदैछ... {{progress}}%",
-    "installing": "इन्स्टल गरिँदैछ...",
-    "preparing": "तयारी गरिँदैछ...",
-    "checkForUpdates": "अपडेटहरू जाँच गर्नुहोस्",
-    "portableUpdateTitle": "म्यानुअल अपडेट आवश्यक",
-    "portableUpdateMessage": "पोर्टेबल इन्स्टलहरू स्वतः अपडेट गर्न सकिँदैन। तलबाट आफ्नो प्रणालीका लागि इन्स्टलर डाउनलोड गर्नुहोस्, चलाउनुहोस् र उही फोल्डरमा इन्स्टल गर्नुहोस् — तपाईंको Data/ फोल्डर (सेटिङ, मोडेल, रेकर्डिङ) जस्ताको तस्तै रहन्छ।",
-    "portableUpdateButton": "इन्स्टलर डाउनलोड गर्नुहोस्",
-    "portableUpdateBrowseMessage": "पोर्टेबल इन्स्टलहरू स्वतः अपडेट गर्न सकिँदैन। GitHub Releases बाट आफ्नो प्रणालीका लागि पछिल्लो संस्करण डाउनलोड गर्नुहोस् र उही फोल्डरमा इन्स्टल गर्नुहोस् — तपाईंको Data/ फोल्डर (सेटिङ, मोडेल, रेकर्डिङ) जस्ताको तस्तै रहन्छ।",
-    "portableUpdateBrowseButton": "GitHub Releases खोल्नुहोस्"
-  },
-  "whatsNew": {
-    "title": "Handy v{{version}} मा नयाँ"
-  },
   "common": {
     "loading": "लोड गरिँदैछ...",
-    "delete": "मेटाउनुहोस्",
-    "close": "बन्द गर्नुहोस्",
     "open": "खोल्नुहोस्",
     "copy": "कपी गर्नुहोस्",
     "clear": "खाली गर्नुहोस्",

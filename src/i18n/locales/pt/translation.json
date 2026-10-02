@@ -1,7 +1,6 @@
 {
   "tray": {
     "settings": "Configurações...",
-    "checkUpdates": "Verificar Atualizações...",
     "copyLastTranscript": "Copiar última transcrição",
     "unloadModel": "Descarregar modelo",
     "model": "Modelo",
@@ -19,17 +18,6 @@
     "about": "Sobre"
   },
   "onboarding": {
-    "subtitle": "Para começar, escolha um modelo de transcrição",
-    "existingModelsTitle": "Modelos compatíveis",
-    "downloadModelsTitle": "Disponíveis para download",
-    "showAllModels": "Mostrar todos os {{total}} modelos",
-    "showFewerModels": "Mostrar menos modelos",
-    "recommended": "Recomendado",
-    "customModelDescription": "Não suportado oficialmente",
-    "modelCard": {
-      "accuracy": "precisão",
-      "speed": "velocidade"
-    },
     "models": {
       "small": {
         "name": "Whisper Small",
@@ -96,9 +84,6 @@
         "description": "Um modelo grande, mais lento, mas muito preciso e multilíngue."
       }
     },
-    "errors": {
-      "selectModel": "Falha ao selecionar o modelo"
-    },
     "permissions": {
       "title": "Permissões Necessárias",
       "description": "O Handy precisa de algumas permissões para funcionar corretamente.",
@@ -121,38 +106,14 @@
     }
   },
   "modelSelector": {
-    "custom": "Personalizado",
-    "streaming": "Streaming",
     "active": "Ativo",
-    "noModelsAvailable": "Nenhum modelo disponível",
-    "verifying": "Verificando {{modelName}}...",
-    "verifyingGeneric": "Verificando...",
-    "extracting": "Extraindo {{modelName}}...",
-    "extractingMultiple": "Extraindo {{count}} modelos...",
-    "extractingGeneric": "Extraindo...",
-    "downloading": "Baixando {{percentage}}%",
-    "downloadingMultiple": "Baixando {{count}} modelos...",
+    "statusTitle": "Status: {{modelStatus}}",
     "modelReady": "Modelo Pronto",
     "loading": "Carregando {{modelName}}...",
     "loadingGeneric": "Carregando...",
     "modelError": "Erro no Modelo",
     "modelUnloaded": "Modelo Descarregado",
-    "noModelDownloadRequired": "Sem Modelo - Download Necessário",
-    "deleteModel": "Excluir {{modelName}}",
-    "switching": "Alternando...",
-    "downloadSpeed": "{{speed}} MB/s",
-    "capabilities": {
-      "languageSelection": "Suporta vários idiomas de entrada",
-      "languageCount": "{{total}} idiomas",
-      "translation": "Pode traduzir para inglês",
-      "translate": "Traduzir para inglês",
-      "singleLanguage": "Suporta apenas este idioma",
-      "languageOnly": "Apenas {{language}}",
-      "streaming": "Mostra a transcrição ao vivo enquanto você fala"
-    },
-    "cancel": "Cancelar",
-    "cancelDownload": "Cancelar download",
-    "legacy": "Legado"
+    "noModelDownloadRequired": "Sem Modelo - Download Necessário"
   },
   "settings": {
     "modelSettings": {
@@ -212,22 +173,8 @@
     "models": {
       "title": "Modelos de Transcrição",
       "description": "Selecione um modelo de transcrição ou baixe modelos adicionais. Diferentes modelos oferecem diferentes níveis de precisão e velocidade.",
-      "deleteConfirm": "Tem certeza de que deseja excluir {{modelName}}? Você precisará baixá-lo novamente para usá-lo.",
-      "deleteActiveConfirm": "{{modelName}} é o seu modelo ativo. Excluí-lo interromperá as transcrições até que você selecione um novo modelo. Tem certeza?",
-      "deleteTitle": "Excluir Modelo",
-      "filters": {
-        "allLanguages": "Todos os Idiomas",
-        "streaming": "Filtrar modelos compatíveis com transcrição ao vivo",
-        "translation": "Filtrar modelos compatíveis com tradução para inglês"
-      },
       "noModelsMatch": "Nenhum modelo corresponde a este filtro.",
-      "yourModels": "Modelos baixados",
-      "availableModels": "Disponíveis para download",
-      "searchPlaceholder": "Buscar modelos por nome…",
-      "rescan": {
-        "label": "Reescanear",
-        "tooltip": "Reescaneia em busca de modelos adicionados à pasta de modelos ou ao cache do Hugging Face fora do Handy"
-      }
+      "yourModels": "Modelos baixados"
     },
     "sound": {
       "title": "Som",
@@ -491,11 +438,6 @@
         "lineCount": "{{count}} linhas",
         "empty": "Aguardando logs… As entradas aparecem aqui à medida que o app as emite."
       },
-      "updateChecks": {
-        "label": "Verificar Atualizações",
-        "description": "Verificar automaticamente novas versões do Handy",
-        "lockedDescription": "Desativado pela configuração do sistema (HANDY_DISABLE_UPDATER)"
-      },
       "soundTheme": {
         "label": "Tema de Som",
         "description": "Escolha um tema de som para feedback de início e parada de gravação"
@@ -589,18 +531,10 @@
         "verdictNoEvents": "Nenhum evento capturado — você pressionou alguma tecla durante o teste?",
         "failed": "Falha no diagnóstico: {{error}}"
       },
-      "whatsNewPreview": {
-        "title": "Pré-visualizar novidades",
-        "description": "Abrir a nota de versão incorporada mais recente sem marcá-la como vista",
-        "button": "Pré-visualizar",
-        "noNotes": "Nenhuma nota de versão incorporada encontrada",
-        "error": "Falha ao pré-visualizar as notas de versão"
-      },
       "onboardingPreview": {
         "title": "Pré-visualizar configuração inicial",
         "description": "Pré-visualize os ecrãs de configuração sem alterar permissões, modelos ou o estado de conclusão",
         "permissionsButton": "Permissões",
-        "modelsButton": "Seleção de modelo",
         "exitButton": "Sair da pré-visualização"
       }
     },
@@ -631,32 +565,11 @@
           "description": "Inferência de alto desempenho do modelo de reconhecimento automático de fala Whisper da OpenAI",
           "details": "O Handy usa ggml para processamento rápido e local de fala para texto. Agradecemos ao incrível trabalho de Georgi Gerganov e colaboradores."
         }
-      },
-      "whatsNewUpdates": {
-        "label": "Mostrar novidades",
-        "description": "Mostrar notas de versão após atualizações do Handy"
       }
     }
   },
-  "footer": {
-    "checkingUpdates": "Verificando atualizações...",
-    "updateAvailableShort": "Atualização disponível",
-    "upToDate": "Atualizado",
-    "updateCheckingDisabled": "Verificação de Atualização Desabilitada",
-    "downloading": "Baixando... {{progress}}%",
-    "installing": "Instalando...",
-    "preparing": "Preparando...",
-    "checkForUpdates": "Verificar atualizações",
-    "portableUpdateTitle": "Atualização manual necessária",
-    "portableUpdateMessage": "Instalações portáteis não podem ser atualizadas automaticamente. Baixe abaixo o instalador para o seu sistema, execute-o e instale na mesma pasta — a sua pasta Data/ (configurações, modelos, gravações) é mantida.",
-    "portableUpdateButton": "Baixar instalador",
-    "portableUpdateBrowseMessage": "Instalações portáteis não podem ser atualizadas automaticamente. Baixe a versão mais recente para o seu sistema no GitHub Releases e instale-a na mesma pasta — a sua pasta Data/ (configurações, modelos, gravações) é mantida.",
-    "portableUpdateBrowseButton": "Abrir GitHub Releases"
-  },
   "common": {
     "loading": "Carregando...",
-    "delete": "Excluir",
-    "close": "Fechar",
     "open": "Abrir",
     "copy": "Copiar",
     "clear": "Limpar",
@@ -700,9 +613,6 @@
   "overlay": {
     "transcribing": "Transcrevendo...",
     "processing": "Processando..."
-  },
-  "whatsNew": {
-    "title": "Novidades no Handy v{{version}}"
   },
   "secureInput": {
     "blockedWithCulprit_one": "{{name}} pode estar bloqueando 1 atalho",

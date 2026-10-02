@@ -1,7 +1,6 @@
 {
   "tray": {
     "settings": "सेटिंग...",
-    "checkUpdates": "अपडेट जांचें...",
     "copyLastTranscript": "पिछला ट्रांसक्रिप्ट कॉपी करें",
     "unloadModel": "मॉडल अनलोड करें",
     "model": "मॉडल",
@@ -19,17 +18,6 @@
     "about": "के बारे में"
   },
   "onboarding": {
-    "subtitle": "शुरू करने के लिए, एक ट्रांसक्रिप्शन मॉडल चुनें",
-    "existingModelsTitle": "संगत मॉडल",
-    "downloadModelsTitle": "डाउनलोड के लिए उपलब्ध",
-    "showAllModels": "सभी {{total}} मॉडल दिखाएं",
-    "showFewerModels": "कम मॉडल दिखाएं",
-    "recommended": "सुझाया गया",
-    "customModelDescription": "आधिकारिक रूप से समर्थित नहीं",
-    "modelCard": {
-      "accuracy": "सटीकता",
-      "speed": "स्पीड"
-    },
     "models": {
       "small": {
         "name": "Whisper Small",
@@ -96,9 +84,6 @@
         "description": "बड़ा और थोड़ा धीमा, लेकिन बहुत सटीक बहुभाषी मॉडल."
       }
     },
-    "errors": {
-      "selectModel": "मॉडल चुना नहीं जा सका"
-    },
     "permissions": {
       "title": "अनुमतियों की ज़रूरत है",
       "description": "Handy को ठीक से काम करने के लिए कुछ अनुमतियों की ज़रूरत है.",
@@ -121,38 +106,14 @@
     }
   },
   "modelSelector": {
-    "custom": "कस्टम",
-    "legacy": "लीगेसी",
-    "streaming": "स्ट्रीमिंग",
     "active": "इस्तेमाल में",
-    "switching": "बदला जा रहा है...",
-    "noModelsAvailable": "कोई मॉडल उपलब्ध नहीं है",
-    "verifying": "{{modelName}} की पुष्टि हो रही है...",
-    "verifyingGeneric": "पुष्टि हो रही है...",
-    "extracting": "{{modelName}} एक्सट्रैक्ट हो रहा है...",
-    "extractingMultiple": "{{count}} मॉडल एक्सट्रैक्ट हो रहे हैं...",
-    "extractingGeneric": "एक्सट्रैक्ट हो रहा है...",
-    "downloading": "{{percentage}}% डाउनलोड हो रहा है",
-    "downloadingMultiple": "{{count}} मॉडल डाउनलोड हो रहे हैं...",
+    "statusTitle": "Status: {{modelStatus}}",
     "modelReady": "मॉडल तैयार है",
     "loading": "{{modelName}} लोड हो रहा है...",
     "loadingGeneric": "लोड हो रहा है...",
     "modelError": "मॉडल में गड़बड़ी",
     "modelUnloaded": "मॉडल अनलोड किया गया",
-    "noModelDownloadRequired": "कोई मॉडल नहीं - डाउनलोड करना ज़रूरी है",
-    "deleteModel": "{{modelName}} हटाएं",
-    "downloadSpeed": "{{speed}} MB/s",
-    "cancel": "रद्द करें",
-    "cancelDownload": "डाउनलोड रद्द करें",
-    "capabilities": {
-      "languageSelection": "कई इनपुट भाषाओं के साथ काम करता है",
-      "singleLanguage": "केवल इसी भाषा के साथ काम करता है",
-      "languageCount": "{{total}} भाषाएं",
-      "languageOnly": "केवल {{language}}",
-      "translation": "अंग्रेज़ी में अनुवाद कर सकता है",
-      "translate": "अनुवाद करें",
-      "streaming": "बोलते समय लाइव ट्रांसक्रिप्शन दिखाता है"
-    }
+    "noModelDownloadRequired": "कोई मॉडल नहीं - डाउनलोड करना ज़रूरी है"
   },
   "settings": {
     "modelSettings": {
@@ -212,21 +173,7 @@
     "models": {
       "title": "ट्रांसक्रिप्शन मॉडल",
       "description": "कोई ट्रांसक्रिप्शन मॉडल चुनें या दूसरे मॉडल डाउनलोड करें. अलग-अलग मॉडल की सटीकता और स्पीड अलग-अलग होती है.",
-      "searchPlaceholder": "नाम से मॉडल खोजें…",
       "yourModels": "डाउनलोड किए गए मॉडल",
-      "availableModels": "डाउनलोड के लिए उपलब्ध",
-      "deleteConfirm": "क्या आप वाकई {{modelName}} को हटाना चाहते हैं? इसे फिर से इस्तेमाल करने के लिए आपको इसे दोबारा डाउनलोड करना होगा.",
-      "deleteActiveConfirm": "{{modelName}} अभी इस्तेमाल में है. इसे हटाने पर ट्रांसक्रिप्शन तब तक रुका रहेगा, जब तक आप कोई नया मॉडल नहीं चुन लेते. क्या आप वाकई हटाना चाहते हैं?",
-      "deleteTitle": "मॉडल हटाएं",
-      "filters": {
-        "allLanguages": "सभी भाषाएं",
-        "streaming": "लाइव ट्रांसक्रिप्शन का समर्थन करने वाले मॉडल फ़िल्टर करें",
-        "translation": "अंग्रेज़ी में अनुवाद का समर्थन करने वाले मॉडल फ़िल्टर करें"
-      },
-      "rescan": {
-        "label": "फिर से स्कैन करें",
-        "tooltip": "Handy के बाहर, मॉडल फ़ोल्डर या Hugging Face कैश में जोड़े गए मॉडल के लिए फिर से स्कैन करें"
-      },
       "noModelsMatch": "इस फ़िल्टर से मेल खाने वाला कोई मॉडल नहीं है."
     },
     "sound": {
@@ -491,23 +438,10 @@
         "lineCount": "{{count}} लाइनें",
         "empty": "लॉग का इंतज़ार है… ऐप से लॉग आते ही एंट्री यहां दिखेंगी."
       },
-      "updateChecks": {
-        "label": "अपडेट जांचें",
-        "description": "Handy के नए वर्शन की अपने आप जांच करें",
-        "lockedDescription": "सिस्टम कॉन्फ़िगरेशन द्वारा अक्षम (HANDY_DISABLE_UPDATER)"
-      },
-      "whatsNewPreview": {
-        "title": "'नया क्या है' की झलक देखें",
-        "description": "बंडल की गई सबसे नई रिलीज़ नोट को 'देखा गया' मार्क किए बिना खोलें",
-        "button": "झलक देखें",
-        "noNotes": "बंडल की गई कोई रिलीज़ नोट नहीं मिली",
-        "error": "रिलीज़ नोट की झलक नहीं दिखाई जा सकी"
-      },
       "onboardingPreview": {
         "title": "शुरुआती सेटअप की झलक",
         "description": "अनुमतियों, मॉडल या पूर्णता स्थिति को बदले बिना शुरुआती सेटअप स्क्रीन की झलक देखें",
         "permissionsButton": "अनुमतियाँ",
-        "modelsButton": "मॉडल चयन",
         "exitButton": "झलक से बाहर निकलें"
       },
       "soundTheme": {
@@ -610,10 +544,6 @@
         "title": "वर्शन",
         "description": "Handy का मौजूदा वर्शन"
       },
-      "whatsNewUpdates": {
-        "label": "'नया क्या है' दिखाएं",
-        "description": "Handy अपडेट होने के बाद रिलीज़ नोट दिखाएं"
-      },
       "appDataDirectory": {
         "title": "ऐप डेटा फ़ोल्डर",
         "description": "वह जगह जहां Handy अपना डेटा सेव करता है"
@@ -638,28 +568,8 @@
       }
     }
   },
-  "footer": {
-    "checkingUpdates": "अपडेट जांचे जा रहे हैं...",
-    "updateAvailableShort": "अपडेट उपलब्ध है",
-    "upToDate": "अप-टू-डेट",
-    "updateCheckingDisabled": "अपडेट जांच बंद है",
-    "downloading": "डाउनलोड हो रहा है... {{progress}}%",
-    "installing": "इंस्टॉल हो रहा है...",
-    "preparing": "तैयारी हो रही है...",
-    "checkForUpdates": "अपडेट जांचें",
-    "portableUpdateTitle": "मैन्युअल अपडेट ज़रूरी है",
-    "portableUpdateMessage": "पोर्टेबल इंस्टॉल अपने आप अपडेट नहीं हो सकते. नीचे से अपने सिस्टम के लिए इंस्टॉलर डाउनलोड करें, उसे चलाएँ और उसी फ़ोल्डर में इंस्टॉल करें — आपका Data/ फ़ोल्डर (सेटिंग, मॉडल, रिकॉर्डिंग) जहाँ है वहीं बना रहता है.",
-    "portableUpdateButton": "इंस्टॉलर डाउनलोड करें",
-    "portableUpdateBrowseMessage": "पोर्टेबल इंस्टॉल अपने आप अपडेट नहीं हो सकते. GitHub Releases से अपने सिस्टम के लिए नया वर्शन डाउनलोड करें और उसे उसी फ़ोल्डर में इंस्टॉल करें — आपका Data/ फ़ोल्डर (सेटिंग, मॉडल, रिकॉर्डिंग) जहाँ है वहीं बना रहता है.",
-    "portableUpdateBrowseButton": "GitHub Releases खोलें"
-  },
-  "whatsNew": {
-    "title": "Handy v{{version}} में नया क्या है"
-  },
   "common": {
     "loading": "लोड हो रहा है...",
-    "delete": "हटाएं",
-    "close": "बंद करें",
     "open": "खोलें",
     "copy": "कॉपी करें",
     "clear": "मिटाएं",

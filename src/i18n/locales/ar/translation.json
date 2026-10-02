@@ -1,7 +1,6 @@
 {
   "tray": {
     "settings": "...الإعدادات",
-    "checkUpdates": "...التحقق من وجود تحديثات",
     "copyLastTranscript": "نسخ آخر نص تم تفريغه",
     "unloadModel": "تفريغ النموذج",
     "model": "النموذج",
@@ -19,17 +18,6 @@
     "models": "النماذج"
   },
   "onboarding": {
-    "subtitle": "للبدء، اختر نموذج التفريغ الصوتي",
-    "existingModelsTitle": "النماذج المتوافقة",
-    "downloadModelsTitle": "متاح للتنزيل",
-    "showAllModels": "عرض كل النماذج ({{total}})",
-    "showFewerModels": "عرض عدد أقل من النماذج",
-    "recommended": "موصى به",
-    "customModelDescription": "غير مدعوم رسميًا",
-    "modelCard": {
-      "accuracy": "الدقة",
-      "speed": "السرعة"
-    },
     "models": {
       "small": {
         "name": "Whisper Small",
@@ -96,9 +84,6 @@
         "description": "نموذج كبير وأبطأ، لكنه دقيق جداً ومتعدد اللغات."
       }
     },
-    "errors": {
-      "selectModel": "فشل تحديد النموذج"
-    },
     "permissions": {
       "title": "الأذونات المطلوبة",
       "description": ".يحتاج Handy إلى بعض الأذونات ليعمل بشكل صحيح",
@@ -121,38 +106,14 @@
     }
   },
   "modelSelector": {
-    "custom": "مخصص",
-    "streaming": "البث",
     "active": "نشط",
-    "noModelsAvailable": "لا توجد نماذج متاحة",
-    "verifying": "جارٍ التحقق من {{modelName}}...",
-    "verifyingGeneric": "جارٍ التحقق...",
-    "extracting": "...جاري استخراج {{modelName}}",
-    "extractingMultiple": "...جاري استخراج {{count}} من النماذج",
-    "extractingGeneric": "...جاري الاستخراج",
-    "downloading": "جاري التنزيل {{percentage}}%",
-    "downloadingMultiple": "جاري تنزيل {{count}} من النماذج...",
+    "statusTitle": "Status: {{modelStatus}}",
     "modelReady": "النموذج جاهز",
     "loading": "...جاري تحميل {{modelName}}",
     "loadingGeneric": "...جاري التحميل",
     "modelError": "خطأ في النموذج",
     "modelUnloaded": "تم إلغاء تحميل النموذج",
-    "noModelDownloadRequired": "لا يوجد نموذج - التنزيل مطلوب",
-    "deleteModel": "حذف {{modelName}}",
-    "switching": "جارٍ التبديل...",
-    "downloadSpeed": "{{speed}} ميجابايت/ث",
-    "cancel": "إلغاء",
-    "cancelDownload": "إلغاء التنزيل",
-    "capabilities": {
-      "languageSelection": "يدعم اختيار اللغة",
-      "singleLanguage": "يدعم هذه اللغة فقط",
-      "languageCount": "{{total}} لغة",
-      "languageOnly": "{{language}} فقط",
-      "translation": "يدعم الترجمة",
-      "translate": "ترجمة",
-      "streaming": "يعرض النسخ المباشر أثناء التحدث"
-    },
-    "legacy": "قديم"
+    "noModelDownloadRequired": "لا يوجد نموذج - التنزيل مطلوب"
   },
   "settings": {
     "general": {
@@ -468,11 +429,6 @@
         "lineCount": "{{count}} سطر",
         "empty": "بانتظار السجلات… ستظهر الإدخالات هنا فور إصدار التطبيق لها."
       },
-      "updateChecks": {
-        "label": "التحقق من وجود تحديثات",
-        "description": "التحقق تلقائياً من وجود إصدارات جديدة من Handy",
-        "lockedDescription": "معطّل بواسطة إعدادات النظام (HANDY_DISABLE_UPDATER)"
-      },
       "soundTheme": {
         "label": "سمة الصوت",
         "description": "اختر سمة صوت لتنبيهات بدء وتوقف التسجيل"
@@ -566,18 +522,10 @@
         "verdictNoEvents": "لم يُسجَّل أي حدث — هل ضغطت أي مفاتيح أثناء الاختبار؟",
         "failed": "فشل التشخيص: {{error}}"
       },
-      "whatsNewPreview": {
-        "title": "معاينة الجديد",
-        "description": "افتح أحدث ملاحظات إصدار مضمنة دون وضع علامة عليها كمقروءة",
-        "button": "معاينة",
-        "noNotes": "لم يتم العثور على ملاحظات إصدار مضمنة",
-        "error": "تعذرت معاينة ملاحظات الإصدار"
-      },
       "onboardingPreview": {
         "title": "معاينة الإعداد الأولي",
         "description": "عاين شاشات الإعداد الأولي دون تغيير الأذونات أو النماذج أو حالة الإكمال",
         "permissionsButton": "الأذونات",
-        "modelsButton": "اختيار النموذج",
         "exitButton": "إنهاء المعاينة"
       }
     },
@@ -608,10 +556,6 @@
           "description": "استنتاج عالي الأداء لنموذج التعرف التلقائي على الكلام Whisper من OpenAI",
           "details": ".يستخدم Handy برنامج ggml لمعالجة سريعة ومحلية لتحويل الكلام إلى نص. شكراً للعمل الرائع الذي قام به Georgi Gerganov والمساهمون"
         }
-      },
-      "whatsNewUpdates": {
-        "label": "إظهار الجديد",
-        "description": "إظهار ملاحظات الإصدار بعد تحديثات Handy"
       }
     },
     "modelSettings": {
@@ -621,42 +565,11 @@
       "title": "نماذج النسخ",
       "description": "اختر نموذج نسخ أو قم بتنزيل نماذج إضافية. تقدم النماذج المختلفة مستويات متفاوتة من الدقة والسرعة.",
       "yourModels": "النماذج المحمّلة",
-      "availableModels": "متاح للتنزيل",
-      "deleteConfirm": "هل أنت متأكد أنك تريد حذف {{modelName}}؟ ستحتاج إلى تنزيله مرة أخرى لاستخدامه.",
-      "deleteActiveConfirm": "{{modelName}} هو النموذج النشط حاليًا. حذفه سيوقف النسخ حتى تختار نموذجًا جديدًا. هل أنت متأكد؟",
-      "deleteTitle": "حذف النموذج",
-      "filters": {
-        "allLanguages": "جميع اللغات",
-        "streaming": "تصفية النماذج التي تدعم النسخ المباشر",
-        "translation": "تصفية النماذج التي تدعم الترجمة إلى الإنجليزية"
-      },
-      "noModelsMatch": "لا توجد نماذج مطابقة لهذا الفلتر.",
-      "searchPlaceholder": "ابحث عن النماذج بالاسم…",
-      "rescan": {
-        "label": "إعادة الفحص",
-        "tooltip": "إعادة الفحص بحثًا عن النماذج المضافة إلى مجلد النماذج أو ذاكرة Hugging Face التخزينية المؤقتة خارج Handy"
-      }
+      "noModelsMatch": "لا توجد نماذج مطابقة لهذا الفلتر."
     }
-  },
-  "footer": {
-    "checkingUpdates": "...جاري التحقق من وجود تحديثات",
-    "updateAvailableShort": "تحديث متاح",
-    "upToDate": "محدث",
-    "updateCheckingDisabled": "تم تعطيل التحقق من التحديث",
-    "downloading": "...جاري التنزيل {{progress}}%",
-    "installing": "...جاري التثبيت",
-    "preparing": "...جاري التحضير",
-    "checkForUpdates": "التحقق من وجود تحديثات",
-    "portableUpdateTitle": "التحديث اليدوي مطلوب",
-    "portableUpdateMessage": "لا يمكن تحديث التثبيتات المحمولة تلقائيًا. نزّل المثبّت المناسب لنظامك من الزر أدناه، شغّله، وثبّته في المجلد نفسه — يبقى مجلد Data/ (الإعدادات والنماذج والتسجيلات) في مكانه.",
-    "portableUpdateButton": "تنزيل المثبّت",
-    "portableUpdateBrowseMessage": "لا يمكن تحديث التثبيتات المحمولة تلقائيًا. نزّل أحدث إصدار مناسب لنظامك من GitHub Releases وثبّته في المجلد نفسه — يبقى مجلد Data/ (الإعدادات والنماذج والتسجيلات) في مكانه.",
-    "portableUpdateBrowseButton": "فتح GitHub Releases"
   },
   "common": {
     "loading": "...جاري التحميل",
-    "delete": "حذف",
-    "close": "إغلاق",
     "open": "فتح",
     "copy": "نسخ",
     "clear": "مسح",
@@ -700,9 +613,6 @@
   "overlay": {
     "transcribing": "...جاري التفريغ",
     "processing": "...جاري المعالجة"
-  },
-  "whatsNew": {
-    "title": "الجديد في Handy v{{version}}"
   },
   "secureInput": {
     "blockedWithCulprit_one": "قد يحظر {{name}} اختصارًا واحدًا",
