@@ -16,7 +16,9 @@
 
 There is no unit-test harness for GitHub Actions YAML in this repo. Three substitutes are used, in increasing strength:
 
-1. **`bunx prettier --check .github/workflows/`** — Prettier parses YAML, so this fails on any syntax error introduced by a bad edit.
+1. **`bunx prettier --check --end-of-line auto .github/workflows/`** — Prettier parses YAML, so this fails on any syntax error introduced by a bad edit.
+
+   `--end-of-line auto` is mandatory on this machine. `.prettierrc` sets `endOfLine: lf` while `core.autocrlf=true` gives this Windows checkout CRLF files, so a bare `--check` reports style violations on every pre-existing file regardless of its content. Without the flag the gate is red before any work starts and proves nothing. Never run `prettier --write` to "fix" it — that rewrites line endings across whole files and buries the real diff.
 2. **`cargo test -p handy` / `bun run build` / `bun run lint`** — guard the Rust, frontend and i18n state that config edits could disturb.
 3. **The first real `release.yml` run** — the authoritative check. Tasks 5, 6 and 7 only truly pass when CI is green.
 
@@ -128,15 +130,22 @@ to:
 - [ ] **Step 6: Verify no signing references remain**
 
 ```bash
-rg -n "trusted-signing|signCommand|AZURE_CLIENT|TAURI_SIGNING_PRIVATE_KEY|APPLE_CERTIFICATE" .github/workflows src-tauri/tauri.conf.json
+rg -n "trusted-signing|signCommand|AZURE_CLIENT|TAURI_SIGNING_PRIVATE_KEY|TSC_VERSION|cache-tsc" .github/workflows src-tauri/tauri.conf.json
 ```
 
 Expected: no output.
 
+The Apple signing variables are deliberately absent from this grep. `build.yml`
+keeps its macOS certificate-import steps (guarded by `if: contains(inputs.platform,
+'macos')`) so macOS support can return later, and those steps reference
+`secrets.APPLE_CERTIFICATE`. They are inert for this fork — every caller now
+passes `sign-binaries: false`, and the input's own default in `build.yml` was
+already `false`.
+
 - [ ] **Step 7: Verify the workflows still parse**
 
 ```bash
-bunx prettier --check .github/workflows/release.yml .github/workflows/build.yml .github/workflows/main-build.yml .github/workflows/build-test.yml .github/workflows/pr-test-build.yml
+bunx prettier --check --end-of-line auto .github/workflows/release.yml .github/workflows/build.yml .github/workflows/main-build.yml .github/workflows/build-test.yml .github/workflows/pr-test-build.yml
 ```
 
 Expected: `All matched files use Prettier code style!`
@@ -307,7 +316,7 @@ to:
 
 ```bash
 rg -n "create-release" .github/workflows/release.yml
-bunx prettier --check .github/workflows/release.yml
+bunx prettier --check --end-of-line auto .github/workflows/release.yml
 ```
 
 Expected: `rg` finds nothing; Prettier reports the file is formatted.
@@ -348,7 +357,7 @@ The job keeps `fail-fast: false`, `asset-prefix: "handy"`, `upload-artifacts: fa
 - [ ] **Step 2: Verify the workflow parses**
 
 ```bash
-bunx prettier --check .github/workflows/release.yml
+bunx prettier --check --end-of-line auto .github/workflows/release.yml
 ```
 
 Expected: `All matched files use Prettier code style!`
@@ -416,7 +425,7 @@ In `.github/workflows/pr-test-build.yml`, replace the whole `include:` list with
 - [ ] **Step 4: Verify all three parse and contain only two targets**
 
 ```bash
-bunx prettier --check .github/workflows/main-build.yml .github/workflows/build-test.yml .github/workflows/pr-test-build.yml
+bunx prettier --check --end-of-line auto .github/workflows/main-build.yml .github/workflows/build-test.yml .github/workflows/pr-test-build.yml
 rg -c "platform: " .github/workflows/main-build.yml .github/workflows/build-test.yml .github/workflows/pr-test-build.yml
 ```
 
@@ -476,7 +485,7 @@ Expected output contains `"id": "gigaam-v3-e2e-ctc"` and `"is_downloaded": true`
 - [ ] **Step 3: Verify the workflow parses**
 
 ```bash
-bunx prettier --check .github/workflows/build.yml
+bunx prettier --check --end-of-line auto .github/workflows/build.yml
 ```
 
 Expected: `All matched files use Prettier code style!`
@@ -562,7 +571,7 @@ In `.github/workflows/build.yml`, insert this step after the `Audit Linux packag
 - [ ] **Step 4: Verify the workflow parses and the awk comparison behaves**
 
 ```bash
-bunx prettier --check .github/workflows/build.yml
+bunx prettier --check --end-of-line auto .github/workflows/build.yml
 awk -v have="2.35" -v max="2.35" 'BEGIN { exit !(have > max) }'; echo "2.35 -> exit $?"
 awk -v have="2.39" -v max="2.35" 'BEGIN { exit !(have > max) }'; echo "2.39 -> exit $?"
 ```
@@ -607,7 +616,7 @@ In `.github/workflows/build.yml`, replace the `Rust cache` step with:
 - [ ] **Step 2: Verify the workflow parses**
 
 ```bash
-bunx prettier --check .github/workflows/build.yml
+bunx prettier --check --end-of-line auto .github/workflows/build.yml
 ```
 
 Expected: `All matched files use Prettier code style!`
@@ -679,7 +688,7 @@ install it fails regardless of how the package was built — check first with
 - [ ] **Step 3: Verify formatting**
 
 ```bash
-bunx prettier --check BUILD.md
+bunx prettier --check --end-of-line auto BUILD.md
 ```
 
 Expected: `All matched files use Prettier code style!`
@@ -739,7 +748,7 @@ shortcuts in Settings, and start transcribing.
 - [ ] **Step 2: Verify formatting**
 
 ```bash
-bunx prettier --check README.md
+bunx prettier --check --end-of-line auto README.md
 ```
 
 Expected: `All matched files use Prettier code style!`
