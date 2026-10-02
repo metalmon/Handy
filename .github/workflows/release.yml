@@ -13,7 +13,10 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     outputs:
-      release-id: ${{ steps.ensure-release.outputs.release-id }}
+      # actions/github-script exposes exactly one output, named `result`, holding
+      # whatever the script returns. The step id is NOT the output name, so
+      # `steps.ensure-release.outputs.release-id` would resolve to empty.
+      release-id: ${{ steps.ensure-release.outputs.result }}
       version: ${{ steps.get-version.outputs.version }}
     steps:
       - name: Checkout repository
