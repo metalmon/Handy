@@ -500,7 +500,7 @@ impl ModelManager {
             .is_some_and(|model| model.is_downloaded)
     }
 
-    fn auto_select_model_if_needed(&self) -> Result<()> {
+    pub fn auto_select_model_if_needed(&self) -> Result<()> {
         let mut settings = get_settings(&self.app_handle);
 
         // A model cannot remain selected after its files disappear. Catalog

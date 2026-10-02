@@ -5,7 +5,7 @@ pub mod transcription;
 
 use crate::settings::{get_settings, write_settings, AppSettings, LogLevel};
 use crate::utils::cancel_current_operation;
-use tauri::{AppHandle, Manager};
+use tauri::{AppHandle, Emitter, Manager};
 use tauri_plugin_opener::OpenerExt;
 
 #[tauri::command]
@@ -39,6 +39,41 @@ pub fn get_app_settings(app: AppHandle) -> Result<AppSettings, String> {
 #[specta::specta]
 pub fn get_default_settings() -> Result<AppSettings, String> {
     Ok(crate::settings::get_default_settings())
+}
+
+/// Mark first-run onboarding as finished (or reopen it).
+///
+/// This build has no model selection step, so the frontend calls this once the
+/// permissions screen is done. It also lets the backend auto-select the bundled
+/// model, which stays disabled until onboarding is complete.
+#[tauri::command]
+#[specta::specta]
+pub fn set_onboarding_completed(app: AppHandle, completed: bool) -> Result<(), String> {
+    let mut settings = get_settings(&app);
+    if settings.onboarding_completed == completed {
+        return Ok(());
+    }
+    settings.onboarding_completed = completed;
+    write_settings(&app, settings);
+
+    // Let the backend pick the bundled model now that onboarding is out of the way.
+    if completed {
+        if let Some(model_manager) = app.try_state::<std::sync::Arc<crate::managers::model::ModelManager>>() {
+            if let Err(e) = model_manager.auto_select_model_if_needed() {
+                log::warn!("Failed to auto-select model after onboarding: {}", e);
+            }
+        }
+    }
+
+    let _ = app.emit(
+        "settings-changed",
+        serde_json::json!({
+            "setting": "onboarding_completed",
+            "value": completed
+        }),
+    );
+
+    Ok(())
 }
 
 #[tauri::command]

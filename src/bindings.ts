@@ -525,6 +525,21 @@ async getDefaultSettings() : Promise<Result<AppSettings, string>> {
     else return { status: "error", error: e  as any };
 }
 },
+/**
+ * Mark first-run onboarding as finished (or reopen it).
+ * 
+ * This build has no model selection step, so the frontend calls this once the
+ * permissions screen is done. It also lets the backend auto-select the bundled
+ * model, which stays disabled until onboarding is complete.
+ */
+async setOnboardingCompleted(completed: boolean) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("set_onboarding_completed", { completed }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
 async getLogDirPath() : Promise<Result<string, string>> {
     try {
     return { status: "ok", data: await TAURI_INVOKE("get_log_dir_path") };
