@@ -19,15 +19,14 @@ Handy was created to fill the gap for a truly open source, extensible speech-to-
 
 1. **Press** a configurable keyboard shortcut: hold it to record and release to stop, or tap it to toggle recording on and off (Hold-only and Toggle-only modes are also available)
 2. **Speak** your words while the shortcut is active
-3. **Release** and Handy processes your speech using Whisper
+3. **Release** and Handy processes your speech with the bundled GigaAM v3 model
 4. **Get** your transcribed text pasted directly into whatever app you're using
 
 The process is entirely local:
 
 - Silence is filtered using VAD (Voice Activity Detection) with Silero
-- Transcription uses your choice of models:
-  - **Whisper models** (Small/Medium/Turbo/Large) with GPU acceleration when available
-  - **Parakeet V3** - CPU-optimized model with excellent performance and automatic language detection
+- Transcription runs on a **GigaAM v3** model that is bundled inside the app —
+  nothing is downloaded at runtime and the app works fully offline
 - Works on Windows, macOS, and Linux
 
 ## Quick Start
@@ -237,38 +236,20 @@ Without these tools, Handy falls back to enigo which may have limited compatibil
 
 ## Verify Release Signatures
 
-Handy release artifacts are signed with Tauri's updater signature format. The public key is stored in [`src-tauri/tauri.conf.json`](src-tauri/tauri.conf.json) under `plugins.updater.pubkey`.
-
-To verify a release manually, set `ARTIFACT` to the filename you downloaded, save the `pubkey` value from `src-tauri/tauri.conf.json` to `handy.pub.b64`, then decode the public key and matching `.sig` file from base64 and verify the artifact with `minisign`:
+Handy does not ship an in-app updater, so release artifacts carry no separate
+updater signature (`.sig` / `.minisig`) — there is no `plugins.updater.pubkey`
+to check. Verify the platform's own code signature instead:
 
 ```bash
-# Replace with the file you downloaded
-ARTIFACT="Handy_0.8.1_amd64.AppImage"
+# macOS
+codesign --verify --deep --strict --verbose=2 Handy.app
+spctl -a -t exec -vv Handy.app
 
-python3 - "$ARTIFACT" <<'PY'
-import base64, pathlib, sys
-
-artifact = sys.argv[1]
-
-pub = pathlib.Path("handy.pub.b64").read_text().strip()
-pathlib.Path("handy.pub").write_bytes(base64.b64decode(pub))
-
-sig = pathlib.Path(f"{artifact}.sig").read_text().strip()
-pathlib.Path(f"{artifact}.minisig").write_bytes(base64.b64decode(sig))
-PY
-
-minisign -Vm "$ARTIFACT" \
-  -p handy.pub \
-  -x "$ARTIFACT.minisig"
+# Windows (PowerShell) — requires the release certificate chain to be installed
+Get-AuthenticodeSignature .\Handy_0.9.7_x64-setup.exe | Format-List
 ```
 
-On success, `minisign` prints:
-
-```text
-Signature and comment signature verified
-```
-
-Do not use `gpg` for these `.sig` files.
+On Linux, packages are signed with the distribution's tooling when available.
 
 ## Troubleshooting
 
@@ -282,9 +263,12 @@ If the transcription is correct in **History** but Handy inserts text you copied
 
 If the problem persists, add your Handy version, operating system, receiving application, paste method, Reliable Paste setting, and before/after delays to the existing issue. Redact private dictated text before sharing logs.
 
-### Manual Model Installation (For Proxy Users or Network Restrictions)
+### Custom Model Copy (Advanced)
 
-If you're behind a proxy, firewall, or in a restricted network environment where Handy cannot download models automatically, you can manually download and install them. The URLs are publicly accessible from any browser.
+The GigaAM v3 model ships inside the app, so there is normally nothing to
+install. If you want to run a modified or community build of the same model,
+drop it into the app-data `models` directory and Handy will prefer it over the
+bundled copy.
 
 #### Step 1: Find Your App Data Directory
 
@@ -300,79 +284,28 @@ The typical paths are:
 - **Windows**: `C:\Users\{username}\AppData\Roaming\com.pais.handy\`
 - **Linux**: `~/.config/com.pais.handy/`
 
-#### Step 2: Create Models Directory
+#### Step 2: Place the Files
 
-Inside your app data directory, create a `models` folder if it doesn't already exist:
-
-```bash
-# macOS/Linux
-mkdir -p ~/Library/Application\ Support/com.pais.handy/models
-
-# Windows (PowerShell)
-New-Item -ItemType Directory -Force -Path "$env:APPDATA\com.pais.handy\models"
-```
-
-#### Step 3: Download Model Files
-
-Download the models you want from below
-
-**Whisper Models (single .bin files):**
-
-- Small (487 MB): `https://blob.handy.computer/ggml-small.bin`
-- Medium (492 MB): `https://blob.handy.computer/whisper-medium-q4_1.bin`
-- Turbo (1600 MB): `https://blob.handy.computer/ggml-large-v3-turbo.bin`
-- Large (1100 MB): `https://blob.handy.computer/ggml-large-v3-q5_0.bin`
-
-**Parakeet Unified EN 0.6B (single `.gguf` file, recommended):**
-
-- Q8_0 (731 MB): `https://huggingface.co/handy-computer/parakeet-unified-en-0.6b-gguf/resolve/main/parakeet-unified-en-0.6b-Q8_0.gguf`
-
-#### Step 4: Install Models
-
-**For Whisper Models (.bin files):**
-
-Simply place the `.bin` file directly into the `models` directory:
+Create a `models/giga-am-v3-int8` directory inside it and put both model files
+there:
 
 ```
-{app_data_dir}/models/
-├── ggml-small.bin
-├── whisper-medium-q4_1.bin
-├── ggml-large-v3-turbo.bin
-└── ggml-large-v3-q5_0.bin
+{app_data_dir}/models/giga-am-v3-int8/
+├── model.int8.onnx
+└── vocab.txt
 ```
-
-**For GGUF Models (.gguf files):**
-
-Place the `.gguf` file directly into the `models` directory, exactly like the Whisper `.bin` files above. Handy also picks up models already present in the shared Hugging Face cache (`~/.cache/huggingface/hub`), so a copy downloaded by another tool works without being moved.
 
 **Important Notes:**
 
-- Do not rename the `.bin` or `.gguf` files—use the exact filenames from the download URLs
-- After placing the files, restart Handy to detect the new models
+- The directory name must be exactly `giga-am-v3-int8`, and both files must be
+  present — a partial copy is ignored
+- After placing the files, restart Handy
+- Handy reads the copy in place; it never modifies or deletes it
 
-#### Step 5: Verify Installation
+#### Step 3: Verify Installation
 
 1. Restart Handy
-2. Open Settings → Models
-3. Your manually installed models should now appear as "Downloaded"
-4. Select the model you want to use and test transcription
-
-### Custom Whisper Models
-
-Handy can auto-discover custom Whisper GGML models placed in the `models` directory. This is useful for users who want to use fine-tuned or community models not included in the default model list.
-
-**How to use:**
-
-1. Obtain a Whisper model in GGML `.bin` format (e.g., from [Hugging Face](https://huggingface.co/models?search=whisper%20ggml))
-2. Place the `.bin` file in your `models` directory (see paths above)
-3. Restart Handy to discover the new model
-4. The model will appear in the "Custom Models" section of the Models settings page
-
-**Important:**
-
-- Community models are user-provided and may not receive troubleshooting assistance
-- The model must be a valid Whisper GGML format (`.bin` file)
-- Model name is derived from the filename (e.g., `my-custom-model.bin` → "My Custom Model")
+2. Open Settings → Models and check that the model status is "Installed"
 
 ### Linux Startup Crashes or Instability
 
@@ -464,7 +397,7 @@ Handy is open-source software, but the Handy name, logo, icon, and brand assets 
 
 ## Acknowledgments
 
-- **Whisper** by OpenAI for the speech recognition model
+- **GigaAM v3** by Salute Developers for the speech recognition model
 - **ggml** for an amazing cross-platform tensor library
 - **Silero** for great lightweight VAD
 - **Tauri** team for the excellent Rust-based app framework

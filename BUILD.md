@@ -116,6 +116,40 @@ bun run tauri build
 
 This compiles a release binary and generates platform-specific bundles (deb, rpm, AppImage on Linux; dmg on macOS; msi on Windows).
 
+### 5. The Bundled Model
+
+There is nothing to download by hand. `beforeBuildCommand` runs
+`bun run fetch:model` first, which downloads the GigaAM v3 CTC model
+(~152 MB compressed, ~215 MB unpacked), verifies its SHA-256, and unpacks it
+into `src-tauri/resources/models/giga-am-v3-int8/`. That directory is git-ignored.
+
+The script is idempotent: once `model.int8.onnx` is present it prints
+`already present, skipping download` and never touches the network, so an
+offline rebuild works after the first fetch. To fetch it without a full build:
+
+```bash
+bun run fetch:model
+```
+
+Because the model ships inside the bundle, a Windows installer is roughly
+165 MB and a release build takes noticeably longer than it used to.
+
+## Building Linux Packages
+
+deb, rpm and AppImage can only be produced on a Linux host. From Windows or
+macOS, use WSL2 or a Linux container with the dependencies listed under
+[Linux](#linux) above, plus `fakeroot`, `dpkg-dev` (deb) and `rpm` (rpm).
+
+Verification that has **not** been performed on this project: the contents and
+the installed resource layout of the Linux packages were confirmed against
+`tauri-bundler`'s resource handling rather than by building a real artifact.
+The bundled model is expected at `<install>/lib/Handy/resources/models/giga-am-v3-int8/`,
+the same relative path the Rust side reads. Check it after the first real build:
+
+```bash
+dpkg-deb -c src-tauri/target/release/bundle/deb/*.deb | grep -i "models/"
+```
+
 ## Linux Install (from source)
 
 The raw binary (`src-tauri/target/release/handy`) cannot run standalone — it needs Tauri resource files (tray icons, sounds, VAD model) to be co-located at the expected path.
@@ -278,4 +312,12 @@ bun run tauri dev
 
 # Or compile a release binary without the installer/signing step:
 bun run tauri build --no-bundle
+```
+
+To produce an actual (unsigned) installer locally, override the command with a
+one-line config file — `--no-bundle` gets you a binary, not an installer:
+
+```bash
+echo '{"bundle":{"windows":{"signCommand":null}}}' > nosign.json
+bun run tauri build --bundles nsis --config nosign.json
 ```

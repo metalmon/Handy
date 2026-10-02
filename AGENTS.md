@@ -42,6 +42,8 @@ bun run format:backend    # cargo fmt only
 
 **Model Setup (Required for Development):**
 
+The GigaAM v3 transcription model is fetched automatically by both `bun run tauri dev` and `bun run tauri build`; run `bun run fetch:model` to prefetch it without a build. The VAD model is not bundled and must be downloaded once:
+
 ```bash
 mkdir -p src-tauri/resources/models
 curl -o src-tauri/resources/models/silero_vad_v4.onnx https://blob.handy.computer/silero_vad_v4.onnx
@@ -94,7 +96,7 @@ Handy is a cross-platform desktop speech-to-text application built with Tauri 2.
 
 **Command-Event Architecture:** Frontend → Backend via Tauri commands; Backend → Frontend via events.
 
-**Pipeline Processing:** Audio → VAD → Whisper/Parakeet → Text output → Clipboard/Paste
+**Pipeline Processing:** Audio → VAD → GigaAM v3 → Text output → Clipboard/Paste
 
 **State Flow:** Zustand → Tauri Command → Rust State → Persistence (tauri-plugin-store)
 
@@ -103,7 +105,7 @@ Handy is a cross-platform desktop speech-to-text application built with Tauri 2.
 **Core Libraries:**
 
 - `transcribe-cpp` - Local Whisper-family inference (GGML/GGUF) with GPU acceleration
-- `transcribe-rs` - ONNX speech recognition (Parakeet, Moonshine, SenseVoice, etc.)
+- `transcribe-rs` - ONNX speech recognition; the bundled GigaAM v3 CTC model runs here
 - `cpal` - Cross-platform audio I/O
 - `vad-rs` - Voice Activity Detection
 - `rdev` - Global keyboard shortcuts
@@ -113,9 +115,9 @@ Handy is a cross-platform desktop speech-to-text application built with Tauri 2.
 ### Application Flow
 
 1. **Initialization:** App starts minimized to tray, loads settings, initializes managers
-2. **Model Setup:** First-run downloads preferred Whisper model (Small/Medium/Turbo/Large)
+2. **Model Setup:** the bundled GigaAM v3 model is read from the install directory (a user-supplied copy in app data takes priority)
 3. **Recording:** Global shortcut triggers audio recording with VAD filtering
-4. **Processing:** Audio sent to Whisper model for transcription
+4. **Processing:** Audio sent to the GigaAM v3 model for transcription
 5. **Output:** Text pasted to active application via system clipboard
 
 ### Settings System
@@ -124,7 +126,7 @@ Settings are stored using Tauri's store plugin with reactive updates:
 
 - Keyboard shortcuts (configurable, supports push-to-talk)
 - Audio devices (microphone/output selection)
-- Model preferences (Small/Medium/Turbo/Large Whisper variants)
+- Model status for the single bundled model
 - Audio feedback and translation options
 
 ### Single Instance Architecture
