@@ -548,16 +548,6 @@
         "title": "Emplacement des données de l'application",
         "description": "Emplacement où Handy stocke ses données"
       },
-      "sourceCode": {
-        "title": "Code source",
-        "description": "Voir le code source et contribuer",
-        "button": "Voir sur GitHub"
-      },
-      "supportDevelopment": {
-        "title": "Soutenir le développement",
-        "description": "Aidez-nous à continuer à construire Handy",
-        "button": "Faire un don"
-      },
       "acknowledgments": {
         "title": "Remerciements",
         "ggml": {
@@ -621,7 +611,6 @@
     "blockedNoCulprit_other": "macOS bloque temporairement {{count}} raccourcis",
     "recorderBlockedWithCulprit": "{{name}} bloque peut-être la modification des raccourcis",
     "recorderBlockedNoCulprit": "macOS bloque temporairement la modification des raccourcis",
-    "learnMore": "Comment résoudre ce problème",
     "recorderBlocked": "Impossible d'enregistrer un raccourci pour le moment : Secure Input de macOS bloque les événements clavier. Résolvez d'abord l'avertissement Secure Input.",
     "dismiss": "Ignorer"
   }

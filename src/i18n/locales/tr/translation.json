@@ -548,16 +548,6 @@
         "title": "Uygulama Veri Dizini",
         "description": "Handy'nin verilerini sakladığı konum"
       },
-      "sourceCode": {
-        "title": "Kaynak Kodu",
-        "description": "Kaynak kodunu görüntüle ve katkıda bulun",
-        "button": "GitHub'da Görüntüle"
-      },
-      "supportDevelopment": {
-        "title": "Geliştirmeyi Destekle",
-        "description": "Handy'yi geliştirmeye devam etmemize yardımcı olun",
-        "button": "Bağış Yap"
-      },
       "acknowledgments": {
         "title": "Teşekkürler",
         "ggml": {
@@ -621,7 +611,6 @@
     "blockedNoCulprit_other": "macOS geçici olarak {{count}} kısayolu engelliyor",
     "recorderBlockedWithCulprit": "{{name}} kısayol değişikliklerini engelliyor olabilir",
     "recorderBlockedNoCulprit": "macOS geçici olarak kısayol değişikliklerini engelliyor",
-    "learnMore": "Bu nasıl düzeltilir",
     "recorderBlocked": "Şu anda kısayol kaydedilemiyor — macOS Secure Input tuş olaylarını engelliyor. Önce Secure Input uyarısını giderin.",
     "dismiss": "Kapat"
   }

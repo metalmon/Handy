@@ -548,16 +548,6 @@
         "title": "Direktori Data Aplikasi",
         "description": "Lokasi Handy menyimpan datanya"
       },
-      "sourceCode": {
-        "title": "Kode Sumber",
-        "description": "Lihat kode sumber dan berkontribusi",
-        "button": "Lihat di GitHub"
-      },
-      "supportDevelopment": {
-        "title": "Dukung Pengembangan",
-        "description": "Bantu kami terus mengembangkan Handy",
-        "button": "Donasi"
-      },
       "acknowledgments": {
         "title": "Ucapan Terima Kasih",
         "ggml": {
@@ -621,7 +611,6 @@
     "blockedNoCulprit_other": "macOS untuk sementara memblokir {{count}} pintasan",
     "recorderBlockedWithCulprit": "{{name}} mungkin memblokir perubahan pintasan",
     "recorderBlockedNoCulprit": "macOS untuk sementara memblokir perubahan pintasan",
-    "learnMore": "Cara memperbaiki",
     "recorderBlocked": "Pintasan tidak dapat direkam saat ini — macOS Secure Input memblokir peristiwa tombol. Selesaikan peringatan Secure Input terlebih dahulu.",
     "dismiss": "Tutup"
   }

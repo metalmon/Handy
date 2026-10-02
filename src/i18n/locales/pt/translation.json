@@ -548,16 +548,6 @@
         "title": "Diretório de Dados do App",
         "description": "Local onde o Handy armazena seus dados"
       },
-      "sourceCode": {
-        "title": "Código Fonte",
-        "description": "Visualizar código fonte e contribuir",
-        "button": "Ver no GitHub"
-      },
-      "supportDevelopment": {
-        "title": "Apoiar o Desenvolvimento",
-        "description": "Ajude-nos a continuar construindo o Handy",
-        "button": "Doar"
-      },
       "acknowledgments": {
         "title": "Agradecimentos",
         "ggml": {
@@ -621,7 +611,6 @@
     "blockedNoCulprit_other": "O macOS está bloqueando temporariamente {{count}} atalhos",
     "recorderBlockedWithCulprit": "{{name}} pode estar bloqueando alterações nos atalhos",
     "recorderBlockedNoCulprit": "O macOS está bloqueando temporariamente alterações nos atalhos",
-    "learnMore": "Como resolver isso",
     "recorderBlocked": "Não é possível gravar atalhos agora — o Secure Input do macOS está bloqueando os eventos de tecla. Resolva primeiro o aviso do Secure Input.",
     "dismiss": "Dispensar"
   }

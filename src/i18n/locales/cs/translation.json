@@ -548,16 +548,6 @@
         "title": "Adresář dat aplikace",
         "description": "Umístění, kde Handy ukládá data"
       },
-      "sourceCode": {
-        "title": "Zdrojový kód",
-        "description": "Zobrazit zdrojový kód a přispět",
-        "button": "Zobrazit na GitHubu"
-      },
-      "supportDevelopment": {
-        "title": "Podpořte vývoj",
-        "description": "Pomozte nám pokračovat ve vývoji Handy",
-        "button": "Přispět"
-      },
       "acknowledgments": {
         "title": "Poděkování",
         "ggml": {
@@ -621,7 +611,6 @@
     "blockedNoCulprit_other": "macOS dočasně blokuje {{count}} zkratek",
     "recorderBlockedWithCulprit": "{{name}} může blokovat změny zkratek",
     "recorderBlockedNoCulprit": "macOS dočasně blokuje změny zkratek",
-    "learnMore": "Jak to vyřešit",
     "recorderBlocked": "Zkratky teď nelze nahrát — Secure Input v macOS blokuje události kláves. Nejprve vyřešte upozornění na Secure Input.",
     "dismiss": "Zavřít"
   }

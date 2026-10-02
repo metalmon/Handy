@@ -58,7 +58,9 @@ pub fn set_onboarding_completed(app: AppHandle, completed: bool) -> Result<(), S
 
     // Let the backend pick the bundled model now that onboarding is out of the way.
     if completed {
-        if let Some(model_manager) = app.try_state::<std::sync::Arc<crate::managers::model::ModelManager>>() {
+        if let Some(model_manager) =
+            app.try_state::<std::sync::Arc<crate::managers::model::ModelManager>>()
+        {
             if let Err(e) = model_manager.auto_select_model_if_needed() {
                 log::warn!("Failed to auto-select model after onboarding: {}", e);
             }

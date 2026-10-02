@@ -548,16 +548,6 @@
         "title": "應用程式資料目錄",
         "description": "Handy 儲存資料的位置"
       },
-      "sourceCode": {
-        "title": "原始碼",
-        "description": "檢視原始碼並參與貢獻",
-        "button": "在 GitHub 上檢視"
-      },
-      "supportDevelopment": {
-        "title": "支持開發",
-        "description": "幫助我們繼續開發 Handy",
-        "button": "捐贈"
-      },
       "acknowledgments": {
         "title": "致謝",
         "ggml": {
@@ -621,7 +611,6 @@
     "blockedNoCulprit_other": "macOS 正在暫時阻擋 {{count}} 個快捷鍵",
     "recorderBlockedWithCulprit": "{{name}} 可能正在阻擋快捷鍵變更",
     "recorderBlockedNoCulprit": "macOS 正在暫時阻擋快捷鍵變更",
-    "learnMore": "如何解決",
     "recorderBlocked": "目前無法錄製快捷鍵——macOS 的 Secure Input 正在阻擋按鍵事件。請先解決 Secure Input 警告。",
     "dismiss": "關閉"
   }

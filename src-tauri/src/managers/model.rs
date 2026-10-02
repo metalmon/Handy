@@ -431,10 +431,11 @@ impl ModelManager {
     /// Refresh [`Self::bundled_paths`] from the bundle's models resource
     /// directory. Idempotent, and safe to call on every rescan.
     fn resolve_bundled_models(&self) {
-        let resolved = match self.app_handle.path().resolve(
-            "resources/models",
-            tauri::path::BaseDirectory::Resource,
-        ) {
+        let resolved = match self
+            .app_handle
+            .path()
+            .resolve("resources/models", tauri::path::BaseDirectory::Resource)
+        {
             Ok(root) => discover_bundled_models(&root),
             Err(e) => {
                 warn!("Could not resolve the models resource directory: {}", e);
@@ -692,7 +693,6 @@ impl ModelManager {
             model_id
         ))
     }
-
 }
 
 #[cfg(test)]
@@ -715,10 +715,7 @@ mod tests {
     #[test]
     fn bundled_table_has_unique_ids_and_dir_names() {
         let mut ids: Vec<&str> = BUNDLED_MODELS.iter().map(|entry| entry.id).collect();
-        let mut dirs: Vec<&str> = BUNDLED_MODELS
-            .iter()
-            .map(|entry| entry.dir_name)
-            .collect();
+        let mut dirs: Vec<&str> = BUNDLED_MODELS.iter().map(|entry| entry.dir_name).collect();
         ids.sort_unstable();
         dirs.sort_unstable();
         let unique_ids = ids.len();
@@ -897,5 +894,4 @@ mod tests {
 
         assert_eq!(languages, vec!["en", "zh", "yue"]);
     }
-
 }

@@ -548,16 +548,6 @@
         "title": "Thư mục dữ liệu ứng dụng",
         "description": "Vị trí Handy lưu trữ dữ liệu"
       },
-      "sourceCode": {
-        "title": "Mã nguồn",
-        "description": "Xem mã nguồn và đóng góp",
-        "button": "Xem trên GitHub"
-      },
-      "supportDevelopment": {
-        "title": "Hỗ trợ phát triển",
-        "description": "Giúp chúng tôi tiếp tục xây dựng Handy",
-        "button": "Quyên góp"
-      },
       "acknowledgments": {
         "title": "Lời cảm ơn",
         "ggml": {
@@ -621,7 +611,6 @@
     "blockedNoCulprit_other": "macOS đang tạm thời chặn {{count}} phím tắt",
     "recorderBlockedWithCulprit": "{{name}} có thể đang chặn việc thay đổi phím tắt",
     "recorderBlockedNoCulprit": "macOS đang tạm thời chặn việc thay đổi phím tắt",
-    "learnMore": "Cách khắc phục",
     "recorderBlocked": "Hiện không thể ghi phím tắt — Secure Input của macOS đang chặn các sự kiện phím. Hãy xử lý cảnh báo Secure Input trước.",
     "dismiss": "Bỏ qua"
   }

@@ -8,8 +8,6 @@ import { useSettings } from "../../hooks/useSettings";
 import { useOsType } from "../../hooks/useOsType";
 import { commands } from "@/bindings";
 import { toast } from "sonner";
-import { openUrl } from "@tauri-apps/plugin-opener";
-import { SECURE_INPUT_HELP_URL } from "../SecureInputWarning";
 
 interface HandyKeysShortcutInputProps {
   descriptionMode?: "inline" | "tooltip";
@@ -216,18 +214,13 @@ export const HandyKeysShortcutInput: React.FC<HandyKeysShortcutInputProps> = ({
 
     // Start backend recording. The backend refuses while macOS Secure Input
     // is active (the recorder's listener would receive no key events and
-    // capture just the modifier) — it also flips the warning banner on, so
-    // the toast points at a visible explanation.
+    // capture just the modifier) — it also flips the warning banner on, which
+    // explains the situation in place.
     try {
       const result = await commands.startHandyKeysRecording(shortcutId);
       if (result.status === "error") {
         if (String(result.error).includes("secure-input-active")) {
-          toast.error(t("secureInput.recorderBlocked"), {
-            action: {
-              label: t("secureInput.learnMore"),
-              onClick: () => openUrl(SECURE_INPUT_HELP_URL),
-            },
-          });
+          toast.error(t("secureInput.recorderBlocked"));
         } else {
           toast.error(
             t("settings.general.shortcut.errors.set", {

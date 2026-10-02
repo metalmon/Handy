@@ -548,16 +548,6 @@
         "title": "תיקיית נתוני אפליקציה",
         "description": "המיקום שבו Handy שומר את הנתונים שלו"
       },
-      "sourceCode": {
-        "title": "קוד מקור",
-        "description": "צפה בקוד המקור ותרום",
-        "button": "צפה ב-GitHub"
-      },
-      "supportDevelopment": {
-        "title": "תמיכה בפיתוח",
-        "description": "עזור לנו להמשיך לבנות את Handy",
-        "button": "תרומה"
-      },
       "acknowledgments": {
         "title": "תודות",
         "ggml": {
@@ -621,7 +611,6 @@
     "blockedNoCulprit_other": "macOS חוסם זמנית {{count}} קיצורי דרך",
     "recorderBlockedWithCulprit": "ייתכן ש-{{name}} חוסם שינויים בקיצורי דרך",
     "recorderBlockedNoCulprit": "macOS חוסם זמנית שינויים בקיצורי דרך",
-    "learnMore": "איך לתקן את זה",
     "recorderBlocked": "לא ניתן להקליט קיצורים כרגע — Secure Input של macOS חוסם אירועי מקשים. פתור תחילה את אזהרת Secure Input.",
     "dismiss": "התעלם"
   }

@@ -548,16 +548,6 @@
         "title": "앱 데이터 디렉토리",
         "description": "Handy가 데이터를 저장하는 위치"
       },
-      "sourceCode": {
-        "title": "소스 코드",
-        "description": "소스 코드 보기 및 기여",
-        "button": "GitHub에서 보기"
-      },
-      "supportDevelopment": {
-        "title": "개발 지원",
-        "description": "Handy 개발을 계속할 수 있도록 도와주세요",
-        "button": "후원하기"
-      },
       "acknowledgments": {
         "title": "감사의 말",
         "ggml": {
@@ -621,7 +611,6 @@
     "blockedNoCulprit_other": "macOS가 단축키 {{count}}개를 일시적으로 차단하고 있습니다",
     "recorderBlockedWithCulprit": "{{name}}이(가) 단축키 변경을 차단하고 있을 수 있습니다",
     "recorderBlockedNoCulprit": "macOS가 단축키 변경을 일시적으로 차단하고 있습니다",
-    "learnMore": "해결 방법",
     "recorderBlocked": "지금은 단축키를 등록할 수 없습니다. macOS Secure Input이 키 이벤트를 차단하고 있습니다. Secure Input 경고를 먼저 해결하세요.",
     "dismiss": "닫기"
   }

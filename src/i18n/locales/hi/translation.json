@@ -548,16 +548,6 @@
         "title": "ऐप डेटा फ़ोल्डर",
         "description": "वह जगह जहां Handy अपना डेटा सेव करता है"
       },
-      "sourceCode": {
-        "title": "सोर्स कोड",
-        "description": "सोर्स कोड देखें और योगदान दें",
-        "button": "GitHub पर देखें"
-      },
-      "supportDevelopment": {
-        "title": "डेवलपमेंट में सहयोग करें",
-        "description": "Handy को आगे बढ़ाने में हमारी मदद करें",
-        "button": "दान करें"
-      },
       "acknowledgments": {
         "title": "आभार",
         "ggml": {
@@ -621,7 +611,6 @@
     "blockedNoCulprit_other": "macOS अस्थायी रूप से {{count}} शॉर्टकट को ब्लॉक कर रहा है",
     "recorderBlockedWithCulprit": "{{name}} शायद शॉर्टकट में बदलाव को ब्लॉक कर रहा है",
     "recorderBlockedNoCulprit": "macOS अस्थायी रूप से शॉर्टकट में बदलाव को ब्लॉक कर रहा है",
-    "learnMore": "इसे कैसे ठीक करें",
     "recorderBlocked": "अभी शॉर्टकट रिकॉर्ड नहीं किए जा सकते — macOS Secure Input कुंजी इवेंट ब्लॉक कर रहा है. पहले Secure Input चेतावनी हल करें.",
     "dismiss": "खारिज करें"
   }

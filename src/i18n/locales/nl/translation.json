@@ -548,16 +548,6 @@
         "title": "App-datamap",
         "description": "Locatie waar Handy de gegevens opslaat"
       },
-      "sourceCode": {
-        "title": "Broncode",
-        "description": "Bekijk de broncode en draag bij",
-        "button": "Bekijk op GitHub"
-      },
-      "supportDevelopment": {
-        "title": "Ontwikkeling ondersteunen",
-        "description": "Help ons om te blijven bouwen aan Handy",
-        "button": "Doneren"
-      },
       "acknowledgments": {
         "title": "Dankbetuigingen",
         "ggml": {
@@ -621,7 +611,6 @@
     "blockedNoCulprit_other": "macOS blokkeert tijdelijk {{count}} sneltoetsen",
     "recorderBlockedWithCulprit": "{{name}} blokkeert mogelijk wijzigingen aan sneltoetsen",
     "recorderBlockedNoCulprit": "macOS blokkeert tijdelijk wijzigingen aan sneltoetsen",
-    "learnMore": "Hoe je dit oplost",
     "recorderBlocked": "Sneltoetsen kunnen nu niet worden opgenomen — Secure Input van macOS blokkeert toetsgebeurtenissen. Los eerst de Secure Input-waarschuwing op.",
     "dismiss": "Sluiten"
   }

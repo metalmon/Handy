@@ -548,16 +548,6 @@
         "title": "Directori de dades de l'aplicació",
         "description": "Ubicació on el Handy desa les dades"
       },
-      "sourceCode": {
-        "title": "Codi font",
-        "description": "Consulta el codi font i col·laboreu-hi",
-        "button": "Mostra al GitHub"
-      },
-      "supportDevelopment": {
-        "title": "Dona suport al desenvolupament",
-        "description": "Ajudeu-nos a continuar desenvolupant el Handy",
-        "button": "Feu una donació"
-      },
       "acknowledgments": {
         "title": "Agraïments",
         "ggml": {
@@ -621,7 +611,6 @@
     "blockedNoCulprit_other": "El macOS està blocant temporalment {{count}} dreceres",
     "recorderBlockedWithCulprit": "{{name}} pot estar blocant els canvis de dreceres",
     "recorderBlockedNoCulprit": "El macOS està blocant temporalment els canvis de dreceres",
-    "learnMore": "Com es resol",
     "recorderBlocked": "Ara no se'n poden enregistrar dreceres: l'entrada segura del macOS bloca els esdeveniments de tecla. Resol primer l'avís d'entrada segura.",
     "dismiss": "Descarta"
   }

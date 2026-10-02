@@ -548,16 +548,6 @@
         "title": "Mapp för appdata",
         "description": "Plats där Handy lagrar sina data"
       },
-      "sourceCode": {
-        "title": "Källkod",
-        "description": "Visa källkod och bidra",
-        "button": "Visa på GitHub"
-      },
-      "supportDevelopment": {
-        "title": "Stöd utvecklingen",
-        "description": "Hjälp oss att fortsätta bygga Handy",
-        "button": "Donera"
-      },
       "acknowledgments": {
         "title": "Tack till",
         "ggml": {
@@ -621,7 +611,6 @@
     "blockedNoCulprit_other": "macOS blockerar tillfälligt {{count}} kortkommandon",
     "recorderBlockedWithCulprit": "{{name}} kanske blockerar ändringar av kortkommandon",
     "recorderBlockedNoCulprit": "macOS blockerar tillfälligt ändringar av kortkommandon",
-    "learnMore": "Så här löser du det",
     "recorderBlocked": "Det går inte att spela in kortkommandon just nu — macOS Secure Input blockerar tangenthändelser. Lös varningen om Secure Input först.",
     "dismiss": "Avfärda"
   }

@@ -1,13 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { listen } from "@tauri-apps/api/event";
-import { openUrl } from "@tauri-apps/plugin-opener";
-import { ExternalLink, TriangleAlert, X } from "lucide-react";
+import { TriangleAlert, X } from "lucide-react";
 import { commands, type SecureInputStatus } from "@/bindings";
-
-// Detailed remediation steps live in the docs rather than in the banner
-export const SECURE_INPUT_HELP_URL =
-  "https://handy.computer/docs/troubleshooting#shortcuts-stopped-working-on-macos-secure-input";
 
 /**
  * Compact warning banner shown while macOS Secure Input is stuck on.
@@ -96,15 +91,6 @@ const SecureInputWarning: React.FC = () => {
           {message}
         </p>
         <div className="flex shrink-0 items-center gap-1">
-          <button
-            onClick={() => openUrl(SECURE_INPUT_HELP_URL)}
-            className="cursor-pointer whitespace-nowrap rounded px-2 py-1.5 text-sm font-medium text-text hover:text-warning focus:outline-none focus:ring-1 focus:ring-warning"
-          >
-            <span className="flex items-center gap-1 border-b border-current leading-4">
-              {t("secureInput.learnMore")}
-              <ExternalLink className="h-3.5 w-3.5" />
-            </span>
-          </button>
           <button
             onClick={() => setDismissed(true)}
             aria-label={t("secureInput.dismiss")}

@@ -548,16 +548,6 @@
         "title": "App Data Directory",
         "description": "Location where Handy stores its data"
       },
-      "sourceCode": {
-        "title": "Source Code",
-        "description": "View source code and contribute",
-        "button": "View on GitHub"
-      },
-      "supportDevelopment": {
-        "title": "Support Development",
-        "description": "Help us continue building Handy",
-        "button": "Donate"
-      },
       "acknowledgments": {
         "title": "Acknowledgments",
         "ggml": {
@@ -621,7 +611,6 @@
     "blockedNoCulprit_other": "macOS is temporarily blocking {{count}} shortcuts",
     "recorderBlockedWithCulprit": "{{name}} may be blocking shortcut changes",
     "recorderBlockedNoCulprit": "macOS is temporarily blocking shortcut changes",
-    "learnMore": "How to fix",
     "recorderBlocked": "Can't record shortcuts right now — macOS Secure Input is blocking key events. Resolve the Secure Input warning first.",
     "dismiss": "Dismiss"
   }

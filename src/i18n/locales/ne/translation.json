@@ -548,16 +548,6 @@
         "title": "एप डेटा डाइरेक्टरी",
         "description": "Handy ले आफ्नो डेटा भण्डारण गर्ने स्थान"
       },
-      "sourceCode": {
-        "title": "स्रोत कोड",
-        "description": "स्रोत कोड हेर्नुहोस् र योगदान गर्नुहोस्",
-        "button": "GitHub मा हेर्नुहोस्"
-      },
-      "supportDevelopment": {
-        "title": "विकासलाई सहयोग गर्नुहोस्",
-        "description": "Handy निर्माण जारी राख्न हामीलाई सहयोग गर्नुहोस्",
-        "button": "दान गर्नुहोस्"
-      },
       "acknowledgments": {
         "title": "आभार",
         "ggml": {
@@ -621,7 +611,6 @@
     "blockedNoCulprit_other": "macOS ले अस्थायी रूपमा {{count}} सर्टकटहरू रोकिरहेको छ",
     "recorderBlockedWithCulprit": "{{name}} ले सर्टकट परिवर्तन रोकिरहेको हुन सक्छ",
     "recorderBlockedNoCulprit": "macOS ले अस्थायी रूपमा सर्टकट परिवर्तन रोकिरहेको छ",
-    "learnMore": "यसलाई कसरी ठिक गर्ने",
     "recorderBlocked": "अहिले सर्टकट रेकर्ड गर्न सकिँदैन — macOS Secure Input ले कुञ्जी इभेन्टहरू रोकिरहेको छ। पहिले Secure Input चेतावनी समाधान गर्नुहोस्।",
     "dismiss": "हटाउनुहोस्"
   }

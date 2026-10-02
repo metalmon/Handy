@@ -548,16 +548,6 @@
         "title": "Cartella Dati App",
         "description": "Cartella in cui Handy salva i dati"
       },
-      "sourceCode": {
-        "title": "Codice Sorgente",
-        "description": "Vedi e contribuisci al codice sorgente",
-        "button": "Vedi su GitHub"
-      },
-      "supportDevelopment": {
-        "title": "Supporta lo Sviluppo",
-        "description": "Aiutaci a sviluppare Handy",
-        "button": "Dona"
-      },
       "acknowledgments": {
         "title": "Ringraziamenti",
         "ggml": {
@@ -621,7 +611,6 @@
     "blockedNoCulprit_other": "macOS sta bloccando temporaneamente {{count}} scorciatoie",
     "recorderBlockedWithCulprit": "{{name}} potrebbe bloccare le modifiche alle scorciatoie",
     "recorderBlockedNoCulprit": "macOS sta bloccando temporaneamente le modifiche alle scorciatoie",
-    "learnMore": "Come risolvere",
     "recorderBlocked": "Non è possibile registrare scorciatoie in questo momento: Secure Input di macOS sta bloccando gli eventi dei tasti. Risolvi prima l'avviso di Secure Input.",
     "dismiss": "Ignora"
   }
