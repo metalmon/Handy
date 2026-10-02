@@ -514,7 +514,62 @@ git commit -m "ci: assert the packaged Windows app finds its bundled model"
 
 ---
 
-### Task 6: Assert the model is packaged and the glibc baseline holds on Linux
+### Task 6: Ship ONNX Runtime inside the rpm package
+
+**Files:**
+- Modify: `.github/workflows/build.yml:382-389` (Linux ORT step)
+- Modify: `.github/workflows/build.yml:670-694` (rpm audit block)
+
+**Why:** Moving rpm from `ubuntu-24.04` to `ubuntu-22.04` in Task 3 breaks the rpm, and the audit will not catch it. This was introduced by that move, not inherited:
+
+- On `ubuntu-24.04` the Linux ORT step never ran, so `ORT_PREFER_DYNAMIC_LINK` was unset and ORT was linked **statically**. The rpm shipped a self-contained binary.
+- On `ubuntu-22.04` the ORT step sets `ORT_PREFER_DYNAMIC_LINK=1`, so the binary ends up with `NEEDED libonnxruntime.so.1` (stated at `build.yml:383`).
+- `src-tauri/build.rs:122-124` returns early for non-Windows targets, so `transcribe-libs/` never receives that `.so` on Linux. The only injection is the `.bundle.linux.deb.files` entry at `build.yml:387-389`.
+- `tauri.conf.json:62-64` maps `rpm.files["/usr/lib/Handy"] = "transcribe-libs"`, which is therefore empty of ORT.
+
+Result: the deb ships the library, the rpm does not, and `handy` cannot start on РЕДОС 8. The rpm audit at `build.yml:674-694` lists the package but never checks for ORT, unlike the deb audit at `build.yml:656-658`.
+
+- [ ] **Step 1: Inject the ORT SONAME into the rpm mapping too**
+
+In `.github/workflows/build.yml`, in the "Install ONNX Runtime (x86_64 Linux, Ubuntu 22.04)" step, change the final `jq` invocation so it writes both mappings:
+
+```bash
+          # deb.files and rpm.files keys = destination in package, value = source on disk.
+          # Both need it: on 22.04 ORT is dynamically linked, so a package that omits the
+          # library produces a binary that cannot start.
+          jq --arg so1 "$ORT_DIR/lib/libonnxruntime.so.1" \
+            '.bundle.linux.deb.files["/usr/lib/Handy/libonnxruntime.so.1"] = $so1
+             | .bundle.linux.rpm.files["/usr/lib/Handy/libonnxruntime.so.1"] = $so1' \
+            src-tauri/tauri.conf.json > tmp.json && mv tmp.json src-tauri/tauri.conf.json
+```
+
+- [ ] **Step 2: Assert the rpm contains the ORT library**
+
+In the same file, inside the `if compgen -G "${BUNDLE_DIR}/rpm/*.rpm"` audit block, add the counterpart of the deb audit's ORT check:
+
+```bash
+            require_pattern "$listing" 'usr/lib/Handy/libonnxruntime\.so\.[0-9]+$' "ONNX Runtime library (SONAME)"
+```
+
+- [ ] **Step 3: Verify**
+
+```bash
+rg -n "deb\.files|rpm\.files" .github/workflows/build.yml
+bunx prettier --check --end-of-line auto .github/workflows/build.yml
+```
+
+Expected: the `jq` filter now sets both `deb.files` and `rpm.files`; the rpm audit gains a `require_pattern` for `usr/lib/Handy/libonnxruntime\.so`; prettier clean.
+
+Commit:
+
+```bash
+git add .github/workflows/build.yml
+git commit -m "fix: ship ONNX Runtime inside the rpm package"
+```
+
+---
+
+### Task 7: Assert the model is packaged and the glibc baseline holds on Linux
 
 **Files:**
 - Modify: `.github/workflows/build.yml:670-716` (deb and rpm audit blocks)
@@ -602,7 +657,7 @@ git commit -m "ci: assert the bundled model and the glibc baseline in Linux pack
 
 ---
 
-### Task 7: Isolate the Rust cache for no-cache release builds
+### Task 8: Isolate the Rust cache for no-cache release builds
 
 **Files:**
 - Modify: `.github/workflows/build.yml:110-119`
@@ -645,7 +700,7 @@ git commit -m "ci: keep release builds out of the shared Rust cache namespace"
 
 ---
 
-### Task 8: Rewrite the signing troubleshooting section
+### Task 9: Rewrite the signing troubleshooting section
 
 **Files:**
 - Modify: `BUILD.md:295-323`
@@ -717,7 +772,7 @@ git commit -m "docs: replace signing workaround with the release procedure"
 
 ---
 
-### Task 9: Document the install paths this fork actually ships
+### Task 10: Document the install paths this fork actually ships
 
 **Files:**
 - Modify: `README.md:34-48`
@@ -777,7 +832,7 @@ git commit -m "docs: document install paths for Astra Linux, RedOS and Windows"
 
 ---
 
-### Task 10: Full local regression run
+### Task 11: Full local regression run
 
 **Files:** none — verification only.
 
@@ -865,7 +920,7 @@ check, along with the `dnf list webkit2gtk4.1` verification they must run on
 | 11. Критерии приёмки | 3, 5, 6, 10 |
 
 **Deviation from spec, deliberate:** the spec did not mention the shared Rust
-cache key. Task 7 adds it because the spec's requirement that release builds
+cache key. Task 8 adds it because the spec's requirement that release builds
 never restore a cached native library is not actually enforced by the code as
 written.
 
@@ -873,4 +928,4 @@ written.
 
 **Consistency:** `ensure-release` is the single name used in Steps 1, 4 and 6;
 `is_downloaded` and `gigaam-v3-e2e-ctc` match the CLI output verified in
-Task 5 Step 2; `GLIBC_2.35` matches the baseline in Tasks 6, 8 and 10.
+Task 5 Step 2; `GLIBC_2.35` matches the baseline in Tasks 7, 9 and 11.
