@@ -1,19 +1,16 @@
-import catalog from "../src-tauri/src/catalog/catalog.json";
+import { readFileSync } from "node:fs";
 import {
   MODEL_CAPABILITY_LANGUAGES,
   supportsLanguageCode,
 } from "../src/lib/constants/languages.ts";
 
-interface CatalogModel {
-  name: string;
-  languages?: string[];
-}
+const MODEL_MANAGER = "src-tauri/src/managers/model.rs";
 
 const failures: string[] = [];
 
 // These model-code variants intentionally share one persisted UI intent. Keep
-// this assertion beside catalog coverage so adding a separate picker entry
-// cannot silently break language continuity when users switch model families.
+// this assertion here so a language rename cannot silently break continuity for
+// users who already have `no` stored.
 if (
   !supportsLanguageCode(["nb"], "no") ||
   !supportsLanguageCode(["no"], "nb")
@@ -23,8 +20,29 @@ if (
   );
 }
 
-for (const model of catalog.models as CatalogModel[]) {
-  for (const modelLanguage of model.languages ?? []) {
+// The model catalog is gone: this build ships exactly one model, GigaAM v3,
+// declared inline in the model manager. Read its supported_languages straight
+// from the registry so the check cannot drift away from the real capability.
+const manager = readFileSync(MODEL_MANAGER, "utf8");
+const bundled = manager.match(
+  /id:\s*"gigaam-v3-e2e-ctc"[\s\S]*?supported_languages:\s*vec!\[([^\]]*)\]/,
+);
+
+if (!bundled) {
+  failures.push(
+    "could not find supported_languages for the bundled gigaam-v3-e2e-ctc entry in " +
+      MODEL_MANAGER,
+  );
+} else {
+  const modelLanguages = [...bundled[1].matchAll(/"([^"]+)"/g)].map(
+    (match) => match[1],
+  );
+
+  if (modelLanguages.length === 0) {
+    failures.push("the bundled model declares no supported languages");
+  }
+
+  for (const modelLanguage of modelLanguages) {
     const matchingIntents = MODEL_CAPABILITY_LANGUAGES.filter((language) =>
       supportsLanguageCode([modelLanguage], language.value),
     );
@@ -36,8 +54,15 @@ for (const model of catalog.models as CatalogModel[]) {
           : `ambiguous intents: ${matchingIntents
               .map((language) => language.value)
               .join(", ")}`;
-      failures.push(`${model.name}: ${modelLanguage} (${matchSummary})`);
+      failures.push(`gigaam-v3-e2e-ctc: ${modelLanguage} (${matchSummary})`);
     }
+  }
+
+  if (modelLanguages.length === 1) {
+    console.log(
+      `Model language coverage: gigaam-v3-e2e-ctc declares ${modelLanguages.join(", ")}, ` +
+        `mapped to ${MODEL_CAPABILITY_LANGUAGES.length} frontend intents`,
+    );
   }
 }
 
@@ -48,5 +73,5 @@ if (failures.length > 0) {
 }
 
 console.log(
-  `Model language coverage: all catalog codes map to exactly one of ${MODEL_CAPABILITY_LANGUAGES.length} frontend intents`,
+  "Model language coverage: all bundled model codes map to exactly one frontend intent",
 );
