@@ -28,6 +28,9 @@ on:
         required: false
         type: boolean
         default: false
+      # Signing is currently OFF for every caller: this fork builds unsigned
+      # because it has no Trusted Signing / Apple secrets. The input stays so
+      # macOS certificate import can be re-enabled by flipping it.
       sign-binaries:
         required: false
         type: boolean
@@ -224,6 +227,8 @@ jobs:
         run: |
           CERT_INFO=$(security find-identity -v -p codesigning build.keychain | grep "Developer ID Application")
           CERT_ID=$(echo "$CERT_INFO" | awk -F'"' '{print $2}')
+          # CERT_ID is consumed by APPLE_SIGNING_IDENTITY in the Build with Tauri
+          # step; restore that env var when re-enabling signing.
           echo "CERT_ID=$CERT_ID" >> $GITHUB_ENV
           echo "Certificate imported."
 
@@ -319,9 +324,9 @@ jobs:
           Write-Host "HANDY_VC_REDIST_DIRS=$dirs"
           Add-Content -Path $env:GITHUB_ENV -Value "HANDY_VC_REDIST_DIRS=$dirs"
 
-      # MSI packaging verifies bundled .dll/.exe resources with signtool before
-      # custom signing. Tauri's SDK lookup has no ARM64 host mapping, so pass
-      # the tool explicitly once ARM64 starts bundling runtime DLLs.
+      # MSI packaging verifies bundled .dll/.exe resources with signtool. Tauri's
+      # SDK lookup has no ARM64 host mapping, so pass the tool explicitly once
+      # ARM64 starts bundling runtime DLLs.
       - name: Point tauri-bundler at signtool.exe (Windows ARM64)
         if: contains(inputs.platform, 'windows') && contains(inputs.target, 'aarch64')
         shell: pwsh
@@ -478,7 +483,7 @@ jobs:
       # Tauri's mirrored 2024 linuxdeploy predates support for the
       # LINUXDEPLOY_EXCLUDED_LIBRARIES environment variable. Put a current
       # upstream build in Tauri's tool cache so the exclusions on the build step
-      # are applied while constructing the original, signed AppImage.
+      # are applied while constructing the original AppImage.
       - name: Install linuxdeploy with library exclusion support
         if: contains(inputs.platform, 'ubuntu') && contains(inputs.build-args, 'appimage')
         shell: bash
@@ -505,7 +510,7 @@ jobs:
           # graphics stack. Bundling Ubuntu's copies ahead of the system libraries can
           # prevent a newer distro's Vulkan ICD or Mesa stack from loading.
           # linuxdeploy reads this semicolon-separated glob list before it creates
-          # (and Tauri signs and uploads) the AppImage, so the published artifact
+          # (and Tauri uploads) the AppImage, so the published artifact
           # is already clean.
           LINUXDEPLOY_EXCLUDED_LIBRARIES: ${{ contains(inputs.platform, 'ubuntu') && 'libvulkan.so*;libwayland-client.so*' || '' }}
           # linuxdeploy passes this to appimagetool, which writes it as
@@ -520,7 +525,7 @@ jobs:
 
       # tauri-action uploads release assets before returning. All AppImage
       # filtering therefore happens inside linuxdeploy above; this verifies the
-      # exact artifact Tauri signed and uploaded.
+      # exact artifact Tauri uploaded.
       - name: Verify AppImage version metadata
         if: contains(inputs.platform, 'ubuntu')
         shell: bash
