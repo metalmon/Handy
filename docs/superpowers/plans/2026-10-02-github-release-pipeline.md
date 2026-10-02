@@ -261,6 +261,14 @@ jobs:
 
 - [ ] **Step 3: Add the publish job**
 
+The `needs` list must include **both** jobs. `needs` holds only *direct*
+dependencies — GitHub's contexts reference states it "doesn't include
+implicitly dependent jobs (for example, dependent jobs of a dependent job)" —
+and a dereference of an absent property "will evaluate to an empty string".
+Since `ensure-release` is only a transitive dependency via `publish-tauri`,
+omitting it would substitute an empty string into the script body and produce
+`const releaseId = ;`, a hard SyntaxError on every run.
+
 Append to the end of `.github/workflows/release.yml`, after the `publish-tauri` job:
 
 ```yaml
@@ -269,7 +277,7 @@ Append to the end of `.github/workflows/release.yml`, after the `publish-tauri` 
   publish-release:
     permissions:
       contents: write
-    needs: publish-tauri
+    needs: [ensure-release, publish-tauri]
     runs-on: ubuntu-latest
     steps:
       - name: Publish release
