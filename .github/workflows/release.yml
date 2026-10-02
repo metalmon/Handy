@@ -4,7 +4,7 @@ on: workflow_dispatch
 
 # Two concurrent runs would delete each other's release assets mid-upload.
 concurrency:
-  group: release
+  group: ${{ github.workflow }}
   cancel-in-progress: false
 
 jobs:
@@ -29,6 +29,12 @@ jobs:
           VERSION=$(grep -o '"version": "[^"]*"' src-tauri/tauri.conf.json | cut -d'"' -f4)
           echo "Application version from tauri.conf.json: $VERSION"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          # An empty VERSION would silently become the tag "vundefined" and create
+          # a release under it, so stop loudly instead.
+          if [[ -z "$VERSION" ]]; then
+            echo "::error::Could not read version from src-tauri/tauri.conf.json"
+            exit 1
+          fi
 
       - name: Ensure Draft Release (reuse tag, replace assets)
         id: ensure-release
@@ -46,17 +52,27 @@ jobs:
             const existing = releases.find((r) => r.tag_name === tag);
 
             if (existing) {
+              if (!existing.draft) {
+                core.warning(
+                  `${tag} is already PUBLISHED. This run replaces its assets, so its ` +
+                    `download links will 404 until the rebuild finishes. Reusing the ` +
+                    `tag is intentional: re-releases are expected under one tag.`
+                );
+              }
               core.info(
                 `Reusing release #${existing.id} for ${tag}; deleting ${existing.assets.length} existing asset(s)`
               );
-              // Re-uploading an asset whose name already exists fails with 422,
-              // so a re-release has to clear the previous set first.
+              // A target only replaces assets whose names it re-uploads, so assets
+              // from an earlier partial run — or from a bundle type the current
+              // matrix no longer builds — would linger forever. Clear the whole set
+              // so each run leaves exactly one asset per bundle.
               for (const asset of existing.assets) {
                 await github.rest.repos.deleteReleaseAsset({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   asset_id: asset.id
                 });
+                core.info(`Deleted asset "${asset.name}" (id ${asset.id})`);
               }
               return existing.id;
             }
@@ -127,9 +143,15 @@ jobs:
     steps:
       - name: Publish release
         uses: actions/github-script@v9
+        env:
+          RELEASE_ID: ${{ needs.ensure-release.outputs.release-id }}
         with:
           script: |
-            const releaseId = ${{ needs.ensure-release.outputs.release-id }};
+            const releaseId = process.env.RELEASE_ID;
+            if (!releaseId) {
+              core.setFailed(`RELEASE_ID was empty; cannot publish release`);
+              return;
+            }
             await github.rest.repos.updateRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
