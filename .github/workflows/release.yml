@@ -2,13 +2,18 @@ name: "Release"
 
 on: workflow_dispatch
 
+# Two concurrent runs would delete each other's release assets mid-upload.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 jobs:
-  create-release:
+  ensure-release:
     permissions:
       contents: write
     runs-on: ubuntu-latest
     outputs:
-      release-id: ${{ steps.create-release.outputs.result }}
+      release-id: ${{ steps.ensure-release.outputs.release-id }}
       version: ${{ steps.get-version.outputs.version }}
     steps:
       - name: Checkout repository
@@ -22,26 +27,53 @@ jobs:
           echo "Application version from tauri.conf.json: $VERSION"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
-      - name: Create Draft Release
-        id: create-release
+      - name: Ensure Draft Release (reuse tag, replace assets)
+        id: ensure-release
         uses: actions/github-script@v9
         with:
           script: |
+            const tag = `v${{ steps.get-version.outputs.version }}`;
+            // GET /releases/tags/{tag} never returns drafts, so a re-release would
+            // find nothing. The paginated list is the only way to see a draft.
+            const releases = await github.paginate(github.rest.repos.listReleases, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100
+            });
+            const existing = releases.find((r) => r.tag_name === tag);
+
+            if (existing) {
+              core.info(
+                `Reusing release #${existing.id} for ${tag}; deleting ${existing.assets.length} existing asset(s)`
+              );
+              // Re-uploading an asset whose name already exists fails with 422,
+              // so a re-release has to clear the previous set first.
+              for (const asset of existing.assets) {
+                await github.rest.repos.deleteReleaseAsset({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  asset_id: asset.id
+                });
+              }
+              return existing.id;
+            }
+
+            core.info(`No release found for ${tag}; creating a draft`);
             const { data } = await github.rest.repos.createRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              tag_name: `v${{ steps.get-version.outputs.version }}`,
-              name: `v${{ steps.get-version.outputs.version }}`,
+              tag_name: tag,
+              name: tag,
               draft: true,
               prerelease: false,
               generate_release_notes: true
-            })
+            });
             return data.id
 
   publish-tauri:
     permissions:
       contents: write
-    needs: create-release
+    needs: ensure-release
     strategy:
       fail-fast: false
       matrix:
@@ -76,8 +108,29 @@ jobs:
       sign-binaries: false
       asset-prefix: "handy"
       upload-artifacts: false
-      release-id: ${{ needs.create-release.outputs.release-id }}
+      release-id: ${{ needs.ensure-release.outputs.release-id }}
       # Releases always build from scratch — never restore the Rust cache, so a
       # stale cached native lib can never be linked into a shipped artifact.
       no-cache: true
     secrets: inherit
+
+  # Publishing is a separate, final job so a failed target can never ship a
+  # half-built release: needs: makes this unreachable unless every target is green.
+  publish-release:
+    permissions:
+      contents: write
+    needs: [ensure-release, publish-tauri]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish release
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const releaseId = ${{ needs.ensure-release.outputs.release-id }};
+            await github.rest.repos.updateRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: releaseId,
+              draft: false
+            });
+            core.info(`Published release #${releaseId}`);
