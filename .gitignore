@@ -49,3 +49,6 @@ __pycache__/
 # Superpowers plans/specs and skill artifacts (local working docs, not product)
 docs/superpowers/
 .superpowers/
+
+# Bundled model, fetched by scripts/fetch-bundled-model.ts before a build
+src-tauri/resources/models/giga-am-v3-int8/
