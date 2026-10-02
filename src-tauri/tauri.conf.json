@@ -45,6 +45,7 @@
     "linux": {
       "deb": {
         "depends": ["libgtk-layer-shell0", "libopenblas0"],
+        "desktopTemplate": "linux/main.desktop",
         "files": {
           "/usr/lib/Handy": "transcribe-libs"
         }
@@ -57,6 +58,7 @@
         "compression": {
           "type": "none"
         },
+        "desktopTemplate": "linux/main.desktop",
         "files": {
           "/usr/lib/Handy": "transcribe-libs"
         }

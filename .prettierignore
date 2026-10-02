@@ -11,6 +11,7 @@ target
 # Tauri
 src-tauri/target
 src-tauri/gen
+src-tauri/linux/main.desktop
 
 # Generated files
 src/bindings.ts
