@@ -10,7 +10,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - platform: "ubuntu-22.04" # deb + rpm (was deb only). Built on glibc 2.35 so the binaries stay loadable on both targets (Astra Linux SE 1.8, РЕДОС 8 — glibc 2.36). glibc and libstdc++ are forward-compatible only, so the build host must never be newer than the target.
+          - platform: "ubuntu-22.04" # deb + rpm. Built on glibc 2.35 so the binaries stay loadable on both targets (Astra Linux SE 1.8, РЕДОС 8 — glibc 2.36). glibc and libstdc++ are forward-compatible only, so the build host must never be newer than the target.
             args: "--bundles deb,rpm"
             target: "x86_64-unknown-linux-gnu"
           - platform: "windows-latest" # Builds NSIS and MSI; NSIS shows "ХЭНДИ", MSI shows ASCII "Handy" (forced: PRODUCTNAME drives install path + upgrade identity — see nsis/installer.nsi).
