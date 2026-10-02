@@ -4,7 +4,7 @@
   "version": "0.9.7",
   "identifier": "com.pais.handy",
   "build": {
-    "beforeDevCommand": "bun run dev",
+    "beforeDevCommand": "bun run fetch:model && bun run dev",
     "devUrl": "http://localhost:1420",
     "beforeBuildCommand": "bun run fetch:model && bun run build",
     "frontendDist": "../dist"
