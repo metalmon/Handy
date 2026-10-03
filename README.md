@@ -27,25 +27,81 @@ The process is entirely local:
 - Silence is filtered using VAD (Voice Activity Detection) with Silero
 - Transcription runs on a **GigaAM v3** model that is bundled inside the app —
   nothing is downloaded at runtime and the app works fully offline
-- Works on Windows, macOS, and Linux
+- Works on Windows, macOS, and Linux. This fork builds installers for Windows
+  and Linux (x86-64) only; see [Installation](#installation)
 
 ## Quick Start
 
 ### Installation
 
-1. Download the latest release from the [releases page](https://github.com/cjpais/Handy/releases) or the [website](https://handy.computer)
-   - **macOS**: Also available via [Homebrew cask](https://formulae.brew.sh/cask/handy): `brew install --cask handy`
-   - **Windows**: Also available via [winget](https://github.com/microsoft/winget-pkgs): `winget install cjpais.Handy` \
-     **Note:** The Homebrew cask and winget package are not maintained by the Handy developers.
-   - **Debian/Ubuntu**: Install the downloaded `.deb` with APT so required dependencies are installed automatically:
+This fork builds **Windows** and **Linux** x86-64 installers: an NSIS `.exe` and
+an MSI for Windows, a `.deb` and an `.rpm` for Linux. macOS is not built by CI
+here — build it from source instead, see [BUILD.md](BUILD.md).
+
+> **No release has been published from this fork's pipeline yet.** Until the first
+> one exists, [build Handy from source](BUILD.md).
+
+1. Download the installer for your platform from the
+   [releases page](https://github.com/metalmon/Handy/releases)
+   - **Windows**: The NSIS installer and the MSI install the same application,
+     but they label it differently — NSIS shows **ХЭНДИ**, the MSI shows ASCII
+     **Handy**. Both put `handy.exe` in a `Handy` folder under `Program Files`.
+     Neither is code-signed, so Windows warns about the download; see
+     [BUILD.md](BUILD.md#release-artifacts-are-unsigned-and-windows-warns-about-them)
+     for what to click to get past it.
+   - **Linux**: Install the downloaded package with your distribution's package
+     manager so the runtime dependencies are resolved. Run this from the folder
+     the package was downloaded into:
+
      ```bash
-     sudo apt install ./Handy_*.deb
+     # Astra Linux, Debian, Ubuntu
+     sudo apt install ./*.deb
+
+     # РЕДОС, Fedora, RHEL
+     sudo dnf install ./*.rpm
      ```
-     Do not use `dpkg -i` unless the dependencies are already installed. If you already used it, run `sudo apt --fix-broken install`.
+
+     Do not use `dpkg -i` or `rpm -i` unless those dependencies are already
+     installed; if you already used them, run `sudo apt --fix-broken install`.
+
 2. Install the application
 3. Launch Handy and grant necessary system permissions (microphone, accessibility)
 4. Configure your preferred keyboard shortcuts in Settings
 5. Start transcribing!
+
+> **The Homebrew cask and the winget package install upstream builds**, not this
+> fork's: `brew install --cask handy` and `winget install cjpais.Handy` fetch
+> releases from `cjpais/Handy`. Neither is maintained by the Handy developers.
+
+### Astra Linux SE 1.8 and РЕДОС 8
+
+These are the distributions this fork's packages are built for:
+
+| Distribution       | Package | Base                  |
+| ------------------ | ------- | --------------------- |
+| Astra Linux SE 1.8 | `.deb`  | Debian 12, glibc 2.36 |
+| РЕДОС 8            | `.rpm`  | glibc 2.36            |
+
+The packages themselves are built on `ubuntu-22.04` (glibc 2.35). CI fails the
+build if the `handy` executable ever requires a newer glibc than the build
+host's, which is what keeps the artifacts loadable on both targets.
+
+Everything Handy needs is inside the package, so installation needs no network
+access: the executable goes to `/usr/bin/handy`, its private runtime libraries
+and the models (GigaAM v3 and Silero VAD, under
+`/usr/lib/Handy/resources/models/`) go to `/usr/lib/Handy/`, and a desktop entry
+named **ХЭНДИ** is added to your application menu.
+
+On РЕДОС the RPM dependencies must be resolvable — the package requires
+`libgtk-layer-shell.so.0()(64bit)` and `libopenblas.so.0()(64bit)`. Install the
+packages that provide those two libraries first if the installer cannot resolve
+them (`gtk-layer-shell` and `openblas` on RPM-based distributions). See
+[Linux Notes](#linux-notes) for the runtime-library table.
+
+> **Untested on this fork:** nobody has installed these packages on Astra Linux
+> SE 1.8 or РЕДОС 8 by hand yet. CI builds and audits them on `ubuntu-22.04`
+> only, which bounds their behaviour on the build host and not on the target
+> distributions. Please report what breaks.
 
 ### Development Setup
 
@@ -234,22 +290,18 @@ Without these tools, Handy falls back to enigo which may have limited compatibil
 - Enable **"Audio Feedback"** (also in Advanced) if you still want audible confirmation of recording state
 - Users who upgrade from older versions or import settings from other platforms may need to manually apply this change
 
-## Verify Release Signatures
+## Release Artifacts Are Unsigned
 
-Handy does not ship an in-app updater, so release artifacts carry no separate
-updater signature (`.sig` / `.minisig`) — there is no `plugins.updater.pubkey`
-to check. Verify the platform's own code signature instead:
+This fork has no code-signing certificate, so the Windows installers carry no
+Authenticode signature and no publisher name, and Windows warns about the
+download before you can install it. See
+[BUILD.md](BUILD.md#release-artifacts-are-unsigned-and-windows-warns-about-them)
+for what that warning looks like and how to get past it.
 
-```bash
-# macOS
-codesign --verify --deep --strict --verbose=2 Handy.app
-spctl -a -t exec -vv Handy.app
-
-# Windows (PowerShell) — requires the release certificate chain to be installed
-Get-AuthenticodeSignature .\Handy_0.9.7_x64-setup.exe | Format-List
-```
-
-On Linux, packages are signed with the distribution's tooling when available.
+There is also no in-app updater: new versions are installed by hand. Nothing is
+published next to the downloads — no `.sig`, no `.minisig`, no checksum list —
+so there is nothing in-band to verify a download against. Establish provenance
+out of band if that matters to you.
 
 ## Troubleshooting
 
@@ -305,7 +357,8 @@ there:
 #### Step 3: Verify Installation
 
 1. Restart Handy
-2. Open Settings → Models and check that the model status is "Installed"
+2. Open Settings → Models and confirm the bundled **GigaAM v3** entry is listed
+   and marked **Active**
 
 ### Linux Startup Crashes or Instability
 
