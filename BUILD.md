@@ -12,6 +12,11 @@ This guide covers how to set up the development environment and build Handy from
 
 ### Platform-Specific Requirements
 
+> [!NOTE]
+> This fork's CI ships **Windows** (NSIS + MSI) and **Linux** (deb + rpm, built on
+> `ubuntu-22.04`) only. There is no macOS job in any workflow, so the macOS
+> instructions below are for local development and are not exercised by CI.
+
 #### macOS
 
 - Xcode Command Line Tools
@@ -114,7 +119,8 @@ bun tauri dev
 bun run tauri build
 ```
 
-This compiles a release binary and generates platform-specific bundles (deb, rpm, AppImage on Linux; dmg on macOS; msi on Windows).
+This compiles a release binary and generates platform-specific bundles
+(deb, rpm and AppImage on Linux; app and dmg on macOS; NSIS and MSI on Windows).
 
 ### 5. The Bundled Model
 
@@ -122,6 +128,10 @@ There is nothing to download by hand. `beforeBuildCommand` runs
 `bun run fetch:model` first, which downloads the GigaAM v3 CTC model
 (~152 MB compressed, ~215 MB unpacked), verifies its SHA-256, and unpacks it
 into `src-tauri/resources/models/giga-am-v3-int8/`. That directory is git-ignored.
+
+That is the only model fetched at build time. The Silero VAD model
+(`src-tauri/resources/models/silero_vad_v4.onnx`, ~1.7 MB) is committed to the
+repository and is bundled from the checkout as-is.
 
 The script is idempotent: once `model.int8.onnx` is present it prints
 `already present, skipping download` and never touches the network, so an
@@ -138,17 +148,58 @@ Because the model ships inside the bundle, a Windows installer is roughly
 
 deb, rpm and AppImage can only be produced on a Linux host. From Windows or
 macOS, use WSL2 or a Linux container with the dependencies listed under
-[Linux](#linux) above, plus `fakeroot`, `dpkg-dev` (deb) and `rpm` (rpm).
+[Linux](#linux) above.
 
-Verification that has **not** been performed on this project: the contents and
-the installed resource layout of the Linux packages were confirmed against
-`tauri-bundler`'s resource handling rather than by building a real artifact.
-The bundled model is expected at `<install>/lib/Handy/resources/models/giga-am-v3-int8/`,
-the same relative path the Rust side reads. Check it after the first real build:
+No host packaging tool is needed beyond that list. `tauri-bundler` writes both
+formats itself, in-process and in pure Rust: the deb via `flate2` + `tar` +
+`ar`, the rpm via the `rpm-rs` crate. Nothing shells out to `dpkg-deb`,
+`fakeroot` or `rpmbuild`. `dpkg-dev` and `rpm` are only needed to **inspect** a
+finished package (`dpkg-deb -c`, `rpm -qpl`), which is what CI does once
+bundling has produced it.
+
+### What CI verifies about Linux packages
+
+Every Linux build audits the package contents before the job can go green: the
+"Audit Linux package runtime contents" step in `.github/workflows/build.yml` runs
+on all four workflows that build Linux (`build-test`, `main-build`,
+`pr-test-build`, `release`). For each `.deb` in `bundle/deb/` it requires, from
+the `dpkg-deb -c` listing:
+
+- `usr/bin/handy`
+- `usr/lib/Handy/libtranscribe.so` (matched by SONAME) and the `libggml-cpu`
+  backend module
+- `usr/lib/Handy/libonnxruntime.so.1` on hosts that link ONNX Runtime
+  dynamically — which includes the `ubuntu-22.04` build this fork ships
+- `usr/lib/Handy/resources/models/giga-am-v3-int8/model.int8.onnx`, the matching
+  `vocab.txt`, and `usr/lib/Handy/resources/models/silero_vad_v4.onnx`
+- no library installed directly into `/usr/lib` (the issue #1639 guard)
+
+It then unpacks the deb with `dpkg-deb -x` and launches the packaged binary
+under `xvfb-run handy --list-devices`, so a package that installs but cannot
+start fails the build. Each `.rpm` in `bundle/rpm/` gets the same listing
+assertions via `rpm -qpl` — including the ONNX Runtime library, which is why the
+rpm needs its own `files` entry for it — but is **not** launched.
+
+Independently, the same step caps the executable's glibc requirement: the highest
+`GLIBC_x.y` symbol version `handy` requires must not exceed `2.35`, the
+`ubuntu-22.04` baseline. Both shipping targets, Astra Linux SE 1.8 and РЕДОС 8,
+ship glibc 2.36, and glibc is forward-compatible only.
+
+So the bundled model is no longer merely **expected** at
+`<install>/lib/Handy/resources/models/giga-am-v3-int8/` on the strength of
+reading `tauri-bundler`'s source — the path is asserted on every run. To re-check
+a local build:
 
 ```bash
 dpkg-deb -c src-tauri/target/release/bundle/deb/*.deb | grep -i "models/"
 ```
+
+What CI still does **not** cover: no release has been published from this
+pipeline yet, and neither Astra Linux SE 1.8 nor РЕДОС 8 has been installed and
+tested by hand — CI builds and audits on `ubuntu-22.04` only. The glibc cap
+covers the `handy` executable, not the prebuilt `libonnxruntime.so.1`. A green
+run therefore bounds the packages' behaviour on the CI host, not on the target
+distributions.
 
 ## Linux Install (from source)
 
@@ -213,6 +264,11 @@ See [issue #1618](https://github.com/cjpais/Handy/issues/1618) for the related o
 and stale-permission report.
 
 ### AppImage build fails on Arch / rolling-release distros
+
+> [!NOTE]
+> This fork's CI passes `--bundles deb,rpm` and never builds an AppImage. What
+> follows applies to a local `bun run tauri build`, which uses
+> `targets: "all"` from `tauri.conf.json` and so attempts all three.
 
 `linuxdeploy` bundles its own `strip` binary which is too old to process system libraries built with newer toolchains on rolling-release distros (Arch, CachyOS, Manjaro, EndeavourOS).
 
@@ -292,32 +348,29 @@ Artifacts then land in `C:\h\release\...` instead of the repo's
 it is only picked up by freshly started processes. Then `bun run tauri dev`
 and `bun run tauri build` work normally.
 
-### Windows `tauri build` fails at bundling with `program not found`
+### Release artifacts are unsigned, and Windows warns about them
 
-If the build compiles all the way to `Built application at: ...\handy.exe` and
-then fails with:
+This fork has no code-signing certificate, and `src-tauri/tauri.conf.json` asks for
+no signing step at all: there is no `signCommand`, no `certificateThumbprint` and
+no `timestampUrl` under `bundle.windows`, so `tauri build` skips signing on every
+host — developer machine and CI alike. The `sign-binaries` input in
+`.github/workflows/build.yml` defaults to `false` and `release.yml` passes
+`false` explicitly; the Apple certificate import steps hang off that input and
+never execute.
 
-```
-Signing C:\...\handy.exe with a custom signing command
-failed to bundle project `program not found`
-```
+There is no override to add. A plain `bun run tauri build` produces an installer,
+and `bun run tauri build --bundles nsis` narrows it to a single one.
 
-that's the code-signing step: `tauri.conf.json` configures a custom
-`signCommand` (`trusted-signing-cli`, Azure Trusted Signing) that only exists
-in the release CI environment. Local development doesn't need it:
+What that means in practice: a Handy installer carries no Authenticode signature
+and no publisher name. On Windows that surfaces as a SmartScreen interstitial —
+"Windows protected your PC" on the NSIS `.exe`, an unknown-publisher prompt on
+the MSI. That warning is a consequence of the artifact being unsigned, not
+evidence of a tampered download.
 
-```powershell
-# Development (no bundling/signing at all):
-bun run tauri dev
+To install past it, use the **More info** → **Run anyway** link on the SmartScreen
+block page.
 
-# Or compile a release binary without the installer/signing step:
-bun run tauri build --no-bundle
-```
-
-To produce an actual (unsigned) installer locally, override the command with a
-one-line config file — `--no-bundle` gets you a binary, not an installer:
-
-```bash
-echo '{"bundle":{"windows":{"signCommand":null}}}' > nosign.json
-bun run tauri build --bundles nsis --config nosign.json
-```
+> [!NOTE]
+> No checksum or signature file is published alongside the artifacts — no
+> `.sig`, no `.minisig`, no hash list — so there is nothing in-band to verify a
+> download against. Establish provenance out of band if that matters to you.
