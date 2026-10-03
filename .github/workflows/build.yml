@@ -373,7 +373,7 @@ jobs:
           ORT_DIR="$(pwd)/onnxruntime-linux-x86_64-${ORT_VERSION}"
           echo "ORT_LIB_LOCATION=$ORT_DIR/lib" >> $GITHUB_ENV
           echo "ORT_PREFER_DYNAMIC_LINK=1" >> $GITHUB_ENV
-          # Resolve symlinks so the deb bundler gets real files (not broken symlinks)
+          # Resolve symlinks so the bundlers get real files (not broken symlinks)
           for f in "$ORT_DIR"/lib/libonnxruntime.so*; do
             if [ -L "$f" ]; then
               cp -L "$f" "$f.real" && mv "$f.real" "$f"
@@ -656,7 +656,10 @@ jobs:
               require_pattern "$listing" 'usr/bin/handy$' "handy binary"
               require_pattern "$listing" 'usr/lib/Handy/libtranscribe\.so(\.[0-9]+)+$' "transcribe runtime library (SONAME)"
               require_pattern "$listing" 'usr/lib/Handy/libggml-cpu.*\.so' "ggml CPU backend module"
-              if [[ "${{ inputs.platform }}" == *"ubuntu-22.04"* && "${{ inputs.target }}" == "x86_64-unknown-linux-gnu" ]]; then
+              # ORT_PREFER_DYNAMIC_LINK is set by the "Install ONNX Runtime" step
+              # above; assert the packaged library exactly where ORT was linked
+              # dynamically. Absent on hosts that statically link ORT.
+              if [[ "${ORT_PREFER_DYNAMIC_LINK:-}" == "1" ]]; then
                 require_pattern "$listing" 'usr/lib/Handy/libonnxruntime\.so\.[0-9]+$' "ONNX Runtime library (SONAME)"
               fi
               # Handy's libs must stay out of the ldconfig-scanned /usr/lib
@@ -686,11 +689,11 @@ jobs:
               require_pattern "$listing" '/usr/bin/handy$' "handy binary"
               require_pattern "$listing" '/usr/lib/Handy/libtranscribe\.so(\.[0-9]+)+$' "transcribe runtime library (SONAME)"
               require_pattern "$listing" '/usr/lib/Handy/libggml-cpu.*\.so' "ggml CPU backend module"
-              # Mirror of the deb audit's ORT check, same platform gate: rpm is
-              # only built on 22.04, where ORT is dynamically linked. rpm -qpl
-              # prints absolute paths, so the pattern carries the leading / like
-              # the assertions above.
-              if [[ "${{ inputs.platform }}" == *"ubuntu-22.04"* && "${{ inputs.target }}" == "x86_64-unknown-linux-gnu" ]]; then
+              # Mirror of the deb audit's ORT check. Where ORT is dynamically
+              # linked the package must carry it or handy cannot start; 24.04
+              # links ORT statically and needs nothing. rpm -qpl prints absolute
+              # paths, so the pattern carries the leading / like the assertions above.
+              if [[ "${ORT_PREFER_DYNAMIC_LINK:-}" == "1" ]]; then
                 require_pattern "$listing" '/usr/lib/Handy/libonnxruntime\.so\.[0-9]+$' "ONNX Runtime library (SONAME)"
               fi
               # Same /usr/lib pollution guard as the deb audit (issue #1639).
