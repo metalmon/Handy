@@ -728,7 +728,10 @@ jobs:
           # Linux SE 1.8, РЕДОС 8) ship glibc 2.36, the Linux build host is
           # ubuntu-22.04 (2.35), and nothing else in this pipeline notices a runner
           # image bump — the packages would install and then fail to start. So fail
-          # here instead: a green run means the build host's glibc never moved.
+          # here instead: a green run bounds the highest glibc symbol version the
+          # binary actually requires. That is what a host bump would raise, but only
+          # if it newly references a symbol — so this is a ceiling, not proof the
+          # host never moved.
           # Scope: the handy executable the bundler copies into /usr/bin. The private
           # /usr/lib/Handy libs are built from source on this same host; the prebuilt
           # libonnxruntime.so.1 is not covered.
