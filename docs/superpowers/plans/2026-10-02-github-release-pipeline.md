@@ -689,44 +689,13 @@ git commit -m "ci: assert the bundled model and the glibc baseline in Linux pack
 
 ### Task 8: Isolate the Rust cache for no-cache release builds
 
-**Files:**
-- Modify: `.github/workflows/build.yml:110-119`
+**Status: DECLINED — the premise does not hold. No code change.**
 
-**Why:** The `Rust cache` step is skipped when `no-cache: true`, but the cache key is derived from platform and target only. A `main-build` run with caching and a release run without it share a key, so the release could still be served a snapshot that a cached build wrote moments earlier — defeating the "releases always build from scratch" guarantee stated in the comment.
+The original reasoning was that the cache key derives from platform and target only, so a cached `main-build` run and an uncached release run share a key and the release could be served a snapshot a cached build just wrote. That is wrong: `build.yml:114` gates the `Rust cache` step on `if: ${{ !inputs.no-cache }}`, and `release.yml` passes `no-cache: true`. A step whose `if` is false does not run, so a release build never restores from the cache and never saves to it. There is no shared namespace, because one side does not participate.
 
-- [ ] **Step 1: Make the cache key depend on no-cache**
+Adding a cache-mode segment to the key would therefore be a no-op: on every run that actually reaches the cache step the expression evaluates to `cached`, so the key would gain a constant.
 
-In `.github/workflows/build.yml`, replace the `Rust cache` step with:
-
-```yaml
-      - name: Rust cache
-        # Release builds skip the cache (no-cache: true) so the artifact is
-        # always compiled clean — no risk of a stale cached native lib being
-        # linked. PR/test builds keep caching for speed. The key carries the
-        # cache mode so a cached PR build and an uncached release build can never
-        # share a snapshot.
-        if: ${{ !inputs.no-cache }}
-        uses: swatinem/rust-cache@v2
-        with:
-          workspaces: "./src-tauri -> target"
-          key: ${{ inputs.platform }}-${{ inputs.target }}-${{ inputs.no-cache && 'nocache' || 'cached' }}-no-bin-v1
-          cache-bin: false
-```
-
-- [ ] **Step 2: Verify the workflow parses**
-
-```bash
-bunx prettier --check --end-of-line auto .github/workflows/build.yml
-```
-
-Expected: `All matched files use Prettier code style!`
-
-- [ ] **Step 3: Commit**
-
-```bash
-git add .github/workflows/build.yml
-git commit -m "ci: keep release builds out of the shared Rust cache namespace"
-```
+Verified in place: `build.yml:110-119` and `release.yml:133`.
 
 ---
 
