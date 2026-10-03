@@ -662,6 +662,17 @@ jobs:
               if [[ "${ORT_PREFER_DYNAMIC_LINK:-}" == "1" ]]; then
                 require_pattern "$listing" 'usr/lib/Handy/libonnxruntime\.so\.[0-9]+$' "ONNX Runtime library (SONAME)"
               fi
+              # Offline by design: a package that installs and launches but is
+              # missing the model only fails at transcription time, on the user's
+              # machine, so assert the weights themselves rather than a directory.
+              # tauri-bundler copies bundle resources to /usr/lib/<productName>
+              # (productName is "Handy") preserving the resource path, so the
+              # bundled model lands in /usr/lib/Handy/resources/models/... — the
+              # same tree the Rust side reads via BaseDirectory::Resource.
+              # dpkg-deb -c prints relative paths, so no leading slash.
+              require_pattern "$listing" 'usr/lib/Handy/resources/models/giga-am-v3-int8/model\.int8\.onnx$' "bundled GigaAM model"
+              require_pattern "$listing" 'usr/lib/Handy/resources/models/giga-am-v3-int8/vocab\.txt$' "GigaAM vocabulary"
+              require_pattern "$listing" 'usr/lib/Handy/resources/models/silero_vad_v4\.onnx$' "Silero VAD model (default backend)"
               # Handy's libs must stay out of the ldconfig-scanned /usr/lib
               # (issue #1639): app-private libs belong in /usr/lib/Handy only.
               # `[^/]+` excludes the Handy/ subdir, so only direct hits match.
@@ -696,6 +707,12 @@ jobs:
               if [[ "${ORT_PREFER_DYNAMIC_LINK:-}" == "1" ]]; then
                 require_pattern "$listing" '/usr/lib/Handy/libonnxruntime\.so\.[0-9]+$' "ONNX Runtime library (SONAME)"
               fi
+              # Same bundled-model assertions as the deb audit (offline by design).
+              # rpm -qpl prints absolute paths, so the patterns carry the leading /
+              # like the assertions above.
+              require_pattern "$listing" '/usr/lib/Handy/resources/models/giga-am-v3-int8/model\.int8\.onnx$' "bundled GigaAM model"
+              require_pattern "$listing" '/usr/lib/Handy/resources/models/giga-am-v3-int8/vocab\.txt$' "GigaAM vocabulary"
+              require_pattern "$listing" '/usr/lib/Handy/resources/models/silero_vad_v4\.onnx$' "Silero VAD model (default backend)"
               # Same /usr/lib pollution guard as the deb audit (issue #1639).
               if grep -Eq 'usr/lib/[^/]+\.so' "$listing"; then
                 echo "ERROR: libraries installed directly into /usr/lib (issue #1639):" >&2
@@ -705,6 +722,47 @@ jobs:
               rm -f "$listing"
             done
           fi
+
+          # glibc is forward-compatible only: a binary linked against a newer glibc
+          # than the target distro ships will not load there. Both targets (Astra
+          # Linux SE 1.8, РЕДОС 8) ship glibc 2.36, the Linux build host is
+          # ubuntu-22.04 (2.35), and nothing else in this pipeline notices a runner
+          # image bump — the packages would install and then fail to start. So fail
+          # here instead: a green run means the build host's glibc never moved.
+          # Scope: the handy executable the bundler copies into /usr/bin. The private
+          # /usr/lib/Handy libs are built from source on this same host; the prebuilt
+          # libonnxruntime.so.1 is not covered.
+          if ! command -v objdump >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y binutils
+          fi
+          MAX_GLIBC_BASELINE="2.35" # ubuntu-22.04's glibc; raise only on purpose
+          handy_bin="$(find "src-tauri/target/${PROFILE}" -maxdepth 2 -type f -name handy -print -quit 2>/dev/null || true)"
+          if [ -z "$handy_bin" ]; then
+            echo "ERROR: could not locate the built handy binary to audit" >&2
+            find "src-tauri/target/${PROFILE}" -maxdepth 2 -name 'handy*' >&2 || true
+            exit 1
+          fi
+          # Highest glibc symbol version the binary requires. The pattern keeps
+          # numeric versions only, so GLIBC_PRIVATE, GLIBC_ABI_DT_RELR (itself a
+          # 2.36+ marker) and libstdc++'s GLIBCXX_* stay out of the comparison.
+          # sort -V orders 2.9 below 2.35, which a string compare would not.
+          max_glibc="$(objdump -T "$handy_bin" \
+            | grep -oE 'GLIBC_[0-9]+(\.[0-9]+)*' \
+            | sed 's/^GLIBC_//' \
+            | sort -V \
+            | tail -1 || true)"
+          if [ -z "$max_glibc" ]; then
+            echo "ERROR: no GLIBC_x.y symbol versions found in ${handy_bin}; objdump output unexpected" >&2
+            objdump -T "$handy_bin" | head -20 >&2 || true
+            exit 1
+          fi
+          newest_glibc="$(printf '%s\n%s\n' "${MAX_GLIBC_BASELINE}" "${max_glibc}" | sort -V | tail -1)"
+          if [ "${newest_glibc}" != "${MAX_GLIBC_BASELINE}" ]; then
+            echo "ERROR: ${handy_bin} requires GLIBC_${max_glibc}, newer than the GLIBC_${MAX_GLIBC_BASELINE} build baseline; the packages would not start on glibc ${MAX_GLIBC_BASELINE}" >&2
+            exit 1
+          fi
+          echo "glibc baseline OK: ${handy_bin} requires at most GLIBC_${max_glibc}"
 
           if compgen -G "${BUNDLE_DIR}/appimage/*.AppImage" > /dev/null; then
             for appimage in "${BUNDLE_DIR}"/appimage/*.AppImage; do
