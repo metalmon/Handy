@@ -833,6 +833,26 @@ jobs:
               }
             }
 
+            # Offline by design: a package missing the model installs and launches
+            # fine, then fails silently at transcription time. Ask the app's own model
+            # registry (--list-models --json) rather than guessing where the bundler
+            # put the files. Only `is_downloaded` proves presence: the catalog always
+            # lists the bundled id, and it flips true solely when
+            # `resources/models/giga-am-v3-int8` really exists in this install dir.
+            $modelsOutput = (& $handy.FullName --list-models --json | Out-String)
+            $modelsOutput | Write-Host
+            if ($LASTEXITCODE -ne 0) {
+              throw "$Label handy.exe --list-models --json failed"
+            }
+            $gigaam = ($modelsOutput | ConvertFrom-Json) | Where-Object { $_.id -eq "gigaam-v3-e2e-ctc" }
+            if (-not $gigaam) {
+              throw "$Label package does not expose the bundled gigaam-v3-e2e-ctc model"
+            }
+            if (-not $gigaam.is_downloaded) {
+              throw "$Label exposes gigaam-v3-e2e-ctc but is_downloaded is false - model files are missing from the installer"
+            }
+            Write-Host "$Label bundled model verified (is_downloaded=true)"
+
             $deviceOutput = (& $handy.FullName --list-devices | Out-String)
             $deviceOutput | Write-Host
             if ($LASTEXITCODE -ne 0) {
