@@ -455,7 +455,7 @@ git commit -m "ci: drop macOS and ARM from the per-push and per-PR builds"
 
 ---
 
-### Task 5: Assert the bundled model survives Windows packaging
+### Task 5: Assert the bundled models survive Windows packaging
 
 **Files:**
 - Modify: `.github/workflows/build.yml:832-856` (the `Assert-PackageContents` function)
@@ -487,7 +487,37 @@ In `.github/workflows/build.yml`, inside `Assert-PackageContents`, insert after 
             Write-Host "$Label bundled model verified (is_downloaded=true)"
 ```
 
-- [ ] **Step 2: Confirm the JSON shape locally**
+- [ ] **Step 2: Assert the model directory is not empty**
+
+`is_downloaded: true` only proves `resources/models/giga-am-v3-int8` **exists** — `discover_bundled_models` tests `path.is_dir()` and nothing else (`src-tauri/src/managers/model.rs:63-67`), and `update_download_status` then sets the flag unconditionally (`:455-458`). NSIS creates resource directories from one list and copies files from another (`src-tauri/nsis/installer.nsi`), so a present-but-empty directory is structurally possible and would pass every gate above while still failing silently at transcription time.
+
+Mirror the existing staged-DLL loop's filesystem check, so the assertion proves the actual file:
+
+```powershell
+            if (-not (Get-ChildItem $Root -Filter "model.int8.onnx" -Recurse -ErrorAction SilentlyContinue)) {
+              throw "$Label package has resources\models\giga-am-v3-int8 but no model.int8.onnx inside it (root: $Root)"
+            }
+```
+
+## VAD model coverage
+
+`silero_vad_v4.onnx` is committed (`git ls-files` confirms) and ships via `resources/**/*`, but `BUNDLED_MODELS` contains only GigaAM, so `--list-models` structurally cannot report on it. `VadBackend::Silero` is the default (`src-tauri/src/settings.rs:1398`) and the background preload logs at `debug!` only (`actions.rs:483-485`), so its absence degrades quietly. Assert it on the filesystem, same mechanism as above, in both the Windows and Linux audits:
+
+```powershell
+if (-not (Get-ChildItem $Root -Filter "silero_vad_v4.onnx" -Recurse -ErrorAction SilentlyContinue)) {
+  throw "$Label package is missing silero_vad_v4.onnx (default VAD backend)"
+}
+```
+
+The bash equivalent for the Linux audits:
+
+```bash
+require_pattern "$listing" 'silero_vad_v4\.onnx$' "Silero VAD model"
+```
+
+Do **not** assert on `src-tauri/resources/models/gigaam_vocab.txt`: no code reads it, and the real vocabulary ships as `giga-am-v3-int8/vocab.txt` inside the directory the `model.int8.onnx` check already covers.
+
+- [ ] **Step 3: Confirm the JSON shape locally**
 
 This step is the regression check for the assertion above; run it against the locally built binary before trusting the CI version:
 
@@ -497,7 +527,7 @@ src-tauri\target\release\handy.exe --list-models --json
 
 Expected output contains `"id": "gigaam-v3-e2e-ctc"` and `"is_downloaded": true`. If it does not, the model is missing from your local `target/release` — run `bun run fetch:model && bun run build` first.
 
-- [ ] **Step 3: Verify the workflow parses**
+- [ ] **Step 4: Verify the workflow parses**
 
 ```bash
 bunx prettier --check --end-of-line auto .github/workflows/build.yml
@@ -505,7 +535,7 @@ bunx prettier --check --end-of-line auto .github/workflows/build.yml
 
 Expected: `All matched files use Prettier code style!`
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 5: Commit**
 
 ```bash
 git add .github/workflows/build.yml
@@ -763,7 +793,7 @@ bunx prettier --check --end-of-line auto BUILD.md
 
 Expected: `All matched files use Prettier code style!`
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 5: Commit**
 
 ```bash
 git add BUILD.md

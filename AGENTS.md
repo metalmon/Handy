@@ -42,12 +42,9 @@ bun run format:backend    # cargo fmt only
 
 **Model Setup (Required for Development):**
 
-The GigaAM v3 transcription model is fetched automatically by both `bun run tauri dev` and `bun run tauri build`; run `bun run fetch:model` to prefetch it without a build. The VAD model is not bundled and must be downloaded once:
+The GigaAM v3 transcription model is fetched automatically by both `bun run tauri dev` and `bun run tauri build`; run `bun run fetch:model` to prefetch it without a build. It is git-ignored, so a fresh clone has no model until that step runs.
 
-```bash
-mkdir -p src-tauri/resources/models
-curl -o src-tauri/resources/models/silero_vad_v4.onnx https://blob.handy.computer/silero_vad_v4.onnx
-```
+The Silero VAD model (`src-tauri/resources/models/silero_vad_v4.onnx`) is ~1.8 MB and **is committed**, so it ships in the installer and needs no manual download.
 
 For detailed platform-specific build setup, see [BUILD.md](BUILD.md).
 
