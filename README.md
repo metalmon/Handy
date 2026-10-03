@@ -129,22 +129,14 @@ For detailed build instructions including platform-specific requirements, see [B
   </a>
 </div>
 
-## Integrations
-
-<a href="https://www.raycast.com/mattiacolombomc/handy" title="Install Handy Raycast Extension"><img src="https://www.raycast.com/mattiacolombomc/handy/install_button@2x.png?v=1.1" height="64" style="height: 64px;" alt="Install handy Raycast Extension" /></a>
-
-Control Handy from [Raycast](https://www.raycast.com) — start/stop recording, browse transcript history, manage dictionary, switch models and languages.
-
-[Source](https://github.com/mattiacolombomc/raycast-handy) · by [@mattiacolombomc](https://github.com/mattiacolombomc)
-
-### Debug Mode
+## Debug Mode
 
 Handy includes an advanced debug mode for development and troubleshooting. Access it by pressing:
 
 - **macOS**: `Cmd+Shift+D`
 - **Windows/Linux**: `Ctrl+Shift+D`
 
-### CLI Parameters
+## CLI Parameters
 
 Handy supports command-line flags for controlling a running instance and customizing startup behavior. These work on all platforms (macOS, Windows, Linux). Largely this is a beta feature.
 
@@ -179,7 +171,7 @@ handy --start-hidden --no-tray
 
 ## Known Issues & Current Limitations
 
-This project is actively being developed and has some [known issues](https://github.com/cjpais/Handy/issues). We believe in transparency about the current state:
+This fork is a distribution of [upstream Handy](https://github.com/cjpais/Handy): the speech model is bundled for offline use, the in-app updater is gone, and the packages are unsigned. Report problems with this build in this repository's [issue tracker](https://github.com/metalmon/Handy/issues). We believe in transparency about the current state:
 
 ### Bluetooth Headset Microphones (macOS)
 
@@ -400,7 +392,7 @@ Once you've found a flag that helps, export it from your shell profile (`~/.bash
 Exec=env HANDY_NO_GTK_LAYER_SHELL=1 handy
 ```
 
-If a workaround helps you, please [open an issue](https://github.com/cjpais/Handy/issues) describing your distro, desktop environment, and session type — that information helps us narrow down the underlying bug.
+If a workaround helps you, please [open an issue](https://github.com/metalmon/Handy/issues) describing your distro, desktop environment, and session type — that information helps us narrow down the underlying bug.
 
 ### Empty recording overlay on Hyprland / Omarchy
 
@@ -411,8 +403,7 @@ If the recording overlay is empty or bordered, fully quit Handy and launch a
 env -u HANDY_NO_GTK_LAYER_SHELL GDK_BACKEND=wayland handy
 ```
 
-If this works, apply `GDK_BACKEND=wayland` only to Handy's launcher. This
-workaround does not work with the 0.9.6 AppImage, which forces X11.
+If this works, apply `GDK_BACKEND=wayland` only to Handy's launcher.
 
 ### Vulkan Overlays and Capture Tools on Windows (`HANDY_KEEP_VULKAN_IMPLICIT_LAYERS`)
 
@@ -429,8 +420,8 @@ Adjust the executable path if needed. This override only applies to apps launche
 
 ### How to Contribute
 
-1. **Check existing issues** at [github.com/cjpais/Handy/issues](https://github.com/cjpais/Handy/issues)
-2. **Fork the repository** and create a feature branch
+1. **Check existing issues** at [github.com/metalmon/Handy/issues](https://github.com/metalmon/Handy/issues)
+2. **Fork this repository** and create a feature branch
 3. **Test thoroughly** on your target platform
 4. **Submit a pull request** with clear description of changes
 5. **Join the discussion** - reach out at [contact@handy.computer](mailto:contact@handy.computer)
