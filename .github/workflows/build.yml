@@ -836,22 +836,36 @@ jobs:
             # Offline by design: a package missing the model installs and launches
             # fine, then fails silently at transcription time. Ask the app's own model
             # registry (--list-models --json) rather than guessing where the bundler
-            # put the files. Only `is_downloaded` proves presence: the catalog always
-            # lists the bundled id, and it flips true solely when
-            # `resources/models/giga-am-v3-int8` really exists in this install dir.
+            # put the files.
+            #
+            # The registry alone is not enough: the bundled id is always in the
+            # catalog, and is_downloaded only ever comes from a bare is_dir() probe
+            # of resources\models\giga-am-v3-int8. installer.nsi creates resource
+            # directories from one list and copies resource files from another, so
+            # an empty model directory still reports as installed. Assert the
+            # weights themselves.
             $modelsOutput = (& $handy.FullName --list-models --json | Out-String)
             $modelsOutput | Write-Host
             if ($LASTEXITCODE -ne 0) {
-              throw "$Label handy.exe --list-models --json failed"
+              throw "$Label handy.exe --list-models --json failed (root: $Root)"
             }
             $gigaam = ($modelsOutput | ConvertFrom-Json) | Where-Object { $_.id -eq "gigaam-v3-e2e-ctc" }
             if (-not $gigaam) {
-              throw "$Label package does not expose the bundled gigaam-v3-e2e-ctc model"
+              throw "$Label package does not expose the bundled gigaam-v3-e2e-ctc model (root: $Root)"
             }
             if (-not $gigaam.is_downloaded) {
-              throw "$Label exposes gigaam-v3-e2e-ctc but is_downloaded is false - model files are missing from the installer"
+              throw "$Label exposes gigaam-v3-e2e-ctc but is_downloaded is false - resources\models\giga-am-v3-int8 was not found under: $Root"
             }
-            Write-Host "$Label bundled model verified (is_downloaded=true)"
+            Write-Host "$Label bundled model directory verified (is_downloaded=true)"
+            if (-not (Get-ChildItem $Root -Filter "model.int8.onnx" -Recurse -ErrorAction SilentlyContinue)) {
+              throw "$Label package has resources\models\giga-am-v3-int8 but no model.int8.onnx inside it (root: $Root)"
+            }
+            # The VAD model ships in the same resources tree but is absent from
+            # BUNDLED_MODELS, so --list-models structurally cannot report on it.
+            if (-not (Get-ChildItem $Root -Filter "silero_vad_v4.onnx" -Recurse -ErrorAction SilentlyContinue)) {
+              throw "$Label package is missing silero_vad_v4.onnx (default VAD backend)"
+            }
+            Write-Host "$Label bundled model files verified (model.int8.onnx, silero_vad_v4.onnx)"
 
             $deviceOutput = (& $handy.FullName --list-devices | Out-String)
             $deviceOutput | Write-Host
